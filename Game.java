@@ -1,20 +1,9 @@
-
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-
-public class Game extends JPanel{
+public class Game {
 	
-	static Image backGround;
-	static Image spaceShip;
+
 	
-	static int windowX = 1000;
-	static int windowY = 700;
+	static int windowX = 1280;
+	static int windowY = 720;
 	
 	static int centerX = windowX /2 ;
 	static int centerY = windowY /2 ;
@@ -23,49 +12,34 @@ public class Game extends JPanel{
 	static int y = 0;
 	static int fps = 30;
 	
-	static int clickedX = -99;
-	static int clickedY = -99;
+	static int clickedX ;
+	static int clickedY ;
+	static boolean newClick = false;
 	
-	static Game test = new Game();
+	static double slopeX;
+	static double slopeY;
+	
+	static int moveSpeed = 10;
+	static int moveCounter = 0;
+	
+	static Display display = new Display();
 	
 	public static void main(String[] args) {
 		
-		JFrame frame = new JFrame();
-		frame.setSize(windowX, windowY);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setLocationRelativeTo(null);
+		
+		
+
 		
 		
 		
-		frame.add(test);
-		ImageIcon icon = new ImageIcon("backGround/backGround.jpg");
-		backGround = icon.getImage();
-		spaceShip = new ImageIcon("backGround/spaceShip.png").getImage();
 		
-		//repaint();
-		frame.setVisible(true);
-		test.addMouseListener(new MouseAdapter() {// provides empty implementation of all
-            // MouseListener`s methods, allowing us to
-            // override only those which interests us
-			@Override //I override only one method for presentation
-				public void mousePressed(MouseEvent e) {
-				
-				clickedX = e.getX() + x;
-				clickedY = e.getY() + y;
-				
-				//System.out.println(clickedX + "," + clickedY);
-				//test.update(clickedX, clickedY);
-			}
-		});
-		
-		
-		test.gameLoop();
+		gameLoop();
 		
 		
 		
 	}
 	
-	public void gameLoop() {
+	public static void gameLoop() {
 		int timer = 1000 / fps;
 		while(true)
 		{
@@ -77,75 +51,126 @@ public class Game extends JPanel{
 			e.printStackTrace();
 		}
 		//System.out.println(clickedX + "," + clickedY);
-		test.update();
-		repaint();
+		update();
+		display.update(x, y);
 		
+
 		}
 	}
 	
-	public void update() {
+	public static void update() 
+	{
 		
-		//while((clickedX != centerX) || (clickedY != centerY)) {
-		if((clickedX != -99)||(clickedY != -99))
+	
+		if(newClick == true)
 		{
-			if(clickedX < centerX) {
-				centerX--;
-				x--;
+			for(moveCounter = 0; moveCounter< moveSpeed; moveCounter++) 
+			{
 				
-			}
-			else if(clickedX > centerX) {
-				centerX++;
-				x++;
-				
-			}
+				if(slopeX > slopeY)
+				{
+					for(int j = 0; j <= slopeX; j++)
+					{
+						updateX();
+						
+						
+						if(clickedX == centerX) {
+							break;
+						}
+						
+						if(moveCounter == moveSpeed) {
+							break;
+							
+						}
+					
+					}
+					
+					updateY();
+					
+				}
+				else if (slopeX < slopeY){
+					
+					for(int j = 0; j <= slopeY; j++) {
+	
+						updateY();
+						
+						if(clickedY == centerY) {
+							break;
+						}
+						
+						if(moveCounter == moveSpeed) {
+							break;
+							
+						}
+					}
+	
+					updateX();
+					
+					
+				}
+				else if(slopeX == slopeY) 
+				{
+					
+					for(int j = 0; j <= slopeY+1; j++) 
+					{
+						
+						updateX();
+						updateY();
 			
-			if(clickedY < centerY) {
-				centerY--;
-				y--;
+						
+						if(moveCounter == moveSpeed) {
+							break;
+							
+						}
+						
+					}
+					
+				}
+	
 			
 			}
-			else if(clickedY > centerY) {
-				centerY++;
-				y++;
-				
+
+			if((clickedX == centerX)&&(clickedY == centerY)) {
+	
+				newClick = false;
+	
 			}
 		}
-		
-		if((clickedX == centerX)&&(clickedY == centerY)) {
-			clickedX = -99;
-			clickedY = -99;
-			
-		}
-		
-			
-			
-			
-			
-		//}
-		
-		
-		
 	}
 	
-	public void paintComponent(Graphics g) {
+	public static void updateX() {
 		
-		super.paintComponent(g);
-		
+		if(clickedX < centerX) {
+			centerX --;
+			x --;
+			moveCounter++;
 			
-			g.drawImage(backGround, 0, 0, windowX, windowY, x, y, x + windowX, y + windowY, null);
-			
-			//g.drawRect(clickedX, clickedY, 500, 500);
-			g.drawImage(spaceShip, windowX/2-78/2, windowY/2-74/2, null);
-			
-			
-			//g.drawLine(centerX, centerY, clickX, ClickY);
-			
-			//System.out.println(x +" " +y);
-		
 		}
-		//g.drawImage(backGround, 0, 0, null);
+		else if(clickedX > centerX) {
+			centerX ++;
+			x ++;
+			moveCounter++;
+	
+		}
+	}
+	
+	public static void updateY() {
 		
-		//
+		if(clickedY < centerY) {
+			centerY --;
+			y --;
+			moveCounter++;
+		}
+		else if(clickedY > centerY) {
+			centerY ++;
+			y ++;
+			moveCounter++;
+		}
+	}
+		
+	
+
+	
 		
 	}
 	
