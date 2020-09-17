@@ -9,10 +9,7 @@ import javax.swing.JPanel;
 
 public class Display extends Game{
 
-	static boolean north;
-	static boolean south;
-	static boolean west;
-	static boolean east;
+	
 	
 	static int picRank;
 	
@@ -32,32 +29,10 @@ public class Display extends Game{
 		frame.getContentPane().add(draw);
 		
 	
-		//control.mouseClicked();
+		Control control = new Control();
+		draw.addMouseListener(control);
 		
-		//repaint();
-		draw.addMouseListener(new MouseAdapter() {
-			//@Override 
-				public void mousePressed(MouseEvent e) {
-				
-				clickedX = e.getX() + x;
-			
-				clickedY = e.getY() + y;
-				
-				newClick = true;
-				
-				north = false;
-				south = false;
-				west = false;
-				east = false;
-			
-				slopeX = Math.abs(Math.round((double)(clickedX - centerX)/(clickedY - centerY)));
-				slopeY = Math.abs(Math.round((double)(clickedY - centerY)/(clickedX - centerX)));
-				
-				//System.out.println(slopeX +" " +slopeY);
-				getDirection();
-
-			}
-		});
+	
 		frame.setVisible(true);
 		
 
@@ -65,6 +40,8 @@ public class Display extends Game{
 	}
 	
 	public static void getDirection() {
+		
+		
 		
 		int differenceX = Math.abs(centerX-clickedX);
 		int differenceY = Math.abs(centerY-clickedY);
@@ -142,12 +119,18 @@ public class Display extends Game{
 			picRank = 0;
 		}
 		
+		directionCheck = false;
+		
 	}
+	
 	
 	public void update(int x, int y) {
 		
+		if(directionCheck == true) {
+			getDirection();
+		}
 		draw.updateValue(x, y, picRank);
-		
+		//picRank = draw.getPicRank();
 		
 		
 	
@@ -187,8 +170,15 @@ class Draw extends JPanel{
 		spaceShip = new ImageIcon("backGround/character.png").getImage();
 		
 	}
-	
+	/*
+	public int getPicRank() {
+		return this.picRank;
+	}
+	*/
 	public void updateValue(int x, int y, int picRank) {
+		this.picRank = picRank;
+		
+		
 		
 		if((this.x != x) || (this.y != y)) {
 			
@@ -202,11 +192,29 @@ class Draw extends JPanel{
 					picCounter = 0;
 				}
 			}
+			/*
+			if((this.x > x) && ( this.y == y)) {
+				this.picRank = 4;
+				picCounter = 0;
+			}
+			else if((this.x < x) && ( this.y == y)) {
+				this.picRank = 0;
+				picCounter = 0;
+			}
+			else if((this.x == x) && ( this.y < y)) {
+				this.picRank = 6;
+				picCounter = 0;
+			}
+			else if((this.x == x) && ( this.y > y)) {
+				this.picRank = 2;
+				picCounter = 0;
+			}
+			*/
 		}
 		
 		this.x = x;
 		this.y = y;
-		this.picRank = picRank;
+		
 		//System.out.println(x +" "+y);
 	
 		
