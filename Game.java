@@ -15,13 +15,18 @@ public class Game {
 	static int clickedX ;
 	static int clickedY ;
 	static boolean newClick = false;
+	static boolean directionCheck = false;
 	
 	static double slopeX;
 	static double slopeY;
 	
-	static int moveSpeed = 30;
+	static int moveSpeed = 20;
 	static int moveCounter = 0;
 	
+	static boolean north;
+	static boolean south;
+	static boolean west;
+	static boolean east;
 
 	
 	
