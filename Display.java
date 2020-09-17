@@ -11,7 +11,7 @@ public class Display extends Game{
 
 	
 	
-	static int picRank;
+	static int picRank = 6;
 	
 	static Draw draw = new Draw(windowX, windowY);
 
@@ -210,6 +210,9 @@ class Draw extends JPanel{
 				picCounter = 0;
 			}
 			*/
+		}
+		else {
+			picCounter = 0;
 		}
 		
 		this.x = x;
