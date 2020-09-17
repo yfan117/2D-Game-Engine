@@ -188,7 +188,7 @@ class Draw extends JPanel{
 				timeCounter = 0;
 				picCounter ++;
 				
-				if(picCounter == 3) {
+				if(picCounter == 4) {
 					picCounter = 0;
 				}
 			}
