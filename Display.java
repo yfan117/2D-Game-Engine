@@ -143,21 +143,19 @@ public class Display extends Game{
 
 class Draw extends JPanel{
 	
-	static Image backGround;
-	static Image character;
+	Image backGround;
+	Image character;
 	
-	static int x = 0;
-	static int y = 0;
-	static int picRank;
+	int x = 0;
+	int y = 0;
+	int picRank;
 
-	static int windowX;
-	static int windowY;
+	int windowX;
+	int windowY;
+
 	
-	static int centerX = windowX /2 ;
-	static int centerY = windowY /2 ;
-	
-	static int picCounter = 0;
-	static int timeCounter = 0;
+	int picCounter = 0;
+	int timeCounter = 0;
 	
 	public Draw(int windowX, int windowY) {
 		
