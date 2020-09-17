@@ -19,8 +19,11 @@ public class Game {
 	static double slopeX;
 	static double slopeY;
 	
-	static int moveSpeed = 10;
+	static int moveSpeed = 30;
 	static int moveCounter = 0;
+	
+
+	
 	
 	static Display display = new Display();
 	
@@ -64,11 +67,13 @@ public class Game {
 	
 		if(newClick == true)
 		{
+			
 			for(moveCounter = 0; moveCounter< moveSpeed; moveCounter++) 
 			{
 				
 				if(slopeX > slopeY)
 				{
+					
 					for(int j = 0; j <= slopeX; j++)
 					{
 						updateX();
@@ -89,6 +94,8 @@ public class Game {
 					
 				}
 				else if (slopeX < slopeY){
+					
+					
 					
 					for(int j = 0; j <= slopeY; j++) {
 	
@@ -133,7 +140,9 @@ public class Game {
 			if((clickedX == centerX)&&(clickedY == centerY)) {
 	
 				newClick = false;
-	
+				
+				
+				
 			}
 		}
 	}
@@ -144,14 +153,18 @@ public class Game {
 			centerX --;
 			x --;
 			moveCounter++;
+	
 			
 		}
 		else if(clickedX > centerX) {
 			centerX ++;
 			x ++;
 			moveCounter++;
+
 	
 		}
+
+			
 	}
 	
 	public static void updateY() {
@@ -160,12 +173,15 @@ public class Game {
 			centerY --;
 			y --;
 			moveCounter++;
+
 		}
 		else if(clickedY > centerY) {
 			centerY ++;
 			y ++;
 			moveCounter++;
+
 		}
+	
 	}
 		
 	
