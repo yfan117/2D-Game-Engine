@@ -72,6 +72,12 @@ public class Game {
 	
 		if(newClick == true)
 		{
+			if(slopeX > 3) {
+				slopeX = 3;
+			}
+			if(slopeY > 3) {
+				slopeY = 3;
+			}
 			
 			for(moveCounter = 0; moveCounter< moveSpeed; moveCounter++) 
 			{
