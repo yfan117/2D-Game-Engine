@@ -144,7 +144,7 @@ public class Display extends Game{
 class Draw extends JPanel{
 	
 	static Image backGround;
-	static Image spaceShip;
+	static Image character;
 	
 	static int x = 0;
 	static int y = 0;
@@ -167,7 +167,7 @@ class Draw extends JPanel{
 		
 		ImageIcon icon = new ImageIcon("backGround/backGround.jpg");
 		backGround = icon.getImage();
-		spaceShip = new ImageIcon("backGround/character.png").getImage();
+		character = new ImageIcon("backGround/character.png").getImage();
 		
 	}
 	/*
@@ -230,7 +230,7 @@ class Draw extends JPanel{
 	
 			g.drawImage(backGround, 0, 0, windowX, windowY, x, y, x + windowX, y + windowY, null);
 			
-			g.drawImage(spaceShip, windowX/2 - 50, windowY/2 - 50, windowX/2 + 50, windowY/2 + 50, picCounter*17, picRank * 17, 17*(picCounter+1), picRank * 17 + 17, null);
+			g.drawImage(character, windowX/2 - 50, windowY/2 - 50, windowX/2 + 50, windowY/2 + 50, picCounter*17, picRank * 17, 17*(picCounter+1), picRank * 17 + 17, null);
 
 			//g.drawImage(spaceShip, windowX/2-78/2, windowY/2-74/2, null);
 			
