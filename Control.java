@@ -22,8 +22,7 @@ public class Control extends Game implements MouseListener{
 		west = false;
 		east = false;
 	
-		slopeX = Math.abs(Math.round((double)(clickedX - centerX)/(clickedY - centerY)));
-		slopeY = Math.abs(Math.round((double)(clickedY - centerY)/(clickedX - centerX)));
+	
 		
 		//System.out.println(slopeX +" " +slopeY);
 		//getDirection();
