@@ -20,7 +20,7 @@ public class Game {
 	static double slopeX;
 	static double slopeY;
 	
-	static int moveSpeed = 10;
+	static int moveSpeed = 20;
 	static int moveCounter = 0;
 	
 	static boolean north;
@@ -66,6 +66,8 @@ public class Game {
 		}
 	}
 	
+	static double maxSlope = 1;
+	
 	public static void update() 
 	{
 		
@@ -75,7 +77,7 @@ public class Game {
 			slopeX = Math.abs(Math.round((double)(clickedX - centerX)/(clickedY - centerY)));
 			slopeY = Math.abs(Math.round((double)(clickedY - centerY)/(clickedX - centerX)));
 			
-			//System.out.println(slopeX +" "+slopeY);
+			//System.out.println(slopeX +" "+slopeY +" " +maxSlope);
 			if(slopeX > 3) {
 				slopeX = 3;
 			}
@@ -89,6 +91,7 @@ public class Game {
 				if(slopeX > slopeY)
 				{
 					
+					maxSlope = slopeX;
 					for(int j = 0; j <= slopeX; j++)
 					{
 						updateX();
@@ -110,7 +113,7 @@ public class Game {
 				}
 				else if (slopeX < slopeY){
 					
-					
+					maxSlope = slopeY;
 					
 					for(int j = 0; j <= slopeY; j++) {
 	
@@ -133,7 +136,7 @@ public class Game {
 				else if(slopeX == slopeY) 
 				{
 					
-					for(int j = 0; j <= slopeY+1; j++) 
+					for(int j = 0; j <= maxSlope; j++) 
 					{
 						
 						updateX();
@@ -155,7 +158,7 @@ public class Game {
 			if((clickedX == centerX)&&(clickedY == centerY)) {
 	
 				newClick = false;
-				
+				maxSlope = 1;
 				
 				
 			}
