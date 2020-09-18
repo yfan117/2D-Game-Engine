@@ -20,7 +20,7 @@ public class Game {
 	static double slopeX;
 	static double slopeY;
 	
-	static int moveSpeed = 20;
+	static int moveSpeed = 10;
 	static int moveCounter = 0;
 	
 	static boolean north;
@@ -72,6 +72,10 @@ public class Game {
 	
 		if(newClick == true)
 		{
+			slopeX = Math.abs(Math.round((double)(clickedX - centerX)/(clickedY - centerY)));
+			slopeY = Math.abs(Math.round((double)(clickedY - centerY)/(clickedX - centerX)));
+			
+			//System.out.println(slopeX +" "+slopeY);
 			if(slopeX > 3) {
 				slopeX = 3;
 			}
