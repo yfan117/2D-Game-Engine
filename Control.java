@@ -11,22 +11,26 @@ public class Control extends Game implements MouseListener{
 	@Override
 	public void mousePressed(MouseEvent e) {
 		// TODO Auto-generated method stub
-		clickedX = e.getX() + x;
+
 		
-		clickedY = e.getY() + y;
 		
-		newClick = true;
+		if(outBound(e.getX(), e.getY()) == false)
+		{
+			
+			clickedX = e.getX() + x;
+			clickedY = e.getY() + y;
+			
+			newClick = true;
+			
+			north = false;
+			south = false;
+			west = false;
+			east = false;
+			
+			
+			directionCheck = true;
 		
-		north = false;
-		south = false;
-		west = false;
-		east = false;
-	
-	
-		
-		//System.out.println(slopeX +" " +slopeY);
-		//getDirection();
-		directionCheck = true;
+		}
 	}
 
 	@Override
