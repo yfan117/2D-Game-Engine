@@ -9,7 +9,7 @@ import javax.swing.JPanel;
 
 public class Display extends Game{
 
-	
+
 	
 	static int picRank = 6;
 	
@@ -86,6 +86,7 @@ public class Display extends Game{
 		}
 	
 		/*
+		 * save this for testing purposes 
 		System.out.println();
 		System.out.println("north: "+north);
 		System.out.println("south: "+south);
@@ -165,6 +166,7 @@ class Draw extends JPanel{
 		
 		ImageIcon icon = new ImageIcon("backGround/backGround.jpg");
 		backGround = icon.getImage();
+		//System.out.println(backGround.getWidth(null));
 		character = new ImageIcon("backGround/character.png").getImage();
 		
 	}
@@ -191,6 +193,7 @@ class Draw extends JPanel{
 				}
 			}
 			/*
+			 * save this for testing purpose
 			if((this.x > x) && ( this.y == y)) {
 				this.picRank = 4;
 				picCounter = 0;
@@ -216,7 +219,6 @@ class Draw extends JPanel{
 		this.x = x;
 		this.y = y;
 		
-		//System.out.println(x +" "+y);
 	
 		
 		
@@ -226,14 +228,22 @@ class Draw extends JPanel{
 	protected void paintComponent(Graphics g) {
 		
 		super.paintComponent(g);
-		
-		//System.out.println("here");
-	
-			g.drawImage(backGround, 0, 0, windowX, windowY, x, y, x + windowX, y + windowY, null);
-			
-			g.drawImage(character, windowX/2 - 50, windowY/2 - 50, windowX/2 + 50, windowY/2 + 50, picCounter*17, picRank * 17, 17*(picCounter+1), picRank * 17 + 17, null);
 
-			//g.drawImage(spaceShip, windowX/2-78/2, windowY/2-74/2, null);
+	
+			g.drawImage(backGround, 					//name of the image draw 
+						0, 0, 							//x, y on the panel to draw from
+						windowX, windowY, 				//x, y on the panel to draw to
+						x - windowX/2, y - windowY/2 , 	//x, y on the image to get from
+						x + windowX/2, y + windowY/2 , 	//x, y on the image to get to
+						null);
+			
+			g.drawImage(character, 
+						windowX/2 - 50, windowY/2 - 50, 
+						windowX/2 + 50, windowY/2 + 50, 
+						picCounter*17, picRank * 17, 
+						17*(picCounter+1), picRank * 17 + 17, 
+						null);
+
 			
 
 		
