@@ -28,23 +28,57 @@ public class Game {
 	static boolean west;
 	static boolean east;
 
-	
+	static int[] respawnLcation;
+	static int[] mapDimension;
 	
 	static Display display = new Display();
+	static Map map = new Map("backGround");
 	
 	public static void main(String[] args) {
 		
+	
 		
-		
-
-		
-		
-		
+		x = respawnLcation[0];
+		y = respawnLcation[1];
 		
 		gameLoop();
 		
 		
 		
+	}
+	
+	public boolean outBound(int eX, int eY) {
+		boolean answer = false;
+	
+
+		int xAxis = windowX / 2;
+		int yAxis = windowY / 2;
+		
+		if(eX < xAxis)
+		{
+			if((x - (xAxis - eX)) <= 0)
+				answer = true;
+		}
+		else if(eX > xAxis)
+		{
+			if((x + (eX - xAxis)) >= mapDimension[0])
+				answer = true;
+		}
+		
+		if(eY < yAxis)
+		{
+			if((y - (yAxis - eY)) <= 0)
+				answer = true;
+		}
+		else if(eY > yAxis)
+		{
+			if((y + (eY - yAxis)) >= mapDimension[1])
+				answer = true;
+		}
+		
+
+		
+		return answer;
 	}
 	
 	public static void gameLoop() {
@@ -58,9 +92,10 @@ public class Game {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		//System.out.println(clickedX + "," + clickedY);
+
 		update();
 		display.update(x, y);
+
 		
 
 		}
@@ -74,10 +109,11 @@ public class Game {
 	
 		if(newClick == true)
 		{
+			
 			slopeX = Math.abs(Math.round((double)(clickedX - centerX)/(clickedY - centerY)));
 			slopeY = Math.abs(Math.round((double)(clickedY - centerY)/(clickedX - centerX)));
 			
-			//System.out.println(slopeX +" "+slopeY +" " +maxSlope);
+
 			if(slopeX > 3) {
 				slopeX = 3;
 			}
@@ -167,11 +203,12 @@ public class Game {
 	
 	public static void updateX() {
 		
-		if(clickedX < centerX) {
+		if(clickedX < centerX){
 			centerX --;
 			x --;
 			moveCounter++;
-	
+			
+			
 			
 		}
 		else if(clickedX > centerX) {
