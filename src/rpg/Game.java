@@ -1,4 +1,3 @@
-package rpg;
 public class Game {
 	
 
@@ -16,18 +15,70 @@ public class Game {
 	static int clickedX ;
 	static int clickedY ;
 	static boolean newClick = false;
+	static boolean directionCheck = false;
 	
 	static double slopeX;
 	static double slopeY;
 	
-	static int moveSpeed = 10;
+	static int moveSpeed = 20;
 	static int moveCounter = 0;
 	
-	static Display display = new Display();
+	static boolean north;
+	static boolean south;
+	static boolean west;
+	static boolean east;
+
+	static int[] respawnLcation;
+	static int[] mapDimension;
 	
-	public static void main(String[] args) {		
+	static Display display = new Display();
+	static Map map = new Map("backGround");
+	
+	public static void main(String[] args) {
+		
+	
+		
+		x = respawnLcation[0];
+		y = respawnLcation[1];
 		
 		gameLoop();
+		
+		
+		
+	}
+	
+	public boolean outBound(int eX, int eY) {
+		boolean answer = false;
+	
+
+		int xAxis = windowX / 2;
+		int yAxis = windowY / 2;
+		
+		if(eX < xAxis)
+		{
+			if((x - (xAxis - eX)) <= 0)
+				answer = true;
+		}
+		else if(eX > xAxis)
+		{
+			if((x + (eX - xAxis)) >= mapDimension[0])
+				answer = true;
+		}
+		
+		if(eY < yAxis)
+		{
+			if((y - (yAxis - eY)) <= 0)
+				answer = true;
+		}
+		else if(eY > yAxis)
+		{
+			if((y + (eY - yAxis)) >= mapDimension[1])
+				answer = true;
+		}
+		
+
+		
+		return answer;
 	}
 	
 	public static void gameLoop() {
@@ -41,13 +92,16 @@ public class Game {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		//System.out.println(clickedX + "," + clickedY);
+
 		update();
 		display.update(x, y);
+
 		
 
 		}
 	}
+	
+	static double maxSlope = 1;
 	
 	public static void update() 
 	{
@@ -55,11 +109,25 @@ public class Game {
 	
 		if(newClick == true)
 		{
+			
+			slopeX = Math.abs(Math.round((double)(clickedX - centerX)/(clickedY - centerY)));
+			slopeY = Math.abs(Math.round((double)(clickedY - centerY)/(clickedX - centerX)));
+			
+
+			if(slopeX > 3) {
+				slopeX = 3;
+			}
+			if(slopeY > 3) {
+				slopeY = 3;
+			}
+			
 			for(moveCounter = 0; moveCounter< moveSpeed; moveCounter++) 
 			{
 				
 				if(slopeX > slopeY)
 				{
+					
+					maxSlope = slopeX;
 					for(int j = 0; j <= slopeX; j++)
 					{
 						updateX();
@@ -80,6 +148,8 @@ public class Game {
 					
 				}
 				else if (slopeX < slopeY){
+					
+					maxSlope = slopeY;
 					
 					for(int j = 0; j <= slopeY; j++) {
 	
@@ -102,7 +172,7 @@ public class Game {
 				else if(slopeX == slopeY) 
 				{
 					
-					for(int j = 0; j <= slopeY+1; j++) 
+					for(int j = 0; j <= maxSlope; j++) 
 					{
 						
 						updateX();
@@ -124,25 +194,32 @@ public class Game {
 			if((clickedX == centerX)&&(clickedY == centerY)) {
 	
 				newClick = false;
-	
+				maxSlope = 1;
+				
+				
 			}
 		}
 	}
 	
 	public static void updateX() {
 		
-		if(clickedX < centerX) {
+		if(clickedX < centerX){
 			centerX --;
 			x --;
 			moveCounter++;
+			
+			
 			
 		}
 		else if(clickedX > centerX) {
 			centerX ++;
 			x ++;
 			moveCounter++;
+
 	
 		}
+
+			
 	}
 	
 	public static void updateY() {
@@ -151,19 +228,41 @@ public class Game {
 			centerY --;
 			y --;
 			moveCounter++;
+
 		}
 		else if(clickedY > centerY) {
 			centerY ++;
 			y ++;
 			moveCounter++;
+
 		}
+	
+	}
+	public void CheckCollisions() {
+		//Rectangle playerBounds = player.getBounds();
+		//for (Enemy enemy : enemies){
+		//Rectangle enemyBounds = enemy.getBounds();
+		//if(playerBounds.intersects(enemyBounds)){
+		//enemy.setVisible(false);
+		//}
+		//}
+		//List<Arrows> ar = Sprite.getArrows();
+		//for (Arrow a : ar){
+		//Rectangle arrowBounds = a.getBounds
+		//for (Enemy enemy : enemies){
+		//Rectangle enemyBounds = enemy.getBounds();
+		//if(arrowBounds.intersects(enemyBounds)){
+		//enemy.setHP(enemy.getHP - 1);
+		//enemy.setVisible(false);
+		//make it so when an enemy visible 
+		
 	}
 		
 	
 
 	
 		
-	}
+}
 	
 	
 
