@@ -1,23 +1,27 @@
 import java.awt.Image;
 import javax.swing.ImageIcon;
+import java.util.List;
 
-public class Player {
+public class Player extends Sprite {
   private int hitpoints;
   private int weapon;//Index to array of weapons
   private Image image;
   private boolean canAttack;
   private boolean canMove;
+  private static List<Arrow> arrows;
   
   public Player() {
+    super(0, 0);
+    this.exists = true;
     this.hitpoints = 10;
     this.weapon = 0;
-    this.image = new ImageIcon(Game.root + "/resources/backGround/character.png").getImage();
+    this.image = new ImageIcon(Game.root + "/resources/character.png").getImage();
     this.canAttack = true;
     this.canMove = true;
   }
   
   public Player(int n) {//Start the player with a weapon
-    super();
+    super(0, 0);
     this.weapon = n;
   }
   
@@ -27,5 +31,9 @@ public class Player {
   
   public boolean canMove() {
     return this.canMove;
+  }
+  
+  public List<Arrow> getArrows() {//move to char make non static
+        return arrows;
   }
 }
