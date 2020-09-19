@@ -50,7 +50,7 @@ public class Display extends Game{
 				slopeX = Math.abs(Math.round((double)(clickedX - centerX)/(clickedY - centerY)));
 				slopeY = Math.abs(Math.round((double)(clickedY - centerY)/(clickedX - centerX)));
 				//shoot();
-				draw.addArrow(new Arrow(651,651, e.getX(), e.getY()));//spaceship.getX(),spaceShip.getY(),e.getX(), e.getY()
+				draw.addArrow(new Arrow(Game.centerX,Game.centerY, e.getX(), e.getY()));//spaceship.getX(),spaceShip.getY(),e.getX(), e.getY()
 			}
 		});
 		frame.setVisible(true);
@@ -132,21 +132,21 @@ class Draw extends JPanel{
 		
 		//System.out.println("here");				
 			g.drawImage(backGround, 0, 0, windowX, windowY, x, y, x + windowX, y + windowY, null);
-			g.drawImage(spaceShip, windowX/2-78/2, windowX/2-78/2, null);
+			g.drawImage(spaceShip, windowX/2-78/2, windowY/2-78/2, null);
 			Graphics2D g2d = (Graphics2D) g;
 		List<Arrow> arrow = Sprite.getArrows();
 		if (arrows.size() > 0) {
-		for(Arrow a : arrows) {
+			for(Arrow a : arrows) {
 			//System.out.println("Drawing Arrow");
 			//System.out.println(MouseInfo.getPointerInfo().getLocation().x);
-			newMouseX = MouseInfo.getPointerInfo().getLocation().x;
-			newMouseY = MouseInfo.getPointerInfo().getLocation().y;
+			//newMouseX = MouseInfo.getPointerInfo().getLocation().x;
+			//newMouseY = MouseInfo.getPointerInfo().getLocation().y;
 			//rate = (newMouseX - newMouseY) / (newMouseY - y);
 			//g.drawImage(arrowIMG, test1, test1, null);
 			//a.setX(test1);
 			//a.setY(test1);
-			newX = a.getX();
-			//System.out.println(newX);
+		//	newX = a.getX();
+		//	//System.out.println(newX);
 			//System.out.println("boop");
 		//	System.out.println(arrows.size());
 			//System.out.println(a.getMouseX());
@@ -155,9 +155,9 @@ class Draw extends JPanel{
 			//g.drawImage(arrowIMG, a.setX(a.getY() + 1), a.setY(a.getX() + 1), null);
 			//a.setX(a.getX() - 1);
 			//a.setY(a.getY() - 1);
-			newX = a.getX();
-			newY = a.getY();
-			g.drawImage(arrowIMG, newX, newY, null);
+		//	newX = a.getX();
+		//	newY = a.getY();
+			g.drawImage(arrowIMG, a.getX(), a.getY(), null);
 			updateArrows();
 			repaint();
 			}
@@ -172,12 +172,34 @@ class Draw extends JPanel{
 					arrow.move();
 				}
 				else {
+
 					System.out.println("remove");
+					arrow.setExists(false);
+					arrow.setX(centerX);
+					arrow.setY(centerY);
 					arrows.remove(i);
 					
 				}
 			}
 		}
+	public void CheckCollisions() {
+		//Rectangle playerBounds = player.getBounds();
+		//for (Enemy enemy : enemies){
+		//Rectangle enemyBounds = enemy.getBounds();
+		//if(playerBounds.intersects(enemyBounds)){
+		//enemy.setVisible(false);
+		//}
+		//}
+		//List<Arrows> ar = Sprite.getArrows();
+		//for (Arrow a : ar){
+		//Rectangle arrowBounds = a.getBounds
+		//for (Enemy enemy : enemies){
+		//Rectangle enemyBounds = enemy.getBounds();
+		//if(arrowBounds.intersects(enemyBounds)){
+		//enemy.setVisible(false);
+		//make it so when an enemy visible 
+		
+	}
 }
 	
 	
