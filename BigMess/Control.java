@@ -22,7 +22,7 @@ public class Control extends Game implements MouseListener{
 			//slopeY = Math.abs(Math.round((double)(clickedY - centerY)/(clickedX - centerX)));
 			list.get(0).clickedX = e.getX() + list.get(0).x;
 			list.get(0).clickedY = e.getY() + list.get(0).y;
-			System.out.println(list.get(0).clickedX+" " +list.get(0).clickedY);
+			//System.out.println(list.get(0).clickedX+" " +list.get(0).clickedY);
 			
 			list.get(0).newClick = true;
 			

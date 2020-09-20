@@ -8,47 +8,47 @@ import java.io.IOException;
 
 public class Character {
 	
-	static int x = 0;
-	static int y = 0;
-	static int fps = 30;
+	 int x = 0;
+	 int y = 0;
+
 	
-	static int clickedX ;
-	static int clickedY ;
-	static boolean newClick = false;
-	static boolean directionCheck = false;
+	 int clickedX ;
+	 int clickedY ;
+	 boolean newClick = false;
+	 boolean directionCheck = false;
 	
 
 	
-	static int moveSpeed = 0;
-	static int moveCounter = 0;
+	 int moveSpeed = 0;
+	 int moveCounter = 0;
 	
-	static boolean north;
-	static boolean south;
-	static boolean west;
-	static boolean east;
+	 boolean north;
+	 boolean south;
+	 boolean west;
+	 boolean east;
 
 
-	static int centerX;
-	static int centerY;
-	//static int[] respawnLcation;
+	 int centerX;
+	 int centerY;
 
-	static double slopeX;
-	static double slopeY;
-	static double maxSlope = 1;
+
+	 double slopeX;
+	 double slopeY;
+	 double maxSlope = 1;
 	
 	
-	static int windowX = 1280;
-	static int windowY = 720;
+	 int windowX = 1280;
+	 int windowY = 720;
 	
-	boolean isPlayer = false;
+	 boolean isPlayer = false;
 	
-	static int preX;
-	static int preY;
+	 int preX;
+	 int preY;
 	
-	static int picCounter = 0;
-	static int timeCounter = 0;
+	 int picCounter = 0;
+	 int timeCounter = 0;
 	
-	static int picRank = 6;
+	 int picRank = 6;
 	
 	public Character(String name, int[] location) throws IOException {
 		
@@ -76,19 +76,36 @@ public class Character {
 
 		
 	}
-	static int a;
-	public Character(int a) {
-		this.a = a;
-	}
 	
 	
-	
-	
-	
-	public void update() 
+	public void update(Character character) 
 	{
+		//System.out.println("here");
+		/*
+		 * && ((character.x > (x + 1500))||(character.x < (x + 1500))||
+				(character.y > (y + 1500))||(character.y < (y + 1500))))
+		 */
 		
+		
+		if((isPlayer == false)&& ((character.x > (x + 300))||(character.x < (x - 300))||
+				(character.y > (y + 300))||(character.y < (y - 300))))
+		{
+			north = false;
+			south = false;
+			west = false;
+			east = false;
+			directionCheck = true;
+			centerX = x;
+			centerY = y;
+			
+			clickedX = character.x - 100;
+			clickedY = character.y - 100;
 	
+			
+			//System.out.println(clickedX +" " +clickedY);
+			
+			newClick = true;
+		}
 		if(newClick == true)
 		{
 			
@@ -183,8 +200,10 @@ public class Character {
 		}
 	}
 	
-	public static void updateX() {
+	
+	public void updateX() {
 		//System.out.println(clickedX +" " +centerX +" " +x);
+		
 		if(clickedX < centerX){
 			centerX --;
 			x --;
@@ -204,7 +223,7 @@ public class Character {
 			
 	}
 	
-	public static void updateY() {
+	public void updateY() {
 		
 		if(clickedY < centerY) {
 			centerY --;

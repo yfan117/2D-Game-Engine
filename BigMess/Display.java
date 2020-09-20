@@ -42,7 +42,8 @@ public class Display extends Game{
 		
 	}
 	static Character genericChar;
-	public static void getDirection() {
+	//Character genericChar
+	public static void getDirection(Character genericChar) {
 	
 		  int differenceX = Math.abs(genericChar.centerX-genericChar.clickedX);
 		  int differenceY = Math.abs(genericChar.centerY-genericChar.clickedY);
@@ -114,17 +115,32 @@ public class Display extends Game{
 	
 	
 	public void update(ArrayList <Character> list) {
-		
+
+		//this.list = list;
+	
 		this.genericChar = list.get(0);
+		for(int i = 0; i< list.size(); i++) {
+		if(list.get(i).directionCheck == true) {
+			getDirection(list.get(i));
+		}
+		}
+		draw.updateValue(list);
+		
+		/*
+		 * 	this.genericChar = list.get(0);
 		
 		if(genericChar.directionCheck == true) {
 			getDirection();
 		}
 		draw.updateValue(list);
-		//genericChar.picRank = draw.getgenericChar.picRank();
 		
-		
-	
+		for(int i = 0; i< list.size(); i++) {
+			if(list.get(i).directionCheck == true) {
+				getDirection(list.get(i));
+			}
+		draw.updateValue(list);
+		}
+		 */
 		
 	
 	}
@@ -158,29 +174,30 @@ class Draw extends JPanel{
 		character = new ImageIcon("backGround/character.png").getImage();
 		
 	}
-	/*
-	public int getgenericChar.picRank() {
-		return this.genericChar.picRank;
-	}
-	*/
+
+
 	static ArrayList <Character> list;
 	
 	public void updateValue(ArrayList <Character> list) {
 		
 		
-		//this.genericChar.picRank = genericChar.picRank;
+
 		this.list = list;
 		
 		for(int i = 0; i< list.size(); i++) {
-		if((list.get(i).x != list.get(i).preX) || (list.get(i).y != list.get(i).preY)) {
+			
+		if((list.get(i).x != list.get(i).preX) || (list.get(i).y != list.get(i).preY)) 
+		{
 			
 			list.get(i).timeCounter ++;
 			
-			if(list.get(i).timeCounter == 5) {
+			if(list.get(i).timeCounter == 5)
+			{
 				list.get(i).timeCounter = 0;
 				list.get(i).picCounter ++;
 				
-				if(list.get(i).picCounter == 4) {
+				if(list.get(i).picCounter == 4) 
+				{
 					list.get(i).picCounter = 0;
 				}
 			}
@@ -190,8 +207,8 @@ class Draw extends JPanel{
 			list.get(i).picCounter = 0;
 		}
 		
-		list.get(i).preX = list.get(i).x;
-		list.get(i).preY = list.get(i).y;
+			list.get(i).preX = list.get(i).x;
+			list.get(i).preY = list.get(i).y;
 		}
 	
 		
@@ -202,14 +219,15 @@ class Draw extends JPanel{
 	protected void paintComponent(Graphics g) {
 		
 		super.paintComponent(g);
-		System.out.println(list.get(0).x );
-	
+		//System.out.println(list.get(0).x );
+		/*
 			g.drawImage(backGround, 					//name of the image draw 
 						0, 0, 							//x, y on the panel to draw from
 						windowX, windowY, 				//x, y on the panel to draw to
 						list.get(0).x - windowX/2, list.get(0).y - windowY/2 , 	//x, y on the image to get from
 						list.get(0).x + windowX/2, list.get(0).y + windowY/2 , 	//x, y on the image to get to
 						null);
+			
 			
 			g.drawImage(character, 
 						windowX/2 - 50, windowY/2 - 50, 
@@ -218,17 +236,41 @@ class Draw extends JPanel{
 						17*(list.get(0).picCounter+1), list.get(0).picRank * 17 + 17, 
 						null);
 			/*
+			
+		
+			g.drawImage(character, 
+					list.get(0).x- 50, list.get(0).y - 50, 
+					list.get(0).x + 50, list.get(0).y + 50, 
+					list.get(0).picCounter*17, list.get(0).picRank * 17, 
+					17*(list.get(0).picCounter+1), list.get(0).picRank * 17 + 17, 
+					null);
+			*/
+			g.drawImage(backGround, 					//name of the image draw 
+						0, 0, 							//x, y on the panel to draw from
+						windowX, windowY, 				//x, y on the panel to draw to
+						list.get(0).x - windowX/2, list.get(0).y - windowY/2 , 	//x, y on the image to get from
+						list.get(0).x + windowX/2, list.get(0).y + windowY/2 , 	//x, y on the image to get to
+						null);
+		
+		
+			g.drawImage(character, 
+						windowX/2 - 50, windowY/2 - 50, 
+						windowX/2 + 50, windowY/2 + 50, 
+						list.get(0).picCounter*17, list.get(0).picRank * 17, 
+						17*(list.get(0).picCounter+1), list.get(0).picRank * 17 + 17, 
+						null);
+			
 			for(int i = 1; i< list.size(); i++)
 			{
 				g.drawImage(character, 
-							list.get(i).x - 50, list.get(i).y - 50, 
-							list.get(i).x + 50, list.get(i).y + 50, 
-							picCounter*17, genericChar.picRank * 17, 
-							17*(picCounter+1), genericChar.picRank * 17 + 17, 
+							windowX/2 - list.get(0).x+ list.get(i).x, windowY/2- list.get(0).y+ list.get(i).y, 
+							windowX/2 - list.get(0).x + list.get(i).x + 100, windowY/2- list.get(0).y + list.get(i).y +100, 
+							list.get(i).picCounter*17, list.get(i).picRank * 17, 
+							17*(list.get(i).picCounter+1), list.get(i).picRank * 17 + 17, 
 							null);
 
 			}
-			 */
+			 
 		
 		}
 	

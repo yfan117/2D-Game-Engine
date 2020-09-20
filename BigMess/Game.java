@@ -24,9 +24,9 @@ public class Game {
 	
 	//static Character genericChar;
 	
-	//static Display display = new Display();
+	static Display display = new Display();
 	static Map map;
-	static List<Character> list = new ArrayList<Character>();
+	static ArrayList<Character> list = new ArrayList<Character>();
 	
 	
 	
@@ -45,20 +45,23 @@ public class Game {
 
 		
 		
-		list.add(new Character(1));
-		list.add(new Character(2));
+		list.add(new Character("player", map.getLocation()));
+		list.add(new Character("enemy", new int[]{100, 100}));
+		list.add(new Character("enemy", new int[]{200, 100}));
 		
-		System.out.println(list.get(0).a);
-		System.out.println(list.get(1).a);
+		//list.add(new Character("enemy", new int[]{200, 200}));
 		
-		//gameLoop();
+		//System.out.println(list.get(0).x);
+		//System.out.println(list.get(1).x);
+		
+		gameLoop();
 		
 		
 		
 		
 		
 	}
-	/*
+	
 	public static void gameLoop() {
 		
 		
@@ -67,7 +70,7 @@ public class Game {
 				for(int i = 0; i < list.size(); i++) {
 					//genericChar = list.get(i);
 					
-					list.get(i).update();
+					list.get(i).update(list.get(0));
 					
 					
 				
@@ -80,10 +83,10 @@ public class Game {
 					e.printStackTrace();
 				}
 				
-				//display.update(list);
+				display.update(list);
 		}
 	}
-	*/
+	
 	public boolean outBound(int eX, int eY, Character genericChar) {
 		  boolean answer = false;
 		 
