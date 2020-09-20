@@ -1,13 +1,14 @@
 package Diablo;
-
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Game {
-	
+	//static final public Path root = Paths.get(System.getProperty("user.dir")).getParent();
 
-	
+	static String repository = "backGround/";
 	static int windowX = 1280;
 	static int windowY = 720;
 	
@@ -22,12 +23,10 @@ public class Game {
 	static int[] mapDimension = new int[2];
 	static int timer = 1000 / fps;
 	
-	//static Character genericChar;
-	
 	static Display display;
 	static Map map;
 	static ArrayList<Character> list = new ArrayList<Character>();
-	
+	static ArrayList<Character> projectile= new ArrayList<Character>();
 	
 	
 	
@@ -49,10 +48,7 @@ public class Game {
 		list.add(new Character("enemy", new int[]{100, 100}));
 		list.add(new Character("enemy", new int[]{200, 100}));
 		
-		//list.add(new Character("enemy", new int[]{200, 200}));
-		
-		//System.out.println(list.get(0).x);
-		//System.out.println(list.get(1).x);
+
 		display = new Display();
 		gameLoop();
 		
@@ -67,15 +63,34 @@ public class Game {
 		
 			while(true)
 			{
-				for(int i = 0; i < list.size(); i++) {
+				for(int i = 0; i < list.size(); i++) 
+				{
 					//genericChar = list.get(i);
 					
 					list.get(i).update(list.get(0));
-					
-					
-				
+	
 		
 				}
+				
+			
+				for(int i = 0; i < projectile.size(); i++) 
+				{
+					//genericChar = list.get(i);
+					projectile.get(i).update(list.get(0));
+					if((projectile.get(i).type == "projectile") && (projectile.get(i).rangeCounter >= projectile.get(i).range))
+					{
+						projectile.remove(i);
+					}
+					
+					
+		
+				}
+				
+				
+				
+				display.update();
+				//System.out.println(projectile.size());
+				
 				try {
 					Thread.sleep(timer);
 				} catch (InterruptedException e) {
@@ -83,8 +98,10 @@ public class Game {
 					e.printStackTrace();
 				}
 				
-				display.update();
-		}
+				
+				
+				
+			}
 	}
 	
 	public boolean outBound(int eX, int eY, Character genericChar) {
@@ -123,14 +140,4 @@ public class Game {
 	
 	
 	
-	
-	
-
-	
-	
-		
-	
-
-	
-		
 	}

@@ -1,14 +1,12 @@
 package Diablo;
-
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
 import javax.swing.ImageIcon;
 
 public class Map extends Game{
-	//static ImageIcon icon;
+
 	
 	static int enemyNum;
 	int[] respawnLcation = new int[2];
@@ -16,13 +14,13 @@ public class Map extends Game{
 	
 	public Map(String mapName) throws IOException  {
 		
-		ImageIcon icon = new ImageIcon("backGround/"+mapName+".jpg");
+		ImageIcon icon = new ImageIcon( repository + mapName + ".jpg");
 		
 		mapDimension[0] = icon.getImage().getWidth(null);
 		mapDimension[1] = icon.getImage().getHeight(null);
 		
 	
-		BufferedReader bufferedReader = new BufferedReader(new FileReader("backGround/"+mapName +".txt"));
+		BufferedReader bufferedReader = new BufferedReader(new FileReader(repository + mapName +".txt"));
 			
 	
 		
@@ -38,9 +36,6 @@ public class Map extends Game{
 		
 		return respawnLcation;
 	}
-	
-
-	
 	
 
 }

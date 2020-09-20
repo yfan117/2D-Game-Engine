@@ -1,12 +1,12 @@
 package Diablo;
-
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class Character {
+public class Character extends Game{
+
 	
 	 int x = 0;
 	 int y = 0;
@@ -40,7 +40,6 @@ public class Character {
 	 int windowX = 1280;
 	 int windowY = 720;
 	
-	 boolean isPlayer = false;
 	
 	 int preX;
 	 int preY;
@@ -49,6 +48,11 @@ public class Character {
 	 int timeCounter = 0;
 	
 	 int picRank = 6;
+	 
+	 int rangeCounter = 0;
+	 int range;
+	 
+	 String type;
 	
 	public Character(String name, int[] location) throws IOException {
 		
@@ -60,35 +64,66 @@ public class Character {
 		
         if(name == "player")
          {
-        	isPlayer = true;
+        	type = "player";
+        	//isPlayer = true;
 			this.centerX = x + windowX/2;
 			this.centerY = y + windowY/2;
          }
-		
-		FileReader reader = new FileReader("backGround/"+name +".txt");
+        
+        if(name == "enemy")
+        {
+        	type = "enemy";
+        }
+       
+		FileReader reader = new FileReader(repository +name +".txt");
 	
 		 BufferedReader bufferedReader = new BufferedReader(reader);
 		
 		 moveSpeed = Integer.parseInt(bufferedReader.readLine());
-	
-        
-         
 
-		
 	}
+	
+	public Character(String name, int originX, int originY, int destinationX, int destinationY) throws IOException {
+		
+		this.x = originX;
+        this.y = originY;
+        
+        preX = x;
+        preY = y;
+		
+        centerX = x;
+		centerY = y;
+		
+		clickedX = destinationX;
+		clickedY = destinationY;
+        
+		newClick = true;
+		
+        if(name == "arrow")
+        {
+        	type = "projectile";
+        }
+      
+		FileReader reader = new FileReader(repository +name +".txt");
+	
+		 BufferedReader bufferedReader = new BufferedReader(reader);
+		
+		 moveSpeed = Integer.parseInt(bufferedReader.readLine());
+		 
+		 range = Integer.parseInt(bufferedReader.readLine());
+
+		 
+	}
+	
+	
 	
 	
 	public void update(Character character) 
 	{
-		//System.out.println("here");
-		/*
-		 * && ((character.x > (x + 1500))||(character.x < (x + 1500))||
-				(character.y > (y + 1500))||(character.y < (y + 1500))))
-		 */
 		
 		
-		if((isPlayer == false)&& ((character.x > (x + 300))||(character.x < (x - 300))||
-				(character.y > (y + 300))||(character.y < (y - 300))))
+		if((type == "enemy")&& ((character.x > (x + 300))||(character.x < (x - 300))
+				||(character.y > (y + 300))||(character.y < (y - 300))))
 		{
 			north = false;
 			south = false;
@@ -102,16 +137,17 @@ public class Character {
 			clickedY = character.y - 100;
 	
 			
-			//System.out.println(clickedX +" " +clickedY);
-			
 			newClick = true;
 		}
+		
+		
+		
 		if(newClick == true)
 		{
-			
+		
 			slopeX = Math.abs(Math.round((double)(clickedX - centerX)/(clickedY - centerY)));
 			slopeY = Math.abs(Math.round((double)(clickedY - centerY)/(clickedX - centerX)));
-			
+	
 
 			if(slopeX > 4) {
 				slopeX = 4;
@@ -122,6 +158,7 @@ public class Character {
 			
 			for(moveCounter = 0; moveCounter< moveSpeed; moveCounter++) 
 			{
+			
 				
 				if(slopeX > slopeY)
 				{
@@ -131,10 +168,13 @@ public class Character {
 					{
 						updateX();
 						
-						
-						if(clickedX == centerX) {
-							break;
-						}
+							
+								if(clickedX == centerX) 
+								{
+									break;
+								}
+							
+							
 						
 						if(moveCounter == moveSpeed) {
 							break;
@@ -145,6 +185,7 @@ public class Character {
 					
 					updateY();
 					
+				
 				}
 				else if (slopeX < slopeY){
 					
@@ -154,9 +195,13 @@ public class Character {
 	
 						updateY();
 						
-						if(clickedY == centerY) {
-							break;
-						}
+					
+							
+							if(clickedY == centerY) {
+								break;
+							}
+						
+					
 						
 						if(moveCounter == moveSpeed) {
 							break;
@@ -165,6 +210,7 @@ public class Character {
 					}
 	
 					updateX();
+					
 					
 					
 				}
@@ -189,26 +235,32 @@ public class Character {
 	
 			
 			}
+			
 
 			if((clickedX == centerX)&&(clickedY == centerY)) {
 	
 				newClick = false;
 				maxSlope = 1;
-				
-				
 			}
+				
+			
 		}
 	}
 	
 	
 	public void updateX() {
-		//System.out.println(clickedX +" " +centerX +" " +x);
+	
 		
 		if(clickedX < centerX){
 			centerX --;
 			x --;
 			moveCounter++;
 			
+			if(type == "projectile")
+			{
+				clickedX--;
+				rangeCounter++;
+			}
 			
 			
 		}
@@ -217,6 +269,11 @@ public class Character {
 			x ++;
 			moveCounter++;
 
+			if(type == "projectile")
+			{
+				clickedX++;
+				rangeCounter++;
+			}
 	
 		}
 
@@ -229,13 +286,24 @@ public class Character {
 			centerY --;
 			y --;
 			moveCounter++;
+			
+			if(type == "projectile")
+			{
+				clickedY--;
+				rangeCounter++;
+			}
 
 		}
 		else if(clickedY > centerY) {
 			centerY ++;
 			y ++;
 			moveCounter++;
-
+			
+			if(type == "projectile")
+			{
+				clickedY++;
+				rangeCounter++;
+			}
 		}
 	
 	}
