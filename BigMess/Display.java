@@ -1,3 +1,5 @@
+package Diablo;
+
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.MouseAdapter;
@@ -14,7 +16,7 @@ public class Display extends Game{
 	
 	//static int genericChar.picRank = 6;
 	
-	static Draw draw = new Draw(windowX, windowY);
+	static Draw draw = new Draw(windowX, windowY, list);
 
 	public Display(){
 		
@@ -39,7 +41,7 @@ public class Display extends Game{
 
 		
 	}
-	static Character genericChar;
+	//static Character genericChar;
 	//Character genericChar
 	public static void getDirection(Character genericChar) {
 	
@@ -112,17 +114,17 @@ public class Display extends Game{
 	}
 	
 	
-	public void update(ArrayList <Character> list) {
+	public void update() {
 
 		//this.list = list;
 	
-		this.genericChar = list.get(0);
+		//this.genericChar = list.get(0);
 		for(int i = 0; i< list.size(); i++) {
 		if(list.get(i).directionCheck == true) {
 			getDirection(list.get(i));
 		}
 		}
-		draw.updateValue(list);
+		draw.updateValue();
 		
 		/*
 		 * 	this.genericChar = list.get(0);
@@ -158,13 +160,13 @@ class Draw extends JPanel{
 	int windowY;
 
 	
+	static ArrayList <Character> list;
 	
-	
-	public Draw(int windowX, int windowY) {
+	public Draw(int windowX, int windowY, ArrayList <Character> list) {
 		
 		this.windowX = windowX;
 		this.windowY = windowY;
-		
+		this.list = list;
 		
 		ImageIcon icon = new ImageIcon("backGround/backGround.jpg");
 		backGround = icon.getImage();
@@ -174,13 +176,11 @@ class Draw extends JPanel{
 	}
 
 
-	static ArrayList <Character> list;
 	
-	public void updateValue(ArrayList <Character> list) {
+	
+	public void updateValue() {
 		
-		
-
-		this.list = list;
+	
 		
 		for(int i = 0; i< list.size(); i++) {
 			
@@ -243,6 +243,8 @@ class Draw extends JPanel{
 					17*(list.get(0).picCounter+1), list.get(0).picRank * 17 + 17, 
 					null);
 			*/
+		
+		
 			g.drawImage(backGround, 					//name of the image draw 
 						0, 0, 							//x, y on the panel to draw from
 						windowX, windowY, 				//x, y on the panel to draw to
@@ -257,7 +259,7 @@ class Draw extends JPanel{
 						list.get(0).picCounter*17, list.get(0).picRank * 17, 
 						17*(list.get(0).picCounter+1), list.get(0).picRank * 17 + 17, 
 						null);
-			
+		
 			for(int i = 1; i< list.size(); i++)
 			{
 				g.drawImage(character, 
@@ -268,6 +270,8 @@ class Draw extends JPanel{
 							null);
 
 			}
+			
+			
 			 
 		
 		}

@@ -1,3 +1,5 @@
+package Diablo;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +24,7 @@ public class Game {
 	
 	//static Character genericChar;
 	
-	static Display display = new Display();
+	static Display display;
 	static Map map;
 	static ArrayList<Character> list = new ArrayList<Character>();
 	
@@ -51,7 +53,7 @@ public class Game {
 		
 		//System.out.println(list.get(0).x);
 		//System.out.println(list.get(1).x);
-		
+		display = new Display();
 		gameLoop();
 		
 		
@@ -81,7 +83,7 @@ public class Game {
 					e.printStackTrace();
 				}
 				
-				display.update(list);
+				display.update();
 		}
 	}
 	
