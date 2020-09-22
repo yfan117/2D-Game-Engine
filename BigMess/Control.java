@@ -20,12 +20,30 @@ public class Control extends Game implements MouseListener {
 			
 			//System.out.println("left click");
 			
-			if(outBound(e.getX(), e.getY(), list.get(0)) == false) 
+			//if(outBound(e.getX(), e.getY(), list.get(0)) == false) 
 			{
 				
-				list.get(0).clickedX = e.getX() + list.get(0).x;
-				list.get(0).clickedY = e.getY() + list.get(0).y;
+				//list.get(0).clickedX = e.getX() + list.get(0).x;
+				//list.get(0).clickedY = e.getY() + list.get(0).y;
 	
+				int eX = e.getX();
+				int eY = e.getY();
+				
+		
+				
+				if(eX < centerX ) {
+					list.get(0).clickedX = list.get(0).x - (centerX - eX);
+				}
+				else if(eX > centerX ) {
+					list.get(0).clickedX = list.get(0).x + (eX - centerX);
+				}
+				
+				if(eY < centerY ) {
+					list.get(0).clickedY = list.get(0).y - (centerY - eY);
+				}
+				else if(eY > centerY ) {
+					list.get(0).clickedY = list.get(0).y + (eY - centerY);
+				}
 				
 				list.get(0).newClick = true;
 				
@@ -49,17 +67,17 @@ public class Control extends Game implements MouseListener {
 			int destinationY = eY;
 			
 			if(eX < centerX ) {
-				destinationX = list.get(0).x - (centerX - eX);
+				destinationX = list.get(0).x - (centerX - eX)*3;
 			}
 			else if(eX > centerX ) {
-				destinationX = list.get(0).x + (eX - centerX);
+				destinationX = list.get(0).x + (eX - centerX)*3;
 			}
 			
 			if(eY < centerY ) {
-				destinationY = list.get(0).y - (centerY - eY);
+				destinationY = list.get(0).y - (centerY - eY)*3;
 			}
 			else if(eY > centerY ) {
-				destinationY = list.get(0).y + (eY - centerY);
+				destinationY = list.get(0).y + (eY - centerY)*3;
 			}
 			
 			

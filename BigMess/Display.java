@@ -41,36 +41,36 @@ public class Display extends Game{
 
 	public static void getDirection(Character genericChar) {
 	
-		  int differenceX = Math.abs(genericChar.centerX-genericChar.clickedX);
-		  int differenceY = Math.abs(genericChar.centerY-genericChar.clickedY);
+		  int differenceX = Math.abs(genericChar.x-genericChar.clickedX);
+		  int differenceY = Math.abs(genericChar.y-genericChar.clickedY);
 		  
 		  int acceptableDifference = 50;
 		  
-		  if((differenceX < acceptableDifference) && (genericChar.centerY < genericChar.clickedY)) {
+		  if((differenceX < acceptableDifference) && (genericChar.y < genericChar.clickedY)) {
 		   genericChar.south = true;
 		  }
-		  else if((differenceX < acceptableDifference) && (genericChar.centerY > genericChar.clickedY)) {
+		  else if((differenceX < acceptableDifference) && (genericChar.y > genericChar.clickedY)) {
 		   genericChar.north = true;
 		  }
-		  else if((differenceY < acceptableDifference) && (genericChar.centerX < genericChar.clickedX)) {
+		  else if((differenceY < acceptableDifference) && (genericChar.x < genericChar.clickedX)) {
 		   genericChar.east = true;
 		  }
-		  else if((differenceY < acceptableDifference) && (genericChar.centerX > genericChar.clickedX)) {
+		  else if((differenceY < acceptableDifference) && (genericChar.x > genericChar.clickedX)) {
 		   genericChar.west = true;
 		  }
-		  else if((differenceX >= acceptableDifference) && (genericChar.centerY < genericChar.clickedY) && (genericChar.centerX < genericChar.clickedX)) {
+		  else if((differenceX >= acceptableDifference) && (genericChar.y < genericChar.clickedY) && (genericChar.x < genericChar.clickedX)) {
 		   genericChar.south = true;
 		   genericChar.east = true;
 		  }
-		  else if((differenceX >= acceptableDifference) && (genericChar.centerY < genericChar.clickedY) && (genericChar.centerX > genericChar.clickedX)) {
+		  else if((differenceX >= acceptableDifference) && (genericChar.y < genericChar.clickedY) && (genericChar.x > genericChar.clickedX)) {
 		   genericChar.south = true;
 		   genericChar.west = true;
 		  }
-		  else if((differenceX >=  acceptableDifference) && (genericChar.centerY > genericChar.clickedY)&& (genericChar.centerX < genericChar.clickedX)) {
+		  else if((differenceX >=  acceptableDifference) && (genericChar.y > genericChar.clickedY)&& (genericChar.x < genericChar.clickedX)) {
 		   genericChar.north = true;
 		   genericChar.east = true;
 		  }
-		  else if((differenceX >=  acceptableDifference) && (genericChar.centerY > genericChar.clickedY)&& (genericChar.centerX > genericChar.clickedX)) {
+		  else if((differenceX >=  acceptableDifference) && (genericChar.y > genericChar.clickedY)&& (genericChar.x > genericChar.clickedX)) {
 		   genericChar.north = true;
 		   genericChar.west = true;
 		  }

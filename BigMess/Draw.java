@@ -32,7 +32,8 @@ class Draw extends JPanel{
 
 		this.windowX = windowX;
 		this.windowY = windowY;
-		  backGround = new ImageIcon(repository +"backGround.jpg").getImage();
+		  backGround = new ImageIcon(repository +"BigMap2.png").getImage();
+		  //backGround = new ImageIcon(repository +"backGround.jpg").getImage();
 		  character = new ImageIcon(repository +"character.png").getImage();
 		  arrowIMG = new ImageIcon(repository +"arrow2.png").getImage();
 		  bowIMG = new ImageIcon(repository +"bow.png").getImage();
@@ -69,30 +70,65 @@ class Draw extends JPanel{
 			list.get(i).picCounter = 0;
 		}
 		
+		
 			list.get(i).preX = list.get(i).x;
 			list.get(i).preY = list.get(i).y;
-		}
-	
 		
+		}
+
 		
 		repaint();
 	}
 	
+	static int zoom = 0;
+	
 	protected void paintComponent(Graphics g) {
 
 			super.paintComponent(g);
-	
+			/*
 			g.drawImage(backGround, 					//name of the image draw 
-						0, 0, 							//x, y on the panel to draw from
-						windowX, windowY, 				//x, y on the panel to draw to
+						0 - zoom, 0 -zoom, 							//x, y on the panel to draw from
+						windowX + zoom, windowY + zoom, 				//x, y on the panel to draw to
 						list.get(0).x - windowX/2, list.get(0).y - windowY/2 , 	//x, y on the image to get from
 						list.get(0).x + windowX/2, list.get(0).y + windowY/2 , 	//x, y on the image to get to
 						null);
+	
+			/**/
+			
+			//infinity map is incomplete
+			int tempX = 0;
+			int tempY =0;
 		
-		
+			if(list.get(0).x > 1000) {
+				tempX  = 980;
+			}
+			if(list.get(0).y > 1000) {
+				tempY  = 980;
+			}
+			
+			
+			for(int xOffset = tempX; xOffset < list.get(0).x + windowX; xOffset = xOffset + 690)
+			{
+				for(int yOffset = tempY; yOffset < list.get(0).y + windowY; yOffset = yOffset + 670)
+				{
+					g.drawImage(backGround, 					
+								xOffset - list.get(0).x, yOffset - list.get(0).y, 							
+								xOffset + 690 - list.get(0).x, yOffset + 670 - list.get(0).y, 			
+								0, 0,
+								690, 670, 
+								null);
+				}
+				
+				
+			}
+			
+			
+			//System.out.println(list.get(0).x +" " +list.get(0).y);
+			//System.out.println(list.get(0).clickedX +" " +list.get(0).clickedY +"\n");
+	
 			g.drawImage(character, 
-						windowX/2 - 50, windowY/2 -50, 
-						windowX/2 + 50, windowY/2 + 50, 
+						windowX/2 - 40, windowY/2 - 40, 
+						windowX/2 + 40, windowY/2 + 40, 
 						list.get(0).picCounter*17, list.get(0).picRank * 17, 
 						17*(list.get(0).picCounter+1), list.get(0).picRank * 17 + 17, 
 						null);	
@@ -104,14 +140,14 @@ class Draw extends JPanel{
 				
 				g.drawImage(character, 
 							windowX/2 - list.get(0).x+ list.get(i).x, windowY/2- list.get(0).y+ list.get(i).y, 
-							windowX/2 - list.get(0).x + list.get(i).x + 100, windowY/2- list.get(0).y + list.get(i).y +100, 
+							windowX/2 - list.get(0).x + list.get(i).x + 80, windowY/2- list.get(0).y + list.get(i).y + 80, 
 							list.get(i).picCounter*17, list.get(i).picRank * 17, 
 							17*(list.get(i).picCounter+1), list.get(i).picRank * 17 + 17, 
 							null);
 
 			}
 			
-			g.drawImage(bowIMG, windowX/2 -50, windowY/2 -50, null);
+			//g.drawImage(bowIMG, windowX/2 -50, windowY/2 -50, null);
 			
 			for(int i = 1; i< projectile.size(); i++)
 			{

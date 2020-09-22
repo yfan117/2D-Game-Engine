@@ -66,8 +66,8 @@ public class Character extends Game{
          {
         	type = "player";
         	//isPlayer = true;
-			this.centerX = x + windowX/2;
-			this.centerY = y + windowY/2;
+			//this.centerX = x + windowX/2;
+			//this.centerY = y + windowY/2;
          }
         
         if(name == "enemy")
@@ -79,7 +79,9 @@ public class Character extends Game{
 	
 		 BufferedReader bufferedReader = new BufferedReader(reader);
 		
-		 moveSpeed = Integer.parseInt(bufferedReader.readLine());
+		// moveSpeed = Integer.parseInt(bufferedReader.readLine());
+		 
+		 moveSpeed = 20;
 
 	}
 	
@@ -91,11 +93,10 @@ public class Character extends Game{
         preX = x;
         preY = y;
 		
-        centerX = x;
-		centerY = y;
+ 
 		
-		clickedX = destinationX;
-		clickedY = destinationY;
+		clickedX = destinationX ;
+		clickedY = destinationY ;
         
 		newClick = true;
 		
@@ -118,24 +119,24 @@ public class Character extends Game{
 	
 	
 	
-	public void update(Character character) 
+	public void update() 
 	{
 		
 		
-		if((type == "enemy")&& ((character.x > (x + 300))||(character.x < (x - 300))
-				||(character.y > (y + 300))||(character.y < (y - 300))))
+		if((type == "enemy")&& ((list.get(0).x > (x + 300))||(list.get(0).x < (x - 300))
+				||(list.get(0).y > (y + 300))||(list.get(0).y < (y - 300))))
 		{
 			north = false;
 			south = false;
 			west = false;
 			east = false;
 			directionCheck = true;
-			centerX = x;
-			centerY = y;
 			
-			clickedX = character.x - 100;
-			clickedY = character.y - 100;
-	
+			
+			clickedX = list.get(0).x - 100;
+			clickedY = list.get(0).y - 100;
+			
+			
 			
 			newClick = true;
 		}
@@ -145,9 +146,9 @@ public class Character extends Game{
 		if(newClick == true)
 		{
 		
-			slopeX = Math.abs(Math.round((double)(clickedX - centerX)/(clickedY - centerY)));
-			slopeY = Math.abs(Math.round((double)(clickedY - centerY)/(clickedX - centerX)));
-	
+			slopeX = Math.abs(Math.round((double)(clickedX - x)/(clickedY - y)));
+			slopeY = Math.abs(Math.round((double)(clickedY - y)/(clickedX - x)));
+			
 
 			if(slopeX > 4) {
 				slopeX = 4;
@@ -169,7 +170,7 @@ public class Character extends Game{
 						updateX();
 						
 							
-								if(clickedX == centerX) 
+								if(clickedX == x) 
 								{
 									break;
 								}
@@ -197,7 +198,7 @@ public class Character extends Game{
 						
 					
 							
-							if(clickedY == centerY) {
+							if(clickedY == y) {
 								break;
 							}
 						
@@ -237,7 +238,7 @@ public class Character extends Game{
 			}
 			
 
-			if((clickedX == centerX)&&(clickedY == centerY)) {
+			if((clickedX == x)&&(clickedY == y)) {
 	
 				newClick = false;
 				maxSlope = 1;
@@ -247,66 +248,45 @@ public class Character extends Game{
 		}
 	}
 	
-	
-	public void updateX() {
-	
+		public void updateX() {
+			
+				
+				if(clickedX < x){
+
+					x --;
+					moveCounter++;
+					
+				}
+				else if(x < clickedX) {
+
+					x ++;
+					moveCounter++;
+					
 		
-		if(clickedX < centerX){
-			centerX --;
-			x --;
-			moveCounter++;
-			
-			if(type == "projectile")
-			{
-				clickedX--;
-				rangeCounter++;
-			}
-			
-			
-		}
-		else if(clickedX > centerX) {
-			centerX ++;
-			x ++;
-			moveCounter++;
-
-			if(type == "projectile")
-			{
-				clickedX++;
-				rangeCounter++;
-			}
-	
-		}
-
-			
-	}
-	
-	public void updateY() {
+				}
 		
-		if(clickedY < centerY) {
-			centerY --;
-			y --;
-			moveCounter++;
-			
-			if(type == "projectile")
-			{
-				clickedY--;
-				rangeCounter++;
+					
 			}
+			
+			public void updateY() {
+				
+				if(clickedY < y) {
 
-		}
-		else if(clickedY > centerY) {
-			centerY ++;
-			y ++;
-			moveCounter++;
+					y --;
+					moveCounter++;
+		
+		
+				}
+				else if(clickedY > y) {
+
+					y ++;
+					moveCounter++;
+		
+		
+				}
 			
-			if(type == "projectile")
-			{
-				clickedY++;
-				rangeCounter++;
 			}
-		}
 	
-	}
 	
 
 }

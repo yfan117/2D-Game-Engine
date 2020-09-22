@@ -1,16 +1,26 @@
 package Diablo;
+import java.awt.Dimension;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+
+
+
+
 public class Game {
 	//static final public Path root = Paths.get(System.getProperty("user.dir")).getParent();
 
+
+
 	static String repository = "backGround/";
-	static int windowX = 1280;
-	static int windowY = 720;
+	//static int windowX = 1280;
+	//static int windowY = 720;
+	
+	static int windowX = 1920;
+	static int windowY = 1080;
 	
 	static int centerX = windowX /2 ;
 	static int centerY = windowY /2 ;
@@ -32,7 +42,7 @@ public class Game {
 	
 	public static void main(String[] args) throws IOException {
 		
-	
+
 		
 		try {
 			map = new Map("backGround");
@@ -45,8 +55,8 @@ public class Game {
 		
 		
 		list.add(new Character("player", map.getLocation()));
-		list.add(new Character("enemy", new int[]{100, 100}));
-		list.add(new Character("enemy", new int[]{200, 100}));
+		//list.add(new Character("enemy", new int[]{100, 100}));
+		//list.add(new Character("enemy", new int[]{200, 100}));
 		
 
 		display = new Display();
@@ -67,7 +77,7 @@ public class Game {
 				{
 					//genericChar = list.get(i);
 					
-					list.get(i).update(list.get(0));
+					list.get(i).update();
 	
 		
 				}
@@ -76,12 +86,15 @@ public class Game {
 				for(int i = 0; i < projectile.size(); i++) 
 				{
 					//genericChar = list.get(i);
-					projectile.get(i).update(list.get(0));
+					projectile.get(i).update();
+					/*
 					if((projectile.get(i).type == "projectile") && (projectile.get(i).rangeCounter >= projectile.get(i).range))
 					{
 						projectile.remove(i);
 					}
-					
+					*/
+					if((projectile.get(i).clickedX == projectile.get(i).x)&&(projectile.get(i).clickedY == projectile.get(i).y))
+						projectile.remove(i);
 					
 		
 				}
@@ -103,7 +116,7 @@ public class Game {
 				
 			}
 	}
-	
+	/*
 	public boolean outBound(int eX, int eY, Character genericChar) {
 		  boolean answer = false;
 		 
@@ -138,6 +151,6 @@ public class Game {
 		  return answer;
 		 }
 	
-	
+	*/
 	
 	}
