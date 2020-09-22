@@ -32,7 +32,7 @@ class Draw extends JPanel{
 
 		this.windowX = windowX;
 		this.windowY = windowY;
-		  backGround = new ImageIcon(repository +"BigMap2.png").getImage();
+		  backGround = new ImageIcon(repository +"bigMap2.png").getImage();
 		  //backGround = new ImageIcon(repository +"backGround.jpg").getImage();
 		  character = new ImageIcon(repository +"character.png").getImage();
 		  arrowIMG = new ImageIcon(repository +"arrow2.png").getImage();
@@ -85,7 +85,9 @@ class Draw extends JPanel{
 	protected void paintComponent(Graphics g) {
 
 			super.paintComponent(g);
-			/*
+			/* 
+			 * save this
+			 *
 			g.drawImage(backGround, 					//name of the image draw 
 						0 - zoom, 0 -zoom, 							//x, y on the panel to draw from
 						windowX + zoom, windowY + zoom, 				//x, y on the panel to draw to
@@ -93,17 +95,25 @@ class Draw extends JPanel{
 						list.get(0).x + windowX/2, list.get(0).y + windowY/2 , 	//x, y on the image to get to
 						null);
 	
-			/**/
+			/*i
+			 * f(list.get(0).x % 1000 == 0) {
+			 
+				tempX  = list.get(0).x - list.get(0).moveSpeed;
+			}
+			if(list.get(0).y % 1000 == 0) {
+				tempY  = list.get(0).y - list.get(0).moveSpeed;
+			}
+			*/
 			
 			//infinity map is incomplete
 			int tempX = 0;
 			int tempY =0;
 		
-			if(list.get(0).x > 1000) {
-				tempX  = 980;
+			if(list.get(0).x % 1000 == 0) {
+				tempX  = list.get(0).x - list.get(0).moveSpeed;
 			}
-			if(list.get(0).y > 1000) {
-				tempY  = 980;
+			if(list.get(0).y % 1000 == 0) {
+				tempY  = list.get(0).y - list.get(0).moveSpeed;
 			}
 			
 			
