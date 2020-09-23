@@ -162,7 +162,9 @@ class Draw extends JPanel{
 				if(projectile.get(i).collision == true)
 				{
 					temp = explosion;
-					System.out.println("explosion");
+					projectile.get(i).active = false;
+					//projectile.get(i).newClick = false;
+					//System.out.println("explosion");
 				}
 				else
 				{
@@ -176,6 +178,7 @@ class Draw extends JPanel{
 						null);
 				
 			}
+		
 			
 			g.drawImage(character, 
 					windowX/2 - 40, windowY/2 - 40, 

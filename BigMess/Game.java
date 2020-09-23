@@ -16,11 +16,11 @@ public class Game {
 
 
 	static String repository = "backGround/";
-	static int windowX = 1280;
-	static int windowY = 720;
+	//static int windowX = 1280;
+	//static int windowY = 720;
 	
-	//static int windowX = 1920;
-	// int windowY = 1080;
+	static int windowX = 1920;
+	static int windowY = 1080;
 	
 	static int centerX = windowX /2 ;
 	static int centerY = windowY /2 ;
@@ -96,17 +96,18 @@ public class Game {
 				
 				
 				display.update();
-	
+				
 				for(int i = 0; i < projectile.size(); i++) 
 				{
 					//System.out.println(projectile.get(i).collision);
-					if((projectile.get(i).newClick == false))
+					if((projectile.get(i).active == false))
 					{
 						projectile.remove(i);
 					}
 					
 		
 				}
+				
 				
 				try {
 					Thread.sleep(timer);

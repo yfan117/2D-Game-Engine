@@ -37,9 +37,10 @@ public class Character extends Game{
 	 double maxSlope = 1;
 	
 	
-	 int windowX = 1280;
-	 int windowY = 720;
-	
+	 //int windowX = 1280;
+	 //int windowY = 720;
+	static int windowX = 1920;
+	static int windowY = 1080;
 	
 	 int preX;
 	 int preY;
@@ -56,6 +57,7 @@ public class Character extends Game{
 	 
 	 boolean visible = false;
 	 boolean collision = false;
+	 boolean active = true;
 	
 	public Character(String name, int[] location) throws IOException {
 		
@@ -78,7 +80,7 @@ public class Character extends Game{
         {
         	type = "enemy";
         	
-        	setVisible();
+        	isVisible();
         	
         }
        
@@ -123,7 +125,7 @@ public class Character extends Game{
 		 
 	}
 	
-	public void setVisible() {
+	public void isVisible() {
 		if(((x >= list.get(0).x - windowX/2) &&(x <= list.get(0).x + windowX/2))
         		&&
         		((y >= list.get(0).y - windowY/2) &&(y <= list.get(0).y + windowY/2)))
@@ -138,51 +140,58 @@ public class Character extends Game{
 	
 	public void isCollision(int x, int y, int placeInList) 
 	{
-		
-		for(int i = 0; i < list.size(); i++) 
+		if(placeInList != 0)
 		{
-			if((visible == true)&&(list.get(i).visible == true))
+			for(int i = 0; i < list.size(); i++) 
 			{
-				if(i != placeInList)
+				if((this.visible == true)&&(list.get(i).visible == true))
 				{
-					if(((x > list.get(i).x ) &&(x <= list.get(i).x + 100))
-			        		&&
-			        		((y > list.get(i).y) &&(y <= list.get(i).y + 100)))
-			        {
-					
+					if((i != placeInList)||(type == "projectile"))
+					{
+						if(((x > list.get(i).x ) &&(x <= list.get(i).x + 100))
+				        		&&
+				        		((y > list.get(i).y) &&(y <= list.get(i).y + 100)))
+				        {
+						
+								
+								
+								
+								if(type == "projectile")
+								{
+									projectile.get(placeInList).collision = true;
+									//System.out.println(placeInList);
+									break;
+								}
+								else
+								{
+									list.get(placeInList).collision = true;
+									//collision = true;
+								}
 							
-							
-							
+								
+				        }
+						else 
+						{
 							if(type == "projectile")
 							{
-								projectile.get(placeInList).collision = true;
+								//if(collision == true)
+									//System.out.println(projectile.get(placeInList).collision);
+								
+								projectile.get(placeInList).collision = false;
+								//break;
 							}
 							else
 							{
-								list.get(i).collision = true;
-								//collision = true;
+								//list.get(i).collision = false;
+								list.get(placeInList).collision = false;
 							}
-						
 							
-			        }
-					else 
-					{
-						if(type == "projectile")
-						{
-							//System.out.println(projectile.get(placeInList).collision);
-							projectile.get(placeInList).collision = false;
+		
 						}
-						else
-						{
-							//list.get(i).collision = false;
-							collision = false;
-						}
-						
-	
 					}
-				}
-				
-			}	
+					
+				}	
+			}
 		}
 	}
 	
@@ -191,8 +200,8 @@ public class Character extends Game{
 	{
 		
 		
-		if((type == "enemy")&& ((list.get(0).x > (x + 300))||(list.get(0).x < (x - 300))
-				||(list.get(0).y > (y + 300))||(list.get(0).y < (y - 300))))
+		if((type == "enemy")&& ((list.get(0).x > (x + 600))||(list.get(0).x < (x - 600))
+				||(list.get(0).y > (y + 600))||(list.get(0).y < (y - 600))))
 		{
 			north = false;
 			south = false;
@@ -212,7 +221,7 @@ public class Character extends Game{
 		}
 		
 		
-		setVisible();
+		isVisible();
 		isCollision(clickedX, clickedY, placeInList);
 
 		
@@ -269,6 +278,7 @@ public class Character extends Game{
 					}
 					if(collision == true)
 					{
+						newClick = false;
 						break;
 					}
 					else
@@ -301,6 +311,7 @@ public class Character extends Game{
 					}
 					if(collision == true)
 					{
+						newClick = false;
 						break;
 					}
 					else
@@ -327,6 +338,7 @@ public class Character extends Game{
 						
 						if(collision == true)
 						{
+							newClick = false;
 							break;
 						}
 						
@@ -340,7 +352,8 @@ public class Character extends Game{
 			}
 			
 
-			if(((clickedX == x)&&(clickedY == y))||(collision == true)) {
+			if((clickedX == x)&&(clickedY == y)) 
+			{
 	
 				newClick = false;
 				maxSlope = 1;
@@ -408,10 +421,12 @@ public class Character extends Game{
 					}
 					else
 					{
-						if(type == "projectile") {
-							projectile.get(placeInList).collision = true;
-						}
+						//if(type == "projectile") {
+							//projectile.get(placeInList).collision = true;
+						//}
 						clickedX = x;
+						clickedY = y;
+						newClick = false;
 					}
 						
 				
@@ -432,10 +447,12 @@ public class Character extends Game{
 					}
 					else 
 					{
-						if(type == "projectile") {
-							projectile.get(placeInList).collision = true;
-						}
+						//if(type == "projectile") {
+						//	projectile.get(placeInList).collision = true;
+						//}
 						clickedX = x;
+						clickedY = y;
+						newClick = false;
 					}
 					
 				}
@@ -446,7 +463,9 @@ public class Character extends Game{
 			public void updateY(int placeInList) {
 				
 				if(clickedY < y) {
+					
 					isCollision(x, y-1, placeInList);
+					
 					if(collision == false)
 					{
 						y --;
@@ -456,10 +475,12 @@ public class Character extends Game{
 					}
 					else
 					{
-						if(type == "projectile") {
-							projectile.get(placeInList).collision = true;
-						}
+						//if(type == "projectile") {
+						//	projectile.get(placeInList).collision = true;
+						//}
+						clickedX = x;
 						clickedY = y;
+						newClick = false;
 					}
 		
 				}
@@ -476,10 +497,12 @@ public class Character extends Game{
 					}
 					else
 					{
-						if(type == "projectile") {
-							projectile.get(placeInList).collision = true;
-						}
+						//if(type == "projectile") {
+						//	projectile.get(placeInList).collision = true;
+						//}
+						clickedX = x;
 						clickedY = y;
+						newClick = false;
 					}
 			
 			}
