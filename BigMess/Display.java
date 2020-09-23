@@ -44,7 +44,7 @@ public class Display extends Game{
 		  int differenceX = Math.abs(genericChar.x-genericChar.clickedX);
 		  int differenceY = Math.abs(genericChar.y-genericChar.clickedY);
 		  
-		  int acceptableDifference = 50;
+		  int acceptableDifference = 75;
 		  
 		  if((differenceX < acceptableDifference) && (genericChar.y < genericChar.clickedY)) {
 		   genericChar.south = true;

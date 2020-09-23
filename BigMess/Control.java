@@ -29,7 +29,8 @@ public class Control extends Game implements MouseListener {
 				int eX = e.getX();
 				int eY = e.getY();
 				
-		
+				list.get(0).collision = false;
+				//System.out.println("here");
 				
 				if(eX < centerX ) {
 					list.get(0).clickedX = list.get(0).x - (centerX - eX);

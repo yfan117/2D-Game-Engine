@@ -14,6 +14,8 @@ class Draw extends JPanel{
 	Image arrowIMG;
 	Image bowIMG;
 	Image temp;
+	Image explosion;
+	
 	// private Player player;
 	//int genericChar.picRank;
 
@@ -33,7 +35,7 @@ class Draw extends JPanel{
 		this.windowX = windowX;
 		this.windowY = windowY;
 		  backGround = new ImageIcon(repository +"bigMap2.png").getImage();
-		  //backGround = new ImageIcon(repository +"backGround.jpg").getImage();
+		  explosion = new ImageIcon(repository +"explosion.png").getImage();
 		  character = new ImageIcon(repository +"character.png").getImage();
 		  arrowIMG = new ImageIcon(repository +"arrow2.png").getImage();
 		  bowIMG = new ImageIcon(repository +"bow.png").getImage();
@@ -136,12 +138,7 @@ class Draw extends JPanel{
 			//System.out.println(list.get(0).x +" " +list.get(0).y);
 			//System.out.println(list.get(0).clickedX +" " +list.get(0).clickedY +"\n");
 	
-			g.drawImage(character, 
-						windowX/2 - 40, windowY/2 - 40, 
-						windowX/2 + 40, windowY/2 + 40, 
-						list.get(0).picCounter*17, list.get(0).picRank * 17, 
-						17*(list.get(0).picCounter+1), list.get(0).picRank * 17 + 17, 
-						null);	
+		
 			
 			
 			
@@ -161,8 +158,17 @@ class Draw extends JPanel{
 			
 			for(int i = 1; i< projectile.size(); i++)
 			{
-				
-				g.drawImage(arrowIMG, 
+				//System.out.println(projectile.get(i).collision);
+				if(projectile.get(i).collision == true)
+				{
+					temp = explosion;
+					System.out.println("explosion");
+				}
+				else
+				{
+					temp = arrowIMG;
+				}
+				g.drawImage(temp, 
 						windowX/2 - list.get(0).x+ projectile.get(i).x, windowY/2- list.get(0).y+ projectile.get(i).y, 
 						windowX/2 - list.get(0).x + projectile.get(i).x + 32, windowY/2- list.get(0).y + projectile.get(i).y +32, 
 						0, 0, 
@@ -170,6 +176,13 @@ class Draw extends JPanel{
 						null);
 				
 			}
+			
+			g.drawImage(character, 
+					windowX/2 - 40, windowY/2 - 40, 
+					windowX/2 + 40, windowY/2 + 40, 
+					list.get(0).picCounter*17, list.get(0).picRank * 17, 
+					17*(list.get(0).picCounter+1), list.get(0).picRank * 17 + 17, 
+					null);	
 
 		}
 	
