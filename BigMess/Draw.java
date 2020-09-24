@@ -82,7 +82,7 @@ class Draw extends JPanel{
 		repaint();
 	}
 	
-	static int zoom = 0;
+	//static int zoom = 0;
 	
 	protected void paintComponent(Graphics g) {
 
@@ -156,7 +156,7 @@ class Draw extends JPanel{
 			
 			//g.drawImage(bowIMG, windowX/2 -50, windowY/2 -50, null);
 			
-			for(int i = 1; i< projectile.size(); i++)
+			for(int i = 0; i< projectile.size(); i++)
 			{
 				//System.out.println(projectile.get(i).collision);
 				if(projectile.get(i).collision == true)
@@ -164,7 +164,7 @@ class Draw extends JPanel{
 					Character.collider.hit(2);
 					temp = explosion;
 					projectile.get(i).active = false;
-					
+				//	System.out.println("hit");
 					//projectile.get(i).newClick = false;
 					//System.out.println("explosion");
 				}

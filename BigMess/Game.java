@@ -54,9 +54,9 @@ public class Game {
 
 		
 		
-		list.add(new Character("player", map.getLocation()));
-		list.add(new Character("enemy", new int[]{500, 500}));
-		list.add(new Character("enemy", new int[]{200, 100}));
+		list.add(new Character("player", map.getLocation(), 100));
+		list.add(new Character("enemy", new int[]{500, 500},100));
+		list.add(new Character("enemy", new int[]{200, 100}, 100));
 		
 
 		display = new Display();
@@ -99,15 +99,15 @@ public class Game {
 				
 				for(int i = 0; i < projectile.size(); i++) 
 				{
-					//System.out.println(projectile.get(i).collision);
-					if((projectile.get(i).active == false))
-					{
+					
+					if((projectile.get(i).visible == false)||(projectile.get(i).active == false)) {
 						projectile.remove(i);
 					}
+		
 					
 		
 				}
-				
+				//System.out.println(projectile.size());
 				
 				try {
 					Thread.sleep(timer);
@@ -122,6 +122,7 @@ public class Game {
 			}
 	}
 	/*
+	 * save this
 	public boolean outBound(int eX, int eY, Character genericChar) {
 		  boolean answer = false;
 		 
