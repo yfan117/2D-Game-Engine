@@ -520,8 +520,10 @@ public class Character extends Game{
 			public void hit(int hitAmount) {
 				this.hp = this.hp - hitAmount;
 				System.out.println(this.hp);
-				if(hp == 0) {
-					die();
+				if (type == "enemy") {
+					if(hp == 0) {
+						die();
+					}
 				}
 			}
 			public void die() {
