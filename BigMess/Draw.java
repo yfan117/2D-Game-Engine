@@ -1,4 +1,5 @@
-package Diablo;
+
+package BigMess;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.util.ArrayList;
@@ -161,8 +162,10 @@ class Draw extends JPanel{
 				//System.out.println(projectile.get(i).collision);
 				if(projectile.get(i).collision == true)
 				{
+					Character.collider.hit(2);
 					temp = explosion;
 					projectile.get(i).active = false;
+				//	System.out.println("hit");
 					//projectile.get(i).newClick = false;
 					//System.out.println("explosion");
 				}
@@ -190,4 +193,3 @@ class Draw extends JPanel{
 		}
 	
 	
-}

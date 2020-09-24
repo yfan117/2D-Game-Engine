@@ -1,4 +1,5 @@
-package Diablo;
+
+package BigMess;
 import java.awt.Dimension;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -54,9 +55,9 @@ public class Game {
 
 		
 		
-		list.add(new Character("player", map.getLocation()));
-		list.add(new Character("enemy", new int[]{500, 500}));
-		list.add(new Character("enemy", new int[]{200, 100}));
+		list.add(new Character("player", map.getLocation(), 100));
+		list.add(new Character("enemy", new int[]{500, 500},100));
+		list.add(new Character("enemy", new int[]{200, 100}, 100));
 		
 
 		display = new Display();

@@ -1,4 +1,7 @@
-package Diablo;
+
+package BigMess;
+
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -55,8 +58,13 @@ public class Character extends Game{
 	 boolean visible = false;
 	 boolean collision = false;
 	 boolean active = true;//temp
+	 
+	 private static int hp;
+	 public static Character collider;
+	 private int whichEn;
+	 
 	
-	public Character(String name, int[] location) throws IOException {
+	public Character(String name, int[] location, int hp) throws IOException {
 		
 		 x = location[0];
          y = location[1];
@@ -78,6 +86,7 @@ public class Character extends Game{
         	type = "enemy";
         	
         	isVisible();
+        	this.hp = hp;
         	
         }
        
@@ -424,12 +433,18 @@ public class Character extends Game{
 										if(type == "projectile")
 										{
 											projectile.get(placeInList).collision = true;
+											
+											this.collider = list.get(1);
+											//System.out.println(whichEn);
 											//System.out.println(placeInList);
 											break;
 										}
 										else
 										{
 											list.get(placeInList).collision = true;
+											this.collider = list.get(1);
+											//collider = list.get(placeInList);
+											//whichEn = placeInList;
 											//collision = true;
 										}
 									
@@ -455,10 +470,31 @@ public class Character extends Game{
 								}
 							}
 							
-						}	
+						}}}	
 					}
-				}
+			public void hit(int hitAmount) {
+			//	if (type == "enemy") {
+					//list.get(whichEn).hp = this.hp - hitAmount;
+				//	this.hp = this.hp + hitAmount;
+					list.get(whichEn).setHP(this.hp - hitAmount);
+					System.out.println(this.hp);
+				//	System.out.println(hp);
+				
+			//		if(hp == 0) {
+			//			die();
+				//	}
+			//	}
+		//	}
+		//	public void die() {
+			//	list.remove(whichEn);
+				
 			}
-			
+			public void setHP(int newHp) {
+				this.hp = newHp;
+				//System.out.println("set" + this.hp);
+			}
+		//	public String getType() {
+		//		return this.type;
+		//	}
 
 }
