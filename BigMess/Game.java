@@ -1,5 +1,5 @@
+package Diablo;
 
-package BigMess;
 import java.awt.Dimension;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -17,11 +17,11 @@ public class Game {
 
 
 	static String repository = "backGround/";
-	//static int windowX = 1280;
-	//static int windowY = 720;
+	static int windowX = 1280;
+	static int windowY = 720;
 	
-	static int windowX = 1920;
-	static int windowY = 1080;
+	//static int windowX = 1920;
+	//static int windowY = 1080;
 	
 	static int centerX = windowX /2 ;
 	static int centerY = windowY /2 ;
@@ -80,10 +80,11 @@ public class Game {
 				{
 					
 					list.get(i).update(i);
-
-		
+					
+					if(i != 0)
+						System.out.println(list.get(i).hp);
 				}
-				
+				System.out.println();
 			
 				for(int i = 0; i < projectile.size(); i++) 
 				{

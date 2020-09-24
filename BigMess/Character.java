@@ -1,5 +1,5 @@
+package Diablo;
 
-package BigMess;
 
 
 import java.io.BufferedReader;
@@ -59,8 +59,8 @@ public class Character extends Game{
 	 boolean collision = false;
 	 boolean active = true;//temp
 	 
-	 private static int hp;
-	 public static Character collider;
+	 int hp;
+	 //Character collider;
 	 private int whichEn;
 	 
 	
@@ -434,7 +434,8 @@ public class Character extends Game{
 										{
 											projectile.get(placeInList).collision = true;
 											
-											this.collider = list.get(1);
+											//this.collider = list.get(i);
+											setHP(list.get(i));
 											//System.out.println(whichEn);
 											//System.out.println(placeInList);
 											break;
@@ -442,7 +443,7 @@ public class Character extends Game{
 										else
 										{
 											list.get(placeInList).collision = true;
-											this.collider = list.get(1);
+											//this.collider = list.get(i);
 											//collider = list.get(placeInList);
 											//whichEn = placeInList;
 											//collision = true;
@@ -472,12 +473,13 @@ public class Character extends Game{
 							
 						}}}	
 					}
+			/*
 			public void hit(int hitAmount) {
 			//	if (type == "enemy") {
 					//list.get(whichEn).hp = this.hp - hitAmount;
 				//	this.hp = this.hp + hitAmount;
 					list.get(whichEn).setHP(this.hp - hitAmount);
-					System.out.println(this.hp);
+					//System.out.println(this.hp);
 				//	System.out.println(hp);
 				
 			//		if(hp == 0) {
@@ -489,8 +491,9 @@ public class Character extends Game{
 			//	list.remove(whichEn);
 				
 			}
-			public void setHP(int newHp) {
-				this.hp = newHp;
+			*/
+			public void setHP(Character temp) {
+				temp.hp = temp.hp - 2;
 				//System.out.println("set" + this.hp);
 			}
 		//	public String getType() {
