@@ -67,11 +67,15 @@ public class Control extends Game implements MouseListener {
 			int destinationX = eX;
 			int destinationY = eY;
 			
+			int orginX = list.get(0).x;
+			int orginY = list.get(0).y;
+			
 			if(eX < centerX ) {
-				destinationX = list.get(0).x - (centerX - eX)*3;
+				destinationX = list.get(0).x - (centerX - eX)*3;	
 			}
 			else if(eX > centerX ) {
 				destinationX = list.get(0).x + (eX - centerX)*3;
+				//orginX = orginX + 10;
 			}
 			
 			if(eY < centerY ) {
@@ -79,12 +83,13 @@ public class Control extends Game implements MouseListener {
 			}
 			else if(eY > centerY ) {
 				destinationY = list.get(0).y + (eY - centerY)*3;
+				//orginY = orginY + 10;
 			}
 			
 			
 			   try {
 				 
-				projectile.add(new Character("arrow", list.get(0).x, list.get(0).y, destinationX, destinationY));
+				projectile.add(new Character("arrow", orginX, orginY, destinationX, destinationY));
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();

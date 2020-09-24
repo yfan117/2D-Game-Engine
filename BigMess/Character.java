@@ -12,8 +12,8 @@ public class Character extends Game{
 	 int y = 0;
 
 	
-	 int clickedX ;
-	 int clickedY ;
+	 int clickedX ;//destination
+	 int clickedY ;//destination
 	 boolean newClick = false;
 	 boolean directionCheck = false;
 	
@@ -27,9 +27,6 @@ public class Character extends Game{
 	 boolean west;
 	 boolean east;
 
-
-	 int centerX;
-	 int centerY;
 
 
 	 double slopeX;
@@ -57,7 +54,7 @@ public class Character extends Game{
 	 
 	 boolean visible = false;
 	 boolean collision = false;
-	 boolean active = true;
+	 boolean active = true;//temp
 	
 	public Character(String name, int[] location) throws IOException {
 		
@@ -88,7 +85,7 @@ public class Character extends Game{
 	
 		 BufferedReader bufferedReader = new BufferedReader(reader);
 		
-		// moveSpeed = Integer.parseInt(bufferedReader.readLine());
+		//moveSpeed = Integer.parseInt(bufferedReader.readLine());
 		 
 		 moveSpeed = 20;
 
@@ -112,6 +109,7 @@ public class Character extends Game{
         if(name == "arrow")
         {
         	type = "projectile";
+        	visible = true;
         }
       
 		FileReader reader = new FileReader(repository +name +".txt");
@@ -123,76 +121,6 @@ public class Character extends Game{
 		 range = Integer.parseInt(bufferedReader.readLine());
 
 		 
-	}
-	
-	public void isVisible() {
-		if(((x >= list.get(0).x - windowX/2) &&(x <= list.get(0).x + windowX/2))
-        		&&
-        		((y >= list.get(0).y - windowY/2) &&(y <= list.get(0).y + windowY/2)))
-        	{
-			
-        		visible = true;
-        	} 
-		else
-			    visible = false;
-		
-	}
-	
-	public void isCollision(int x, int y, int placeInList) 
-	{
-		if(placeInList != 0)
-		{
-			for(int i = 0; i < list.size(); i++) 
-			{
-				if((this.visible == true)&&(list.get(i).visible == true))
-				{
-					if((i != placeInList)||(type == "projectile"))
-					{
-						if(((x > list.get(i).x ) &&(x <= list.get(i).x + 100))
-				        		&&
-				        		((y > list.get(i).y) &&(y <= list.get(i).y + 100)))
-				        {
-						
-								
-								
-								
-								if(type == "projectile")
-								{
-									projectile.get(placeInList).collision = true;
-									//System.out.println(placeInList);
-									break;
-								}
-								else
-								{
-									list.get(placeInList).collision = true;
-									//collision = true;
-								}
-							
-								
-				        }
-						else 
-						{
-							if(type == "projectile")
-							{
-								//if(collision == true)
-									//System.out.println(projectile.get(placeInList).collision);
-								
-								projectile.get(placeInList).collision = false;
-								//break;
-							}
-							else
-							{
-								//list.get(i).collision = false;
-								list.get(placeInList).collision = false;
-							}
-							
-		
-						}
-					}
-					
-				}	
-			}
-		}
 	}
 	
 	
@@ -208,10 +136,9 @@ public class Character extends Game{
 			west = false;
 			east = false;
 			directionCheck = true;
-			
-			//System.out.println((int)(Math.random()*100));
-			clickedX = list.get(0).x - (int)(Math.random()*200);
-			clickedY = list.get(0).y - (int)(Math.random()*200);
+	
+			clickedX = list.get(0).x - (int)(Math.random()*100);
+			clickedY = list.get(0).y - (int)(Math.random()*100);
 			
 			
 			
@@ -346,8 +273,8 @@ public class Character extends Game{
 					
 				}
 				
-				//if((type == "enemy")&&(collision == true))	
-					//System.out.println("x: " +x +" y: " +y +"   collision: "+collision +"  visible: "+visible +"\n");
+				//if((type == "projectile")&&(collision == true))	
+					//System.out.println("x:" +x +" y:" +y +"   collision:"+collision +"  visible:"+visible +" active:" +active +" newClick:" +newClick +"\n");
 			
 			}
 			
@@ -355,46 +282,10 @@ public class Character extends Game{
 			if((clickedX == x)&&(clickedY == y)) 
 			{
 	
+			//	active = false;
 				newClick = false;
 				maxSlope = 1;
-				/*
-				isCollision(x, y, placeInList);
-				if(collision == true)
-				{
-					list.get(placeInList).x = list.get(placeInList).x - 5;
-					clickedX = x - 100;
-					list.get(placeInList).y = list.get(placeInList).y - 5;
-					clickedX = y - 100;
-				}
-				
-				//x = x - 50;
-				if(collision == true)
-				{
-					for(int a = 0; a < 1000; a = a + 100) 
-					{
-						for(int b = 100; b < 1000; b = b + 100) 
-						{
-							isCollision(x+a, y+b, placeInList);
-							if(collision == false) 
-							{
-								clickedX = x+a;
-								clickedY = y+b;
-								newClick = true;
-								
-							}
-							
-							if(newClick == true)
-							{
-								break;
-							}
-						}
-						
-						if(newClick == true)
-						{
-							break;
-						}
-					}
-				}*/
+			
 			}
 				
 			
@@ -421,12 +312,10 @@ public class Character extends Game{
 					}
 					else
 					{
-						//if(type == "projectile") {
-							//projectile.get(placeInList).collision = true;
-						//}
+						
 						clickedX = x;
 						clickedY = y;
-						newClick = false;
+						
 					}
 						
 				
@@ -447,12 +336,10 @@ public class Character extends Game{
 					}
 					else 
 					{
-						//if(type == "projectile") {
-						//	projectile.get(placeInList).collision = true;
-						//}
+						
 						clickedX = x;
 						clickedY = y;
-						newClick = false;
+						
 					}
 					
 				}
@@ -475,12 +362,10 @@ public class Character extends Game{
 					}
 					else
 					{
-						//if(type == "projectile") {
-						//	projectile.get(placeInList).collision = true;
-						//}
+						
 						clickedX = x;
 						clickedY = y;
-						newClick = false;
+						
 					}
 		
 				}
@@ -497,17 +382,83 @@ public class Character extends Game{
 					}
 					else
 					{
-						//if(type == "projectile") {
-						//	projectile.get(placeInList).collision = true;
-						//}
+						
 						clickedX = x;
 						clickedY = y;
-						newClick = false;
+						
 					}
 			
 			}
+		}
+	
+
+			public void isVisible() {
+				if(((x >= list.get(0).x - windowX/2) &&(x <= list.get(0).x + windowX/2))
+		        		&&
+		        		((y >= list.get(0).y - windowY/2) &&(y <= list.get(0).y + windowY/2)))
+		        	{
+					
+		        		visible = true;
+		        	} 
+				else
+					    visible = false;
+				
 			}
-	
-	
+			
+			public void isCollision(int x, int y, int placeInList) 
+			{
+				if(type !="player")
+				{
+					for(int i = 1; i < list.size(); i++) 
+					{
+						if((this.visible == true)&&(list.get(i).visible == true))
+						{
+							if((i != placeInList)||(type == "projectile"))
+							{
+								if(((x > list.get(i).x ) &&(x < list.get(i).x + 100))
+						        		&&
+						        		((y > list.get(i).y) &&(y < list.get(i).y + 100)))
+						        {
+								
+					
+										if(type == "projectile")
+										{
+											projectile.get(placeInList).collision = true;
+											//System.out.println(placeInList);
+											break;
+										}
+										else
+										{
+											list.get(placeInList).collision = true;
+											//collision = true;
+										}
+									
+										
+						        }
+								else 
+								{
+									if(type == "projectile")
+									{
+										//if(collision == true)
+											//System.out.println(projectile.get(placeInList).collision);
+										
+										projectile.get(placeInList).collision = false;
+										//break;
+									}
+									else
+									{
+										//list.get(i).collision = false;
+										list.get(placeInList).collision = false;
+									}
+									
+				
+								}
+							}
+							
+						}	
+					}
+				}
+			}
+			
 
 }
