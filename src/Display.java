@@ -1,4 +1,4 @@
-package BigMess;
+package Diablo;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.MouseAdapter;
@@ -13,40 +13,40 @@ import javax.swing.JPanel;
 public class Display extends Game{
 
 
-	static Draw draw = new Draw(repository, windowX, windowY, list, projectile);
+	static Draw draw = new Draw(root + "/resources/images/" , windowX, windowY, list, projectile);
 
 	public Display(){
-	
+
 		JFrame frame = new JFrame();
 		//Draw draw = new Draw();
 		frame.setSize(windowX, windowY);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLocationRelativeTo(null);
 		//frame.setResizable(false);
-		
-		
-		
+
+
+
 		frame.getContentPane().add(draw);
-		
-	
+
+
 		Control control = new Control();
 		draw.addMouseListener(control);
-		
-	
-		frame.setVisible(true);
-		
 
-		
+
+		frame.setVisible(true);
+
+
+
 	}
 
 	public static void getDirection(int i) {
-	
+
 			Character genericChar = list.get(i);
 		  int differenceX = Math.abs(genericChar.x-genericChar.clickedX);
 		  int differenceY = Math.abs(genericChar.y-genericChar.clickedY);
-		  
+
 		  int acceptableDifference = 75;
-		  
+
 		  if((differenceX < acceptableDifference) && (genericChar.y < genericChar.clickedY)) {
 		   genericChar.south = true;
 		  }
@@ -76,7 +76,7 @@ public class Display extends Game{
 		   genericChar.west = true;
 		  }
 		  /*
-		   * save this for testing purposes 
+		   * save this for testing purposes
 		  System.out.println();
 		  System.out.println("genericChar.north: "+genericChar.north);
 		  System.out.println("genericChar.south: "+genericChar.south);
@@ -109,8 +109,8 @@ public class Display extends Game{
 		  }
 		  genericChar.directionCheck = false;
 	}
-	
-	
+
+
 	public void update() {
 
 		for(int i = 0; i< list.size(); i++) {
@@ -120,10 +120,10 @@ public class Display extends Game{
 			}
 		}
 		draw.updateValue();
-		
-	
-		
-	
+
+
+
+
 	}
 	 public void CheckCollisions() {
 		  //Rectangle playerBounds = player.getBounds();
@@ -141,17 +141,8 @@ public class Display extends Game{
 		  //if(arrowBounds.intersects(enemyBounds)){
 		  //enemy.setHP(enemy.getHP - 1);
 		  //enemy.setVisible(false);
-		  //make it so when an enemy visible 
+		  //make it so when an enemy visible
 		 }
 
-		
+
 	}
-
-
-	
-
-	
-	
-
-
-
