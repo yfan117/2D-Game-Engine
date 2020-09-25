@@ -1,10 +1,4 @@
-<<<<<<< HEAD
-<<<<<<<< HEAD:src/Map.java
 package Diablo;
-========
-
-package BigMess;
->>>>>>>> c763570e1ee493dd1a252837001c30f5c3251ba1:BigMess/Map.java
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -45,17 +39,3 @@ public class Map extends Game{
 
 
 }
-=======
-import javax.swing.ImageIcon;
-
-public class Map extends Game {
-
- public Map(String mapName) {
-  ImageIcon icon = new ImageIcon(Game.root + "/resources/backGround/"+mapName+".jpg");
-  
-  mapDimension = new int[] {icon.getImage().getWidth(null), icon.getImage().getHeight(null)};
-  
-  respawnLcation = new int[] {0, 0};
- }
-}
->>>>>>> c763570e1ee493dd1a252837001c30f5c3251ba1
