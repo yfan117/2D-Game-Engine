@@ -496,6 +496,9 @@ public class Character extends Game{
 				temp.hp = temp.hp - 2;
 				//System.out.println("set" + this.hp);
 			}
+			public int getHP() {
+				return this.hp;
+			}
 		//	public String getType() {
 		//		return this.type;
 		//	}

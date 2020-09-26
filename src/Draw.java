@@ -1,6 +1,7 @@
 package Diablo;
 
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.util.ArrayList;
@@ -153,7 +154,13 @@ class Draw extends JPanel{
 							list.get(i).picCounter*17, list.get(i).picRank * 17, 
 							17*(list.get(i).picCounter+1), list.get(i).picRank * 17 + 17, 
 							null);
-
+				g.setColor(Color.BLACK);
+				g.drawRect(windowX/2 - list.get(0).x+ list.get(i).x-5, windowY/2- list.get(0).y+ list.get(i).y+-20, 100, 5);
+				g.setColor(Color.RED);
+				g.fillRect(windowX/2 - list.get(0).x+ list.get(i).x-5, windowY/2- list.get(0).y+ list.get(i).y+-20, list.get(i).getHP(), 5);
+				if (list.get(i).getHP() <= 0){
+					list.remove(i);
+				}
 			}
 			
 			//g.drawImage(bowIMG, windowX/2 -50, windowY/2 -50, null);
@@ -190,6 +197,10 @@ class Draw extends JPanel{
 					list.get(0).picCounter*17, list.get(0).picRank * 17, 
 					17*(list.get(0).picCounter+1), list.get(0).picRank * 17 + 17, 
 					null);	
+			g.setColor(Color.BLACK);
+			g.drawRect(25, 650, 200, 20);
+			g.setColor(Color.RED);
+			g.fillRect(25, 650, 200, 20);
 
 		}
 	
