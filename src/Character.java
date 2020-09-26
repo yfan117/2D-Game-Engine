@@ -537,8 +537,8 @@ public class Character extends Game{
 			public int getHP() {
 				return this.hp;
 			}
-		public void switchMelee(boolean action) {
-			this.isMelee = !action;
-			System.out.println("SWITCHED");
+		public void switchMelee() {
+			this.isMelee = !this.isMelee;
+			System.out.println(isMelee);
 		}
 }
