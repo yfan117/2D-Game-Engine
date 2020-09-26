@@ -1,4 +1,6 @@
 package Diablo;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
@@ -15,7 +17,6 @@ public class Control extends Game implements MouseListener {
 	@Override
 	public void mousePressed(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
 		if(SwingUtilities.isLeftMouseButton(e)) {
 			
 			//System.out.println("left click");
@@ -61,6 +62,7 @@ public class Control extends Game implements MouseListener {
 		
 		if (SwingUtilities.isRightMouseButton(e)) 
 		{	
+			
 			int eX = e.getX();
 			int eY = e.getY();
 			
@@ -70,32 +72,71 @@ public class Control extends Game implements MouseListener {
 			int orginX = list.get(0).x;
 			int orginY = list.get(0).y;
 			
-			if(eX < centerX ) {
-				destinationX = list.get(0).x - (centerX - eX)*3;	
-			}
-			else if(eX > centerX ) {
-				destinationX = list.get(0).x + (eX - centerX)*3;
-				//orginX = orginX + 10;
-			}
-			
-			if(eY < centerY ) {
-				destinationY = list.get(0).y - (centerY - eY)*3;
-			}
-			else if(eY > centerY ) {
-				destinationY = list.get(0).y + (eY - centerY)*3;
-				//orginY = orginY + 10;
-			}
 			
 			
-			   try {
-				 
-				projectile.add(new Character("arrow", orginX, orginY, destinationX, destinationY));
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+			if(list.get(0).isMelee == false)
+			{
+	
+				if(eX < centerX ) {
+					destinationX = list.get(0).x - (centerX - eX)*3;	
+				}
+				else if(eX > centerX ) {
+					destinationX = list.get(0).x + (eX - centerX)*3;
+					//orginX = orginX + 10;
+				}
 				
-		 }
+				if(eY < centerY ) {
+					destinationY = list.get(0).y - (centerY - eY)*3;
+				}
+				else if(eY > centerY ) {
+					destinationY = list.get(0).y + (eY - centerY)*3;
+					//orginY = orginY + 10;
+				}
+				   try {
+					 
+					projectile.add(new Character("arrow", destinationX, destinationY, 10));
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+					
+			 }
+			else
+			{
+				Character temp;
+				if(eX < centerX ) {
+					destinationX = list.get(0).x - (centerX - eX);	
+				}
+				else if(eX > centerX ) {
+					destinationX = list.get(0).x + (eX - centerX);
+					//orginX = orginX + 10;
+				}
+				
+				if(eY < centerY ) {
+					destinationY = list.get(0).y - (centerY - eY);
+				}
+				else if(eY > centerY ) {
+					destinationY = list.get(0).y + (eY - centerY);
+					//orginY = orginY + 10;
+				}
+				
+				
+				try {
+					temp = new Character("melee", 0, 0, 0);
+					//System.out.println(temp.isCollision(destinationX, destinationY, temp));
+					list.get(0).target = temp.isCollision(destinationX, destinationY, temp);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			
+				list.get(0).clickedX = list.get(list.get(0).target).x;
+				list.get(0).clickedY = list.get(list.get(0).target).y;
+				
+				list.get(0).newClick = true;
+				
+			}
+		}
 		
 	}
 

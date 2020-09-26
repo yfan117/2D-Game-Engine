@@ -1,14 +1,25 @@
 package Diablo;
+import java.awt.Container;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.ActionMap;
 import javax.swing.ImageIcon;
+import javax.swing.InputMap;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.KeyStroke;
 
 public class Display extends Game{
 
@@ -18,6 +29,7 @@ public class Display extends Game{
 	public Display(){
 
 		JFrame frame = new JFrame();
+	//	addKeyBind(frame.getContentPane(),"TAB");
 		//Draw draw = new Draw();
 		frame.setSize(windowX, windowY);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -31,17 +43,17 @@ public class Display extends Game{
 
 		Control control = new Control();
 		draw.addMouseListener(control);
-
-
+		
+	//	setFocusable(true);
 		frame.setVisible(true);
+		//this.setFocusable(true);
 
 
+	}	
 
-	}
+	public static void getDirection(Character genericChar) {
 
-	public static void getDirection(int i) {
-
-			Character genericChar = list.get(i);
+			//Character genericChar = list.get(i);
 		  int differenceX = Math.abs(genericChar.x-genericChar.clickedX);
 		  int differenceY = Math.abs(genericChar.y-genericChar.clickedY);
 
@@ -59,6 +71,7 @@ public class Display extends Game{
 		  else if((differenceY < acceptableDifference) && (genericChar.x > genericChar.clickedX)) {
 		   genericChar.west = true;
 		  }
+		
 		  else if((differenceX >= acceptableDifference) && (genericChar.y < genericChar.clickedY) && (genericChar.x < genericChar.clickedX)) {
 		   genericChar.south = true;
 		   genericChar.east = true;
@@ -75,6 +88,7 @@ public class Display extends Game{
 		   genericChar.north = true;
 		   genericChar.west = true;
 		  }
+		  /*
 		  /*
 		   * save this for testing purposes
 		  System.out.println();
@@ -116,7 +130,7 @@ public class Display extends Game{
 		for(int i = 0; i< list.size(); i++) {
 			//if(list.get(i).directionCheck == true)
 			if(list.get(i).newClick == true) {
-				getDirection(i);
+				getDirection(list.get(i));
 			}
 		}
 		draw.updateValue();
@@ -142,7 +156,6 @@ public class Display extends Game{
 		  //enemy.setHP(enemy.getHP - 1);
 		  //enemy.setVisible(false);
 		  //make it so when an enemy visible
-		 }
-
+	 }
 
 	}
