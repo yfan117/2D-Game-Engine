@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 cd class
 del /S *.class
 cd ../src
@@ -20,5 +19,3 @@ javac -d ../class Map.java
 javac -d ../class Game.java
 cd ../class
 java Game
->>>>>>> c763570e1ee493dd1a252837001c30f5c3251ba1
-pause
