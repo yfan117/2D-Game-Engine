@@ -2,15 +2,25 @@ package Diablo;
 
 
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.ActionMap;
 import javax.swing.ImageIcon;
+import javax.swing.InputMap;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
+import javax.swing.KeyStroke;
 
-class Draw extends JPanel{
+class Draw extends JPanel  {
 	
 	Image backGround;
 	Image character;
@@ -44,13 +54,32 @@ class Draw extends JPanel{
 		  damageCharacter = new ImageIcon(repository +"damageCharacter.png").getImage();
 		  arrowIMG = new ImageIcon(repository +"arrow2.png").getImage();
 		  bowIMG = new ImageIcon(repository +"bow.png").getImage();
+		  
+		  InputMap im = getInputMap(WHEN_IN_FOCUSED_WINDOW);
+          ActionMap am = getActionMap();
 
+          im.put(KeyStroke.getKeyStroke(KeyEvent.VK_1, 0, false), "pressed");
+          im.put(KeyStroke.getKeyStroke(KeyEvent.VK_1, 0, true), "released");
+          am.put("pressed", new AbstractAction() {
+              @Override
+              public void actionPerformed(ActionEvent e) {
+                  System.out.println("Pressed");
+                  
+              }
+          });
 
+          am.put("released", new AbstractAction() {
+              @Override
+              public void actionPerformed(ActionEvent e) {
+                  System.out.println("released");
+                  list.get(0).switchMelee();
+              }
+          });
+
+          setFocusable(true);
+          requestFocusInWindow();        
 		
 	}
-
-
-
 
 	public void updateValue() {
 		

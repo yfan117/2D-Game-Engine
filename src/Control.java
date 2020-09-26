@@ -1,4 +1,6 @@
 package Diablo;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
@@ -15,7 +17,6 @@ public class Control extends Game implements MouseListener {
 	@Override
 	public void mousePressed(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
 		if(SwingUtilities.isLeftMouseButton(e)) {
 			
 			//System.out.println("left click");

@@ -141,6 +141,7 @@ public class Character extends Game{
         }
         
         this.hitBox = hitBox;
+
         FileReader reader = new FileReader(root + "/resources/text/" + name + ".txt");
 
 		 BufferedReader bufferedReader = new BufferedReader(reader);
@@ -537,5 +538,10 @@ public class Character extends Game{
 			public int getHP() {
 				return this.hp;
 			}
-		
+
+		public void switchMelee() {
+			this.isMelee = !this.isMelee;
+			System.out.println(isMelee);
+		}
+
 }
