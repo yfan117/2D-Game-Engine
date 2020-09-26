@@ -51,6 +51,9 @@ public class Display extends Game{
 
 	}	
 
+
+	}
+
 	public static void getDirection(Character genericChar) {
 
 			//Character genericChar = list.get(i);
