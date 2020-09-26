@@ -18,6 +18,7 @@ class Draw extends JPanel{
 	Image bowIMG;
 	Image temp;
 	Image explosion;
+	Image damageCharacter;
 	
 	// private Player player;
 	//int genericChar.picRank;
@@ -40,6 +41,7 @@ class Draw extends JPanel{
 		  backGround = new ImageIcon(repository +"bigMap2.png").getImage();
 		  explosion = new ImageIcon(repository +"explosion.png").getImage();
 		  character = new ImageIcon(repository +"character.png").getImage();
+		  damageCharacter = new ImageIcon(repository +"damageCharacter.png").getImage();
 		  arrowIMG = new ImageIcon(repository +"arrow2.png").getImage();
 		  bowIMG = new ImageIcon(repository +"bow.png").getImage();
 
@@ -147,20 +149,28 @@ class Draw extends JPanel{
 			
 			for(int i = 1; i< list.size(); i++)
 			{
+				if(list.get(i).tookDamage == true)
+				{
+					temp = damageCharacter;
+				}
+				else
+				{
+					temp = character;
+				}
 				
-				g.drawImage(character, 
+				g.drawImage(temp, 
 							windowX/2 - list.get(0).x+ list.get(i).x, windowY/2- list.get(0).y+ list.get(i).y, 
 							windowX/2 - list.get(0).x + list.get(i).x + 80, windowY/2- list.get(0).y + list.get(i).y + 80, 
 							list.get(i).picCounter*17, list.get(i).picRank * 17, 
 							17*(list.get(i).picCounter+1), list.get(i).picRank * 17 + 17, 
 							null);
+				
 				g.setColor(Color.BLACK);
 				g.drawRect(windowX/2 - list.get(0).x+ list.get(i).x-5, windowY/2- list.get(0).y+ list.get(i).y+-20, 100, 5);
 				g.setColor(Color.RED);
 				g.fillRect(windowX/2 - list.get(0).x+ list.get(i).x-5, windowY/2- list.get(0).y+ list.get(i).y+-20, list.get(i).getHP(), 5);
-				if (list.get(i).getHP() <= 0){
-					list.remove(i);
-				}
+			
+				list.get(i).tookDamage = false;
 			}
 			
 			//g.drawImage(bowIMG, windowX/2 -50, windowY/2 -50, null);
@@ -196,11 +206,12 @@ class Draw extends JPanel{
 					windowX/2 + 40, windowY/2 + 40, 
 					list.get(0).picCounter*17, list.get(0).picRank * 17, 
 					17*(list.get(0).picCounter+1), list.get(0).picRank * 17 + 17, 
-					null);	
+					null);
+			
 			g.setColor(Color.BLACK);
-			g.drawRect(25, 650, 200, 20);
+			g.drawRect(25,windowY - 100, 200, 20);
 			g.setColor(Color.RED);
-			g.fillRect(25, 650, 200, 20);
+			g.fillRect(25, windowY - 100, 200, 20);
 
 		}
 	

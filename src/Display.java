@@ -39,9 +39,9 @@ public class Display extends Game{
 
 	}
 
-	public static void getDirection(int i) {
+	public static void getDirection(Character genericChar) {
 
-			Character genericChar = list.get(i);
+			//Character genericChar = list.get(i);
 		  int differenceX = Math.abs(genericChar.x-genericChar.clickedX);
 		  int differenceY = Math.abs(genericChar.y-genericChar.clickedY);
 
@@ -59,6 +59,7 @@ public class Display extends Game{
 		  else if((differenceY < acceptableDifference) && (genericChar.x > genericChar.clickedX)) {
 		   genericChar.west = true;
 		  }
+		
 		  else if((differenceX >= acceptableDifference) && (genericChar.y < genericChar.clickedY) && (genericChar.x < genericChar.clickedX)) {
 		   genericChar.south = true;
 		   genericChar.east = true;
@@ -75,6 +76,7 @@ public class Display extends Game{
 		   genericChar.north = true;
 		   genericChar.west = true;
 		  }
+		  /*
 		  /*
 		   * save this for testing purposes
 		  System.out.println();
@@ -116,7 +118,7 @@ public class Display extends Game{
 		for(int i = 0; i< list.size(); i++) {
 			//if(list.get(i).directionCheck == true)
 			if(list.get(i).newClick == true) {
-				getDirection(i);
+				getDirection(list.get(i));
 			}
 		}
 		draw.updateValue();
