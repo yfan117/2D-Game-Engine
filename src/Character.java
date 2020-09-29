@@ -39,8 +39,8 @@ public class Character extends Game{
 
 	 //int windowX = 1280;
 	 //int windowY = 720;
-	static int windowX = 1920;
-	static int windowY = 1080;
+	// int windowX = 1920;
+	 //int windowY = 1080;
 
 	 int preX;
 	 int preY;
@@ -50,21 +50,28 @@ public class Character extends Game{
 
 	 int picRank = 6;
 
-	 int rangeCounter = 0;
+	 //int rangeCounter = 0;
 	 int range;
 
 	 String type;
 
 	 boolean visible = false;
 	 boolean collision = false;
-	 boolean active = true;//temp
+	 boolean active = true;
+	 
+	 boolean isMelee = true;
+	 
+	 boolean tookDamage = false;
 
 	 int hp;
-	 //Character collider;
-	 private int whichEn;
+	 
+	 int damage;
+	 
+	 int hitBox;
 
+	 int target = 0;
 
-	public Character(String name, int[] location, int hp) throws IOException {
+	public Character(String name, int[] location, int hp, int hitBox) throws IOException {
 
 		 x = location[0];
          y = location[1];
@@ -79,6 +86,7 @@ public class Character extends Game{
 			//this.centerX = x + windowX/2;
 			//this.centerY = y + windowY/2;
         	visible = true;
+     
          }
 
         if(name == "enemy")
@@ -86,11 +94,13 @@ public class Character extends Game{
         	type = "enemy";
 
         	isVisible();
-        	this.hp = hp;
+        	
 
         }
-
-		FileReader reader = new FileReader(root + "/resources/text/" + name + ".txt");
+        this.hp = hp;
+        this.hitBox = hitBox;
+        FileReader reader = new FileReader(root + "/resources/text/" + name + ".txt");
+	
 
 		 BufferedReader bufferedReader = new BufferedReader(reader);
 
@@ -100,10 +110,10 @@ public class Character extends Game{
 
 	}
 
-	public Character(String name, int originX, int originY, int destinationX, int destinationY) throws IOException {
+	public Character(String name, int destinationX, int destinationY, int hitBox) throws IOException {
 
-		this.x = originX;
-        this.y = originY;
+		this.x = list.get(0).x;
+        this.y = list.get(0).y;
 
         preX = x;
         preY = y;
@@ -119,26 +129,36 @@ public class Character extends Game{
         {
         	type = "projectile";
         	visible = true;
+        
+		
         }
+        if(name == "melee")
+        {
+        	type = "melee";
+        	visible = true;
+        
+		
+        }
+        
+        this.hitBox = hitBox;
 
-		FileReader reader = new FileReader(root + "/resources/text/" + name + ".txt");
+        FileReader reader = new FileReader(root + "/resources/text/" + name + ".txt");
 
 		 BufferedReader bufferedReader = new BufferedReader(reader);
 
 		 moveSpeed = Integer.parseInt(bufferedReader.readLine());
 
-		 range = Integer.parseInt(bufferedReader.readLine());
-
+		 damage = Integer.parseInt(bufferedReader.readLine());
 
 	}
 
 
-	public void update(int placeInList)
+	public void update(Character current)
 	{
 
 
-		if((type == "enemy")&& ((list.get(0).x > (x + 600))||(list.get(0).x < (x - 600))
-				||(list.get(0).y > (y + 600))||(list.get(0).y < (y - 600))))
+		if((type == "enemy")&& ((list.get(0).x > (x + 300))||(list.get(0).x < (x - 300))
+				||(list.get(0).y > (y + 300))||(list.get(0).y < (y - 300))))
 		{
 			north = false;
 			south = false;
@@ -158,9 +178,11 @@ public class Character extends Game{
 
 
 		isVisible();
-		isCollision(clickedX, clickedY, placeInList);
+	
+		isCollision(clickedX, clickedY, current);
 
-
+		
+		
 
 		//&&(collision = false)
 
@@ -194,7 +216,7 @@ public class Character extends Game{
 					maxSlope = slopeX;
 					for(int j = 0; j <= slopeX; j++)
 					{
-						updateX(placeInList);
+						updateX(current);
 
 
 								if(clickedX == x)
@@ -218,7 +240,7 @@ public class Character extends Game{
 						break;
 					}
 					else
-						updateY(placeInList);
+						updateY(current);
 
 
 				}
@@ -228,7 +250,7 @@ public class Character extends Game{
 
 					for(int j = 0; j <= slopeY; j++) {
 
-						updateY(placeInList);
+						updateY(current);
 
 
 
@@ -251,7 +273,7 @@ public class Character extends Game{
 						break;
 					}
 					else
-						updateX(placeInList);
+						updateX(current);
 
 
 
@@ -262,8 +284,8 @@ public class Character extends Game{
 					for(int j = 0; j <= maxSlope; j++)
 					{
 
-						updateX(placeInList);
-						updateY(placeInList);
+						updateX(current);
+						updateY(current);
 
 
 						if(moveCounter == moveSpeed)
@@ -294,7 +316,23 @@ public class Character extends Game{
 			//	active = false;
 				newClick = false;
 				maxSlope = 1;
-
+				
+				if(current.type == "melee")
+				{
+					projectile.remove(current);
+				
+				}
+				
+				if((current.type == "player")&&(target != 0))
+				{
+					//System.out.println("here");
+					takeDamage(list.get(target), 30);
+					
+					target = 0;
+				
+				}
+				
+				
 			}
 
 
@@ -302,12 +340,12 @@ public class Character extends Game{
 	}
 
 
-		public void updateX(int placeInList) {
+		public void updateX(Character current) {
 
 
 				if(clickedX < x){
 
-					isCollision(x-1, y, placeInList);
+					isCollision(x-1, y, current);
 
 					//System.out.println(collision);
 					if(collision == false)
@@ -333,7 +371,7 @@ public class Character extends Game{
 				}
 				else if(x < clickedX) {
 
-					isCollision(x+1, y, placeInList);
+					isCollision(x+1, y, current);
 
 					if(collision == false)
 					{
@@ -356,11 +394,11 @@ public class Character extends Game{
 
 			}
 
-			public void updateY(int placeInList) {
+			public void updateY(Character current) {
 
 				if(clickedY < y) {
 
-					isCollision(x, y-1, placeInList);
+					isCollision(x, y-1, current);
 
 					if(collision == false)
 					{
@@ -380,7 +418,7 @@ public class Character extends Game{
 				}
 				else if(clickedY > y) {
 
-					isCollision(x, y+1, placeInList);
+					isCollision(x, y+1, current);
 
 					if(collision == false)
 					{
@@ -414,90 +452,96 @@ public class Character extends Game{
 
 			}
 
-			public void isCollision(int x, int y, int placeInList)
+			public int isCollision(int x, int y, Character current)
 			{
+				int result = 0;
 				if(type !="player")
 				{
 					for(int i = 1; i < list.size(); i++)
 					{
 						if((this.visible == true)&&(list.get(i).visible == true))
 						{
-							if((i != placeInList)||(type == "projectile"))
+							if((list.get(i) != current)||(current.type == "projectile"))
 							{
-								if(((x > list.get(i).x ) &&(x < list.get(i).x + 100))
+								//System.out.println("here");
+								if(((x + current.hitBox > list.get(i).x) &&(x < list.get(i).x + list.get(i).hitBox))
 						        		&&
-						        		((y > list.get(i).y) &&(y < list.get(i).y + 100)))
+						        		((y + current.hitBox > list.get(i).y) &&(y < list.get(i).y + list.get(i).hitBox)))
 						        {
 
 
-										if(type == "projectile")
+										if(current.type == "projectile")
 										{
-											projectile.get(placeInList).collision = true;
+											current.collision = true;
 
 											//this.collider = list.get(i);
-											setHP(list.get(i));
-											//System.out.println(whichEn);
+											takeDamage(list.get(i), current.damage);
+											//System.out.println(current.type);
+											//System.out.println(placeInList);
+											//result = true;
+											break;
+										}
+										if(current.type == "melee")
+										{
+											current.collision = true;
+
+											//this.collider = list.get(i);
+											//setHP(list.get(i));
+											result = i;
+											//System.out.println(current.type);
 											//System.out.println(placeInList);
 											break;
 										}
 										else
 										{
-											list.get(placeInList).collision = true;
+											current.collision = true;
 											//this.collider = list.get(i);
 											//collider = list.get(placeInList);
 											//whichEn = placeInList;
 											//collision = true;
 										}
-
-
 						        }
+
+										//
 								else
 								{
-									if(type == "projectile")
+									if(current.type == "projectile")
 									{
 										//if(collision == true)
 											//System.out.println(projectile.get(placeInList).collision);
 
-										projectile.get(placeInList).collision = false;
+										current.collision = false;
 										//break;
 									}
 									else
 									{
 										//list.get(i).collision = false;
-										list.get(placeInList).collision = false;
+										current.collision = false;
 									}
+									
+									//result = false;
 
 
 								}
 							}
 
 						}}}
+				
+				return result;
 					}
-			/*
-			public void hit(int hitAmount) {
-			//	if (type == "enemy") {
-					//list.get(whichEn).hp = this.hp - hitAmount;
-				//	this.hp = this.hp + hitAmount;
-					list.get(whichEn).setHP(this.hp - hitAmount);
-					//System.out.println(this.hp);
-				//	System.out.println(hp);
 
-			//		if(hp == 0) {
-			//			die();
-				//	}
-			//	}
-		//	}
-		//	public void die() {
-			//	list.remove(whichEn);
+			public void takeDamage(Character target, int damage) {
+				target.hp = target.hp - damage;
+				target.tookDamage = true;
+				//System.out.println("set" + damage);
+			}
+			public int getHP() {
+				return this.hp;
+			}
 
-			}
-			*/
-			public void setHP(Character temp) {
-				temp.hp = temp.hp - 2;
-				//System.out.println("set" + this.hp);
-			}
-		//	public String getType() {
-		//		return this.type;
-		//	}
+		public void switchMelee() {
+			this.isMelee = !this.isMelee;
+			System.out.println(isMelee);
+		}
 
 }

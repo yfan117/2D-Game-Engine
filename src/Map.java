@@ -1,3 +1,4 @@
+
 package Diablo;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -15,12 +16,14 @@ public class Map extends Game{
 	public Map(String mapName) throws IOException  {
 
 		ImageIcon icon = new ImageIcon(root + "/resources/images/" + mapName + ".jpg");
+	
 
 		mapDimension[0] = icon.getImage().getWidth(null);
 		mapDimension[1] = icon.getImage().getHeight(null);
 
 
 		BufferedReader bufferedReader = new BufferedReader(new FileReader(root + "/resources/text/" + mapName +".txt"));
+	
 
 
 
@@ -39,3 +42,4 @@ public class Map extends Game{
 
 
 }
+
