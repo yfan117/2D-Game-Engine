@@ -12,11 +12,11 @@ import java.util.List;
 
 
 public class Game {
+
 	//static final public Path root = Paths.get(System.getProperty("user.dir")).getParent();
 	
-
-	static final public Path root = Paths.get(System.getProperty("user.dir")).getParent();
-
+	//this is only works for Fan
+	static final public String root = Paths.get(System.getProperty("user.dir")).getParent()+"/Portfolio";
 
 
 	
@@ -60,7 +60,7 @@ public class Game {
 
 
 
-		list.add(new Character("player", map.getLocation(), 100, 100));
+		list.add(new Character("player", map.getLocation(), 100, 80));
 		list.add(new Character("enemy", new int[]{500, 500},100, 80));
 		list.add(new Character("enemy", new int[]{200, 100}, 100, 80));
 
@@ -100,6 +100,8 @@ public class Game {
 
 
 				display.update();
+				
+				//list.get(0).takeDamage(list.get(0), 1);
 
 				for(int i = 0; i < projectile.size(); i++)
 				{
@@ -117,11 +119,16 @@ public class Game {
 
 					if (list.get(i).hp <= 0)
 					{
-						list.remove(i);
+						list.get(i).visible = false;
 					}
 				}
 			
 				//System.out.println(projectile.size());
+				
+				if(list.get(0).hp <= 0)
+				{
+					break;
+				}
 
 				try {
 					Thread.sleep(timer);
