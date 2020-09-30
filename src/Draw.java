@@ -2,25 +2,15 @@ package Diablo;
 
 
 import java.awt.Color;
-import java.awt.Container;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.ActionMap;
 import javax.swing.ImageIcon;
-import javax.swing.InputMap;
-import javax.swing.JComponent;
 import javax.swing.JPanel;
-import javax.swing.KeyStroke;
 
-class Draw extends JPanel  {
+class Draw extends JPanel{
 	
 	Image backGround;
 	Image character;
@@ -29,6 +19,9 @@ class Draw extends JPanel  {
 	Image temp;
 	Image explosion;
 	Image damageCharacter;
+	Image darkness;
+	Image weapon;
+	Image death;
 	
 	// private Player player;
 	//int genericChar.picRank;
@@ -53,33 +46,16 @@ class Draw extends JPanel  {
 		  character = new ImageIcon(repository +"character.png").getImage();
 		  damageCharacter = new ImageIcon(repository +"damageCharacter.png").getImage();
 		  arrowIMG = new ImageIcon(repository +"arrow2.png").getImage();
-		  bowIMG = new ImageIcon(repository +"bow.png").getImage();
-		  
-		  InputMap im = getInputMap(WHEN_IN_FOCUSED_WINDOW);
-          ActionMap am = getActionMap();
+		  darkness = new ImageIcon(repository +"darkness.png").getImage();
+		  weapon = new ImageIcon(repository +"weapon.png").getImage();
+		  death = new ImageIcon(repository +"death.png").getImage();
 
-          im.put(KeyStroke.getKeyStroke(KeyEvent.VK_1, 0, false), "pressed");
-          im.put(KeyStroke.getKeyStroke(KeyEvent.VK_1, 0, true), "released");
-          am.put("pressed", new AbstractAction() {
-              @Override
-              public void actionPerformed(ActionEvent e) {
-                  System.out.println("Pressed");
-                  
-              }
-          });
 
-          am.put("released", new AbstractAction() {
-              @Override
-              public void actionPerformed(ActionEvent e) {
-                  System.out.println("released");
-                  list.get(0).switchMelee();
-              }
-          });
-
-          setFocusable(true);
-          requestFocusInWindow();        
 		
 	}
+
+
+
 
 	public void updateValue() {
 		
@@ -178,28 +154,31 @@ class Draw extends JPanel  {
 			
 			for(int i = 1; i< list.size(); i++)
 			{
-				if(list.get(i).tookDamage == true)
+				if(list.get(i).visible == true)
 				{
-					temp = damageCharacter;
-				}
-				else
-				{
-					temp = character;
-				}
+					if(list.get(i).tookDamage == true)
+					{
+						temp = damageCharacter;
+					}
+					else
+					{
+						temp = character;
+					}
+					
+					g.drawImage(temp, 
+								windowX/2 - list.get(0).x+ list.get(i).x, windowY/2- list.get(0).y+ list.get(i).y, 
+								windowX/2 - list.get(0).x + list.get(i).x + 80, windowY/2- list.get(0).y + list.get(i).y + 80, 
+								list.get(i).picCounter*17, list.get(i).picRank * 17, 
+								17*(list.get(i).picCounter+1), list.get(i).picRank * 17 + 17, 
+								null);
+					
+					g.setColor(Color.BLACK);
+					g.drawRect(windowX/2 - list.get(0).x+ list.get(i).x-5, windowY/2- list.get(0).y+ list.get(i).y+-20, 100, 5);
+					g.setColor(Color.RED);
+					g.fillRect(windowX/2 - list.get(0).x+ list.get(i).x-5, windowY/2- list.get(0).y+ list.get(i).y+-20, list.get(i).hp, 5);
 				
-				g.drawImage(temp, 
-							windowX/2 - list.get(0).x+ list.get(i).x, windowY/2- list.get(0).y+ list.get(i).y, 
-							windowX/2 - list.get(0).x + list.get(i).x + 80, windowY/2- list.get(0).y + list.get(i).y + 80, 
-							list.get(i).picCounter*17, list.get(i).picRank * 17, 
-							17*(list.get(i).picCounter+1), list.get(i).picRank * 17 + 17, 
-							null);
-				
-				g.setColor(Color.BLACK);
-				g.drawRect(windowX/2 - list.get(0).x+ list.get(i).x-5, windowY/2- list.get(0).y+ list.get(i).y+-20, 100, 5);
-				g.setColor(Color.RED);
-				g.fillRect(windowX/2 - list.get(0).x+ list.get(i).x-5, windowY/2- list.get(0).y+ list.get(i).y+-20, list.get(i).getHP(), 5);
-			
-				list.get(i).tookDamage = false;
+					list.get(i).tookDamage = false;
+				}
 			}
 			
 			//g.drawImage(bowIMG, windowX/2 -50, windowY/2 -50, null);
@@ -229,18 +208,56 @@ class Draw extends JPanel  {
 				
 			}
 		
+			g.drawImage(darkness, 
+						0, 0, 
+						windowX, windowY,  
+						null);
 			
-			g.drawImage(character, 
+			
+			if(list.get(0).tookDamage == true)
+			{
+				temp = damageCharacter;
+			}
+			else
+			{
+				temp = character;
+			}
+			list.get(0).tookDamage = false;
+			g.drawImage(temp, 
 					windowX/2 - 40, windowY/2 - 40, 
 					windowX/2 + 40, windowY/2 + 40, 
 					list.get(0).picCounter*17, list.get(0).picRank * 17, 
 					17*(list.get(0).picCounter+1), list.get(0).picRank * 17 + 17, 
 					null);
 			
+			/*
+			g.drawImage(weapon, 
+					windowX/2 - 40, windowY/2 - 40, 
+					windowX/2 + 40, windowY/2 + 40, 
+					0, 0, 
+					0, 17, 
+					null);
+			*/
+			int hp = list.get(0).hp;
+			if(list.get(0).hp <= 0)
+			{
+				hp = 0;
+				
+			}
 			g.setColor(Color.BLACK);
 			g.drawRect(25,windowY - 100, 200, 20);
 			g.setColor(Color.RED);
-			g.fillRect(25, windowY - 100, 200, 20);
+			g.fillRect(25, windowY - 100, hp * 2, 20);
+			
+			if(hp == 0)
+			{
+				g.drawImage(death, 
+							0, 0, 
+							windowX, windowY,  
+							null);
+			}
+			
+			
 
 		}
 	

@@ -62,6 +62,8 @@ public class Character extends Game{
 	 boolean isMelee = true;
 	 
 	 boolean tookDamage = false;
+	 
+	 boolean hasDoneDmage = false;
 
 	 int hp;
 	 
@@ -69,7 +71,7 @@ public class Character extends Game{
 	 
 	 int hitBox;
 
-	 int target = 0;
+	 Character target;
 
 	public Character(String name, int[] location, int hp, int hitBox) throws IOException {
 
@@ -94,9 +96,10 @@ public class Character extends Game{
         	type = "enemy";
 
         	isVisible();
-        	
-
+   
         }
+        
+        target = this;
         this.hp = hp;
         this.hitBox = hitBox;
         FileReader reader = new FileReader(root + "/resources/text/" + name + ".txt");
@@ -141,7 +144,6 @@ public class Character extends Game{
         }
         
         this.hitBox = hitBox;
-
         FileReader reader = new FileReader(root + "/resources/text/" + name + ".txt");
 
 		 BufferedReader bufferedReader = new BufferedReader(reader);
@@ -156,9 +158,9 @@ public class Character extends Game{
 	public void update(Character current)
 	{
 
-
-		if((type == "enemy")&& ((list.get(0).x > (x + 300))||(list.get(0).x < (x - 300))
-				||(list.get(0).y > (y + 300))||(list.get(0).y < (y - 300))))
+		hasDoneDmage = false;
+		if((type == "enemy")&& ((list.get(0).x > (x + 200))||(list.get(0).x < (x - 200))
+				||(list.get(0).y > (y + 200))||(list.get(0).y < (y - 200))))
 		{
 			north = false;
 			south = false;
@@ -168,10 +170,14 @@ public class Character extends Game{
 
 			clickedX = list.get(0).x - (int)(Math.random()*100);
 			clickedY = list.get(0).y - (int)(Math.random()*100);
+			//clickedX = list.get(0).x;
+			//clickedY = list.get(0).y;
 
 
 
 			newClick = true;
+			
+			target = list.get(0);
 
 
 		}
@@ -308,8 +314,8 @@ public class Character extends Game{
 					//System.out.println("x:" +x +" y:" +y +"   collision:"+collision +"  visible:"+visible +" active:" +active +" newClick:" +newClick +"\n");
 
 			}
-
-
+			//takeDamage(list.get(0), 100);
+			System.out.println(list.get(0).hp);
 			if((clickedX == x)&&(clickedY == y))
 			{
 
@@ -317,18 +323,20 @@ public class Character extends Game{
 				newClick = false;
 				maxSlope = 1;
 				
-				if(current.type == "melee")
-				{
-					projectile.remove(current);
-				
-				}
-				
-				if((current.type == "player")&&(target != 0))
+			
+				//if((current.type == "player")&&(target != this))
+				if(this.target != this)
 				{
 					//System.out.println("here");
-					takeDamage(list.get(target), 30);
+					if(target.hp >0)
+					{
+						if((isInRange(this, this.target) == true)&&(hasDoneDmage == false))
+						{
+							takeDamage(target, 10);
+							this.target = this;
+						}
+					}
 					
-					target = 0;
 				
 				}
 				
@@ -533,15 +541,25 @@ public class Character extends Game{
 			public void takeDamage(Character target, int damage) {
 				target.hp = target.hp - damage;
 				target.tookDamage = true;
+				hasDoneDmage = true;
 				//System.out.println("set" + damage);
 			}
-			public int getHP() {
-				return this.hp;
+			
+			public boolean isInRange(Character self, Character target)
+			{
+				int range = 20;
+				boolean result = false;
+			
+					
+				if((self.x < (target.x + range))&&(self.x > (target.x - range))
+					||(self.y < (target.y + range))&&(self.y > (target.y - range)))
+					{
+						result = true;
+					}
+					
+					return result;
 			}
-
-		public void switchMelee() {
-			this.isMelee = !this.isMelee;
-			System.out.println(isMelee);
-		}
-
+			
+			
+		
 }
