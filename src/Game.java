@@ -13,10 +13,8 @@ import java.util.List;
 
 public class Game {
 
-	//static final public Path root = Paths.get(System.getProperty("user.dir")).getParent();
-	
-	//this is only works for Fan
-	static final public String root = Paths.get(System.getProperty("user.dir")).getParent()+"/Diablo Copy";
+	static final public Path root = Paths.get(System.getProperty("user.dir")).getParent();
+
 
 
 	

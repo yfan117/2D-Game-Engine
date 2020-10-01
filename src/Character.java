@@ -70,11 +70,13 @@ public class Character extends Game{
 	 boolean tookDamage = false;
 	 
 	 boolean hasDoneDmage = false;
+
 	 
 	 boolean isIFrame = false;
 	 
 	 int iFrameCount = 0;
 	 //Timer timer = new Timer();
+
 
 	 int hp;
 	 
@@ -168,8 +170,10 @@ public class Character extends Game{
 
 	public void update(Character current)
 	{
+
+
 		hasDoneDmage = false;
-		//isIFrame = false;
+
 		if((type == "enemy")&& ((list.get(0).x > (x + 200))||(list.get(0).x < (x - 200))
 				||(list.get(0).y > (y + 200))||(list.get(0).y < (y - 200))))
 		{
@@ -326,7 +330,7 @@ public class Character extends Game{
 
 			}
 			//takeDamage(list.get(0), 100);
-			//System.out.println(list.get(0).hp);
+
 			if((clickedX == x)&&(clickedY == y))
 			{
 
@@ -343,10 +347,15 @@ public class Character extends Game{
 					{
 						if((isInRange(this, this.target) == true)&&(hasDoneDmage == false))
 						{
+
 							if(this.target.isIFrame == false) {
 								takeDamage(target, 10);
 								this.target = this;
 							}
+
+							takeDamage(target, 10);
+							this.target = this;
+
 						}
 					}
 					
@@ -563,9 +572,11 @@ public class Character extends Game{
 			public void takeDamage(Character target, int damage) {
 				target.hp = target.hp - damage;
 				target.tookDamage = true;
+
 				
 				hasDoneDmage = true;
 				iFrame(target);
+
 			}
 			
 			public boolean isInRange(Character self, Character target)
@@ -582,6 +593,7 @@ public class Character extends Game{
 					
 					return result;
 			}
+
 			public void iFrame(Character target) {
 				this.target.isIFrame = true;
 				
@@ -601,6 +613,7 @@ public class Character extends Game{
 				timer.start();
 
 			}
+
 			
 		
 }
