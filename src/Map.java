@@ -26,7 +26,7 @@ public class Map extends Game{
 	
 
 
-
+		System.out.println(root + "/resources/text/" + mapName +".txt");
 		respawnLcation[0] = Integer.parseInt(bufferedReader.readLine());
 		respawnLcation[1] = Integer.parseInt(bufferedReader.readLine());
 

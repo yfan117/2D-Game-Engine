@@ -2,11 +2,17 @@ package Diablo;
 
 
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.TimerTask;
+
+import javax.swing.Timer;
+import javax.swing.event.AncestorListener;
 
 public class Character extends Game{
 
@@ -62,6 +68,13 @@ public class Character extends Game{
 	 boolean isMelee = true;
 	 
 	 boolean tookDamage = false;
+	 
+	 boolean hasDoneDmage = false;
+	 
+	 boolean isIFrame = false;
+	 
+	 int iFrameCount = 0;
+	 //Timer timer = new Timer();
 
 	 int hp;
 	 
@@ -69,7 +82,7 @@ public class Character extends Game{
 	 
 	 int hitBox;
 
-	 int target = 0;
+	 Character target;
 
 	public Character(String name, int[] location, int hp, int hitBox) throws IOException {
 
@@ -94,9 +107,10 @@ public class Character extends Game{
         	type = "enemy";
 
         	isVisible();
-        	
-
+   
         }
+        
+        target = this;
         this.hp = hp;
         this.hitBox = hitBox;
         FileReader reader = new FileReader(root + "/resources/text/" + name + ".txt");
@@ -141,7 +155,7 @@ public class Character extends Game{
         }
         
         this.hitBox = hitBox;
-        FileReader reader = new FileReader(root + "/Diablo Copy/resources/text/" + name + ".txt");
+        FileReader reader = new FileReader(root + "/resources/text/" + name + ".txt");
 
 		 BufferedReader bufferedReader = new BufferedReader(reader);
 
@@ -154,10 +168,10 @@ public class Character extends Game{
 
 	public void update(Character current)
 	{
-
-
-		if((type == "enemy")&& ((list.get(0).x > (x + 300))||(list.get(0).x < (x - 300))
-				||(list.get(0).y > (y + 300))||(list.get(0).y < (y - 300))))
+		hasDoneDmage = false;
+		//isIFrame = false;
+		if((type == "enemy")&& ((list.get(0).x > (x + 200))||(list.get(0).x < (x - 200))
+				||(list.get(0).y > (y + 200))||(list.get(0).y < (y - 200))))
 		{
 			north = false;
 			south = false;
@@ -167,10 +181,14 @@ public class Character extends Game{
 
 			clickedX = list.get(0).x - (int)(Math.random()*100);
 			clickedY = list.get(0).y - (int)(Math.random()*100);
+			//clickedX = list.get(0).x;
+			//clickedY = list.get(0).y;
 
 
 
 			newClick = true;
+			
+			target = list.get(0);
 
 
 		}
@@ -307,8 +325,8 @@ public class Character extends Game{
 					//System.out.println("x:" +x +" y:" +y +"   collision:"+collision +"  visible:"+visible +" active:" +active +" newClick:" +newClick +"\n");
 
 			}
-
-
+			//takeDamage(list.get(0), 100);
+			//System.out.println(list.get(0).hp);
 			if((clickedX == x)&&(clickedY == y))
 			{
 
@@ -316,18 +334,22 @@ public class Character extends Game{
 				newClick = false;
 				maxSlope = 1;
 				
-				if(current.type == "melee")
-				{
-					projectile.remove(current);
-				
-				}
-				
-				if((current.type == "player")&&(target != 0))
+			
+				//if((current.type == "player")&&(target != this))
+				if(this.target != this)
 				{
 					//System.out.println("here");
-					takeDamage(list.get(target), 30);
+					if(target.hp >0)
+					{
+						if((isInRange(this, this.target) == true)&&(hasDoneDmage == false))
+						{
+							if(this.target.isIFrame == false) {
+								takeDamage(target, 10);
+								this.target = this;
+							}
+						}
+					}
 					
-					target = 0;
 				
 				}
 				
@@ -335,7 +357,14 @@ public class Character extends Game{
 			}
 
 
-		}
+		}	
+		if (this.target.iFrameCount >= 1) {
+				//timer.stop();
+				this.target.iFrameCount = 0;
+				this.target.isIFrame = false;
+				System.out.println("STOPPED");
+			}
+
 	}
 
 
@@ -474,7 +503,9 @@ public class Character extends Game{
 											current.collision = true;
 
 											//this.collider = list.get(i);
+											if(this.isIFrame == false) {
 											takeDamage(list.get(i), current.damage);
+											}
 											//System.out.println(current.type);
 											//System.out.println(placeInList);
 											//result = true;
@@ -532,13 +563,44 @@ public class Character extends Game{
 			public void takeDamage(Character target, int damage) {
 				target.hp = target.hp - damage;
 				target.tookDamage = true;
-				//System.out.println("set" + damage);
+				
+				hasDoneDmage = true;
+				iFrame(target);
 			}
-			public int getHP() {
-				return this.hp;
+			
+			public boolean isInRange(Character self, Character target)
+			{
+				int range = 20;
+				boolean result = false;
+			
+					
+				if((self.x < (target.x + range))&&(self.x > (target.x - range))
+					||(self.y < (target.y + range))&&(self.y > (target.y - range)))
+					{
+						result = true;
+					}
+					
+					return result;
 			}
-		public void switchMelee() {
-			this.isMelee = !this.isMelee;
-			System.out.println(isMelee);
-		}
+			public void iFrame(Character target) {
+				this.target.isIFrame = true;
+				
+				Timer timer = new Timer(300, new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						// TODO Auto-generated method stub
+						target.iFrameCount++;
+						if (target.iFrameCount >= 1) {
+							((Timer)e.getSource()).stop();	
+
+						}
+						
+						System.out.println(target + " " +target.iFrameCount);
+					}
+				});
+				timer.start();
+
+			}
+			
+		
 }
