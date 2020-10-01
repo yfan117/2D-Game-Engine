@@ -33,7 +33,12 @@ public class Display extends Game{
 		draw.addMouseListener(control);
 
 
+
 		frame.setVisible(true);
+
+
+
+
 
 
 
