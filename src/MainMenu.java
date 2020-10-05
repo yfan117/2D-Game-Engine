@@ -16,7 +16,6 @@ public class MainMenu extends JPanel
     private ImageIcon startButtonImage;
     private JButton startButton;
     private Display display;
-    private boolean inMenu;
     private MusicPlayer musicPlayer;
 
     public MainMenu(Display d)
@@ -28,7 +27,6 @@ public class MainMenu extends JPanel
         layout = new BorderLayout();
         this.setLayout(layout);
 
-        inMenu = true;
         display = d;
         img = new ImageIcon(Game.root + "/resources/images/MainMenu.png").getImage();
 
@@ -39,15 +37,10 @@ public class MainMenu extends JPanel
         startButton.setContentAreaFilled(false);
         startButton.setFocusPainted(false);
         startButton.setBorderPainted(false);
-        startButton.addActionListener(e -> {inMenu = false; display.switchJPanels(); musicPlayer.stop();});
+        startButton.addActionListener(e -> {Game.changeGameState(1); display.switchJPanels(1); musicPlayer.stop();});
         add(startButton, BorderLayout.SOUTH);
 
         musicPlayer.play();
-    }
-
-    public boolean isInMenu()
-    {
-        return inMenu;
     }
 
     @Override

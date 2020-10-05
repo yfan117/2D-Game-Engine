@@ -17,10 +17,11 @@ public class Display extends Game {
 	private JFrame frame;
 	private MainMenu mainMenu = new MainMenu(this);
 	static Draw draw = new Draw(root + "/resources/images/" , windowX, windowY, list, projectile);
+	private int currentPanel = 0;
 
 	public Display() {
 
-		frame = new JFrame();
+		frame = new JFrame("Perdition's Light");
 		//Draw draw = new Draw();
 		frame.setSize(windowX, windowY);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -35,12 +36,24 @@ public class Display extends Game {
 		frame.setVisible(true);
 	}
 
-	public void switchJPanels() {
+	public void switchJPanels(int i) {
 
-		frame.getContentPane().remove(mainMenu);
-		frame.getContentPane().add(draw);
-		frame.setVisible(false);
-		frame.setVisible(true);
+		frame.getContentPane().removeAll();
+		switch(i) {
+			case 0:
+				frame.getContentPane().add(mainMenu);
+				currentPanel = 0;
+				break;
+			case 1:
+				frame.getContentPane().add(draw);
+				currentPanel = 1;
+				break;
+		}
+		frame.revalidate();
+	}
+
+	public int getCurrentPanel() {
+		return currentPanel;
 	}
 
 	public MainMenu getMainMenu() {
