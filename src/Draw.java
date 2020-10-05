@@ -1,7 +1,7 @@
 package Diablo;
 
-
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.util.ArrayList;
@@ -10,7 +10,7 @@ import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
-class Draw extends JPanel{
+class Draw extends JPanel {
 	
 	Image backGround;
 	Image character;
@@ -23,13 +23,11 @@ class Draw extends JPanel{
 	Image weapon;
 	Image death;
 	
-	// private Player player;
+	//private Player player;
 	//int genericChar.picRank;
 
 	int windowX;
 	int windowY;
-
-	
 	
 	static ArrayList <Character> list;
 	static ArrayList<Character> projectile;
@@ -41,7 +39,7 @@ class Draw extends JPanel{
 
 		this.windowX = windowX;
 		this.windowY = windowY;
-		  backGround = new ImageIcon(repository +"bigMap2.png").getImage();
+		  backGround = new ImageIcon(repository +"BigMap2.png").getImage();
 		  explosion = new ImageIcon(repository +"explosion.png").getImage();
 		  character = new ImageIcon(repository +"character.png").getImage();
 		  damageCharacter = new ImageIcon(repository +"damageCharacter.png").getImage();
@@ -49,46 +47,37 @@ class Draw extends JPanel{
 		  darkness = new ImageIcon(repository +"darkness.png").getImage();
 		  weapon = new ImageIcon(repository +"weapon.png").getImage();
 		  death = new ImageIcon(repository +"death.png").getImage();
-
-
-		
 	}
 
-
-
+	public void changeToNight(String repository) {
+		if(Game.getNight()) {
+			backGround = new ImageIcon(repository +"BigMap2night.png").getImage();
+		}
+		else {
+			backGround = new ImageIcon(repository +"BigMap2.png").getImage();
+		}
+	}
 
 	public void updateValue() {
 		
 		for(int i = 0; i< list.size(); i++) {
-			
-		if((list.get(i).x != list.get(i).preX) || (list.get(i).y != list.get(i).preY)) 
-		{
-			
+		if((list.get(i).x != list.get(i).preX) || (list.get(i).y != list.get(i).preY)) {
 			list.get(i).timeCounter ++;
 			
-			if(list.get(i).timeCounter == 5)
-			{
+			if(list.get(i).timeCounter == 5) {
 				list.get(i).timeCounter = 0;
 				list.get(i).picCounter ++;
-				
-				if(list.get(i).picCounter == 4) 
-				{
+				if(list.get(i).picCounter == 4) {
 					list.get(i).picCounter = 0;
 				}
 			}
-		
 		}
 		else {
 			list.get(i).picCounter = 0;
 		}
-		
-		
 			list.get(i).preX = list.get(i).x;
 			list.get(i).preY = list.get(i).y;
-		
 		}
-
-		
 		repaint();
 	}
 	
@@ -128,11 +117,8 @@ class Draw extends JPanel{
 				tempY  = list.get(0).y - list.get(0).moveSpeed;
 			}
 			
-			
-			for(int xOffset = tempX; xOffset < list.get(0).x + windowX; xOffset = xOffset + 690)
-			{
-				for(int yOffset = tempY; yOffset < list.get(0).y + windowY; yOffset = yOffset + 670)
-				{
+			for(int xOffset = tempX; xOffset < list.get(0).x + windowX; xOffset = xOffset + 690) {
+				for(int yOffset = tempY; yOffset < list.get(0).y + windowY; yOffset = yOffset + 670) {
 					g.drawImage(backGround, 					
 								xOffset - list.get(0).x, yOffset - list.get(0).y, 							
 								xOffset + 690 - list.get(0).x, yOffset + 670 - list.get(0).y, 			
@@ -140,28 +126,17 @@ class Draw extends JPanel{
 								690, 670, 
 								null);
 				}
-				
-				
 			}
-			
-			
+
 			//System.out.println(list.get(0).x +" " +list.get(0).y);
 			//System.out.println(list.get(0).clickedX +" " +list.get(0).clickedY +"\n");
-	
-		
-			
-			
-			
-			for(int i = 1; i< list.size(); i++)
-			{
-				if(list.get(i).visible == true)
-				{
-					if(list.get(i).tookDamage == true)
-					{
+
+			for(int i = 1; i< list.size(); i++) {
+				if(list.get(i).visible == true) {
+					if(list.get(i).tookDamage == true) {
 						temp = damageCharacter;
 					}
-					else
-					{
+					else {
 						temp = character;
 					}
 					
@@ -183,11 +158,9 @@ class Draw extends JPanel{
 			
 			//g.drawImage(bowIMG, windowX/2 -50, windowY/2 -50, null);
 			
-			for(int i = 0; i< projectile.size(); i++)
-			{
+			for(int i = 0; i< projectile.size(); i++) {
 				//System.out.println(projectile.get(i).collision);
-				if(projectile.get(i).collision == true)
-				{
+				if(projectile.get(i).collision == true) {
 					//Character.collider.hit(2);
 					temp = explosion;
 					projectile.get(i).active = false;
@@ -195,8 +168,7 @@ class Draw extends JPanel{
 					//projectile.get(i).newClick = false;
 					//System.out.println("explosion");
 				}
-				else
-				{
+				else {
 					temp = arrowIMG;
 				}
 				g.drawImage(temp, 
@@ -205,7 +177,6 @@ class Draw extends JPanel{
 						0, 0, 
 						64, 64, 
 						null);
-				
 			}
 		
 			g.drawImage(darkness, 
@@ -213,13 +184,10 @@ class Draw extends JPanel{
 						windowX, windowY,  
 						null);
 			
-			
-			if(list.get(0).tookDamage == true)
-			{
+			if(list.get(0).tookDamage == true) {
 				temp = damageCharacter;
 			}
-			else
-			{
+			else {
 				temp = character;
 			}
 			list.get(0).tookDamage = false;
@@ -239,26 +207,45 @@ class Draw extends JPanel{
 					null);
 			*/
 			int hp = list.get(0).hp;
-			if(list.get(0).hp <= 0)
-			{
+			if(list.get(0).hp <= 0) {
 				hp = 0;
 				
 			}
 			g.setColor(Color.BLACK);
-			g.drawRect(25,windowY - 100, 200, 20);
+
+			//hp bar
 			g.setColor(Color.RED);
+			g.drawRect(25,windowY - 100, 200, 20);
 			g.fillRect(25, windowY - 100, hp * 2, 20);
+
+			//stamina bar
+
+			//oil bar
+			g.setColor(new Color(102, 51, 0));//Brown
+			g.drawRect((windowX / 2) - 100, windowY - 90, 200, 20);
+			if(list.get(0).oil >= 100)
+				g.fillRect((windowX / 2) - 100, windowY - 90, 200, 20);
+			else
+				g.fillRect((windowX / 2) - 100, windowY - 90, list.get(0).oil * 2, 20);
+
+			//insanity bar
+			g.setColor(Color.YELLOW);
+			g.drawRect((windowX / 2) - 100, windowY - 110, 200, 20);
+			g.fillRect((windowX / 2) - 100, windowY - 110, list.get(0).insanity * 2, 20);
+
+			//nighttime clock
+			g.setFont(new Font("TimesRoman", Font.PLAIN, 40));
+//			g.setColor(Color.BLACK);//Background for timer
+//			g.drawRect(25, 17, 100, 40);
+//			g.fillRect(25, 17, 100, 40);
+			g.setColor(Color.WHITE);
+			g.drawString(Game.timeToClockString(), 25, 50);
 			
-			if(hp == 0)
-			{
+			if(hp == 0) {
 				g.drawImage(death, 
 							0, 0, 
 							windowX, windowY,  
 							null);
 			}
-			
-			
-
 		}
-	
 }
