@@ -33,6 +33,7 @@ public class Display extends Game {
 		Control control = new Control();
 		draw.addMouseListener(control);
 
+
 		frame.setVisible(true);
 	}
 
@@ -56,8 +57,10 @@ public class Display extends Game {
 		return currentPanel;
 	}
 
+
 	public MainMenu getMainMenu() {
 		return mainMenu;
+
 	}
 
 	public static void getDirection(Character genericChar) {

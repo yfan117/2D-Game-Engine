@@ -37,6 +37,7 @@ public class Game {
 		return timeUntilNight;
 	}
 
+
 	//itNight boolean, and helper methods
 	static private boolean isNight = false;
 	public static void setNight(boolean b) {
@@ -48,6 +49,14 @@ public class Game {
 	
 	//this is only works for Fan
 	//static final public String root = Paths.get(System.getProperty("user.dir")).getParent()+"/Portfolio";
+
+public class Game {
+
+	static final public Path root = Paths.get(System.getProperty("user.dir")).getParent();
+
+
+
+
 	
 	//static String repository = "backGround/";
 	static int windowX = 1280;
