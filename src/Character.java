@@ -149,16 +149,13 @@ public class Character extends Game {
         }
         
         this.hitBox = hitBox;
-        FileReader reader = new FileReader(root + "/resources/text/" + name + ".txt");
 
-        BufferedReader bufferedReader = new BufferedReader(reader);
+        BufferedReader bufferedReader = new BufferedReader(new FileReader(root + "/resources/text/" + name + ".txt"));
 
         moveSpeed = Integer.parseInt(bufferedReader.readLine());
 
         damage = Integer.parseInt(bufferedReader.readLine());
-
 	}
-
 
 	public void update(Character current)
 	{
