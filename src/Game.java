@@ -46,18 +46,10 @@ public class Game {
 	public static boolean getNight() {
 		return isNight;
 	}
-	
+
 	//this is only works for Fan
 	//static final public String root = Paths.get(System.getProperty("user.dir")).getParent()+"/Portfolio";
 
-public class Game {
-
-	static final public Path root = Paths.get(System.getProperty("user.dir")).getParent();
-
-
-
-
-	
 	//static String repository = "backGround/";
 	static int windowX = 1280;
 	static int windowY = 720;
