@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public class Movement {
 	
 	int obsXY = 100;
-	int obsSize = 200;
+	int obsSize = 0;
 	
 	Entity current;
 
@@ -18,6 +18,8 @@ public class Movement {
 		this.current = current;
 		
 		checkPoint = new ArrayList<Node>();
+		checkPoint.add(new Node(current.x, current.y));
+		
 		usedGrid   = new ArrayList<Node>();
 		//checkPoint.add(new Node(current.x, current.y));
 	}
@@ -25,57 +27,74 @@ public class Movement {
 
 	
 	int nodeIndex = 0;
+	
+	public static void keyBoardUpdate(Entity current)
+	{
+		if(current.moveRight == true)
+		{
+			if(Movement.isObstacle(current.x+10, current.y) == false)
+			{
+				//list.get(0).hasPath = true;
+				//list.get(0).move.checkPoint.add(new Node(list.get(0).x+10, list.get(0).y));
+				current.x = current.x + 10;
+			}
+		}
+		
+		if(current.moveLeft == true)
+		{
+			if(Movement.isObstacle(current.x-10, current.y) == false)
+			{
+				//current.hasPath = true;
+				//current.move.checkPoint.add(new Node(current.x+10, current.y));
+				current.x = current.x - 10;
+			}
+		}
+		
+		if(current.moveUp == true)
+		{
+			if(Movement.isObstacle(current.x, current.y - 10) == false)
+			{
+				//current.hasPath = true;
+				//current.move.checkPoint.add(new Node(current.x+10, current.y));
+				current.y = current.y - 10;
+			}
+		}
+		
+		if(current.moveDown == true)
+		{
+			if(Movement.isObstacle(current.x, current.y+10) == false)
+			{
+				//current.hasPath = true;
+				//current.move.checkPoint.add(new Node(current.x+10, current.y));
+				current.y = current.y + 10;
+			}
+		}
+		
+	}
 
 	public void update(Entity current)
 	{
 
 		current.hasDoneDmage = false;
-		if((current.type == "enemy")&& ((current.list.get(0).x > (current.x + 200))||(current.list.get(0).x < (current.x - 200))
-				||(current.list.get(0).y > (current.y + 200))||(current.list.get(0).y < (current.y - 200))))
-		{
-			current.north = false;
-			current.south = false;
-			current.west = false;
-			current.east = false;
-			current.directionCheck = true;
-
-			current.clickedX = current.list.get(0).x - (int)(Math.random()*100);
-			current.clickedY = current.list.get(0).y - (int)(Math.random()*100);
-			//clickedX = list.get(0).x;
-			//clickedY = list.get(0).y;
-
-
-
-			current.newClick = true;
-			
-			current.target = current.list.get(0);
-
-
-		}
-
-
+		
+		
 		isVisible();
 	
 		isCollision(current.clickedX, current.clickedY, current);
-
-		/*
-		for(int i = 0; i < checkPoint.size(); i++)
-		{
-			if(checkPoint.size() >= 1)
-				System.out.println("checkPoint " +i +" - x is:" +checkPoint.get(i).x + " y is:" +checkPoint.get(i).y +" player location: " +current.x +" "+current.y);
-		}
-		*/
 		
-		//&&(collision = false)
+		
 
-
-		if(current.newClick == true)
+		if((current.newClick == true)&&(checkPoint.size()>1))
 		{
 			//System.out.println("here");
+			//if((current.type != "projectile")&&(current.type != "player"))
 			if(current.type != "projectile")
 			{
-				current.clickedX = checkPoint.get(1).x;
-				current.clickedY = checkPoint.get(1).y;
+				
+					current.clickedX = checkPoint.get(1).x;
+					current.clickedY = checkPoint.get(1).y;
+				
+				
 			}
 		
 			
@@ -210,12 +229,14 @@ public class Movement {
 					checkPoint.remove(1);
 				}
 				
+		
 				//current.newClick = false;
 				current.maxSlope = 1;
 				
 				if(checkPoint.size() == 1)
 				{
 					current.newClick = false;
+					current.hasPath = false;
 				}
 				
 				//checkPoint.replaceXY(current.x, current.y);
@@ -540,6 +561,7 @@ public class Movement {
 			public boolean isObstacles(int x, int y)
 			{
 				
+				/*
 				
 				if(((x >= obsXY) &&(x <= obsXY + obsSize ))
 		        		&&
@@ -555,6 +577,21 @@ public class Movement {
 					isObs = false;
 					return false;
 				}
+				*/
+				for(int i = 0; i < Game.obstacleLocation.size(); i ++)
+				{
+					if(x == Game.obstacleLocation.get(i).x)
+					{
+						if(y == Game.obstacleLocation.get(i).y)
+						{
+							isObs = true;
+							return true;
+						}
+					}
+				}
+				
+				isObs = false;
+				return false;
 			}
 			
 			
@@ -579,8 +616,6 @@ public class Movement {
 			
 				while(( originX != targetX ) || (originY != targetY ))
 				{
-					
-				
 					
 					//
 					if(slopeX > slopeY)
@@ -724,8 +759,16 @@ public class Movement {
 					establishGrid(-5, +5, grid);
 					establishGrid( 0, +5, grid);
 					establishGrid( 5, +5, grid);
-					
-					
+					/*
+					try {
+						shortestX = grid.get(0).x;
+						shortestY = grid.get(0).y;
+					}
+					catch(IndexOutOfBoundsException e)
+					{
+						
+					}
+					*/
 					shortestX = grid.get(0).x;
 					shortestY = grid.get(0).y;
 					int smallestIndex = 0;
@@ -752,11 +795,11 @@ public class Movement {
 					
 					int possibleX = tempX;
 					int possibleY = tempY;
-					
+					System.out.println(shortestX +" "+shortestY);
 					if(isLineOfSight(checkPoint.get(checkPoint.size()-1).x, checkPoint.get(checkPoint.size()-1).y, shortestX, shortestY) == false)
 					{
 						//System.out.println("from "+checkPoint.get(checkPoint.size()-1).x +" "+ checkPoint.get(checkPoint.size()-1).y +" to:" + shortestX+" "+ shortestY +" LOS is false");
-						//System.out.println("!!!");
+						//System.out.println(checkPoint.get(checkPoint.size()-1).x + " "+checkPoint.get(checkPoint.size()-1).y);
 						checkPoint.add(new Node(possibleX, possibleY));
 						
 						
@@ -781,9 +824,35 @@ public class Movement {
 				
 				for(int i = 0; i < checkPoint.size(); i++) 
 				{
-					System.out.println("checkX:" +checkPoint.get(i).x +"  checkY" +checkPoint.get(i).y +"  clickedX" +current.clickedX+"  clickedY" +current.clickedY);
+					//System.out.println("checkX:" +checkPoint.get(i).x +"  checkY" +checkPoint.get(i).y +"  clickedX" +current.clickedX+"  clickedY" +current.clickedY);
 				}
-				System.out.println(checkPoint.size());
+				//System.out.println(checkPoint.size());
+				
+				
+				for(int i = 0; i < checkPoint.size(); i++)
+				{
+					for(int a = checkPoint.size()-1; a > i+1; a--)
+					{
+						if(isLineOfSight(checkPoint.get(i).x, checkPoint.get(i).y, checkPoint.get(a).x, checkPoint.get(a).y) == true)
+						{
+							System.out.println(i +" "+a);
+							System.out.println("checkpoint size " +checkPoint.size());
+
+							int numRemove = a-i-1;
+							for(int b = 0; b < numRemove; b++)
+							{
+								//System.out.println(checkPoint.size());
+								checkPoint.remove(i+1);
+						
+							}
+							System.out.println("checkpoint size " +checkPoint.size());
+
+							break;
+						}
+						
+					}
+					
+				}
 				
 			}
 			
@@ -826,7 +895,18 @@ public class Movement {
 			}
 		
 			
-		
+			public static boolean isObstacle(int cx, int cy)
+			{
+				for(int i = 0; i < Game.obstacleLocation.size(); i ++)
+				{
+					if ((Game.obstacleLocation.get(i).x == cx) && (Game.obstacleLocation.get(i).y == cy))
+					{
+						return true;
+					}
+				}
+				
+				return false;
+			}
 
 }
 

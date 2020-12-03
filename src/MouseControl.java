@@ -12,6 +12,7 @@ public class MouseControl extends Game implements MouseListener {
 		// TODO Auto-generated method stub
 		
 	}
+	
 
 	@Override
 	public void mousePressed(MouseEvent e) {
@@ -47,29 +48,35 @@ public class MouseControl extends Game implements MouseListener {
 					list.get(0).clickedY = list.get(0).y + (eY - centerY);
 				}
 				
-				list.get(0).newClick = true;
-				
-				list.get(0).north = false;
-				list.get(0).south = false;
-				list.get(0).west = false;
-				list.get(0).east = false;
-				
-				
-				list.get(0).directionCheck = true;
-				
-				list.get(0).target = list.get(0);
-
-				//System.out.println(Math.sqrt(Math.pow(list.get(0).clickedX - 105, 2)+Math.pow(list.get(0).clickedY - 95, 2)));
-				//System.out.println(Math.sqrt(Math.pow(list.get(0).clickedX - 95, 2)+Math.pow(list.get(0).clickedY - 95, 2)));
-
 				list.get(0).clickedX =Math.round(list.get(0).clickedX/5)*5;
 				list.get(0).clickedY =Math.round(list.get(0).clickedY/5)*5;
+				if(Movement.isObstacle(list.get(0).clickedX, list.get(0).clickedY) == false)
+				{
+					list.get(0).newClick = true;
+					
+					list.get(0).north = false;
+					list.get(0).south = false;
+					list.get(0).west = false;
+					list.get(0).east = false;
+					
+					
+					list.get(0).directionCheck = true;
+					
+					list.get(0).target = list.get(0);
+
+					//System.out.println(Math.sqrt(Math.pow(list.get(0).clickedX - 105, 2)+Math.pow(list.get(0).clickedY - 95, 2)));
+					//System.out.println(Math.sqrt(Math.pow(list.get(0).clickedX - 95, 2)+Math.pow(list.get(0).clickedY - 95, 2)));
+
+					
+					
+					list.get(0).move.nodeIndex = 1;
+					list.get(0).move.checkPoint = new ArrayList<Node>();
+					list.get(0).move.usedGrid   = new ArrayList<Node>();
+					list.get(0).move.checkPoint.add(new Node(list.get(0).x, list.get(0).y));
+					list.get(0).move.pathFind();
+					list.get(0).hasPath = true;
+				}
 				
-				list.get(0).move.nodeIndex = 1;
-				list.get(0).move.checkPoint = new ArrayList<Node>();
-				list.get(0).move.usedGrid   = new ArrayList<Node>();
-				list.get(0).move.checkPoint.add(new Node(list.get(0).x, list.get(0).y));
-				list.get(0).move.pathFind();
 		
 			}
 		}

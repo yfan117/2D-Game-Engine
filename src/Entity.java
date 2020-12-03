@@ -57,6 +57,8 @@ public class Entity extends Game{
 	 boolean tookDamage = false;
 	 
 	 boolean hasDoneDmage = false;
+	 
+	 boolean hasPath = false;
 
 	 int hp;
 	 
@@ -68,9 +70,22 @@ public class Entity extends Game{
 	 
 	 Movement move;
 	 
+	 AI ai;
 	 
+	 int respondX = 0;
+	 int respondY = 0;
+	/* 
+	static boolean moveLeft = false;
+	static boolean moveRight = false;
+	static boolean moveUp = false;
+	static boolean moveDown = false;
+	*/
+	 boolean moveLeft = false;
+	 boolean moveRight = false;
+	 boolean moveUp = false;
+	 boolean moveDown = false;
 	 
-	 
+	 boolean keyMove = false;
 
 	public Entity(String name, int[] location, int hp, int hitBox) throws IOException {
 
@@ -95,8 +110,12 @@ public class Entity extends Game{
         if(name == "enemy")
         {
         	type = "enemy";
+        	
+        	int respondX = x;
+        	int respondY = y;
 
         	move.isVisible();
+        	ai = new AI(this);
    
         }
         
@@ -153,6 +172,39 @@ public class Entity extends Game{
 		 moveSpeed = Integer.parseInt(bufferedReader.readLine());
 
 		 damage = Integer.parseInt(bufferedReader.readLine());
+
+	}
+	
+	public Entity(String name, int x, int y) throws IOException {
+
+		this.x = x;
+        this.y = y;
+
+
+        FileReader reader = new FileReader(root + "/resources/text/" + name + ".txt");
+
+		 BufferedReader bufferedReader = new BufferedReader(reader);
+
+		 int x1 = Integer.parseInt(bufferedReader.readLine());
+
+		 int y1 = Integer.parseInt(bufferedReader.readLine());
+		 
+		 int x2 = Integer.parseInt(bufferedReader.readLine());
+
+		 int y2 = Integer.parseInt(bufferedReader.readLine());
+		 
+		 System.out.println(name+" "+ x+" "+ y);
+		 System.out.println(x1+" "+ y1+" "+ x2 +" " +y2);
+		 
+		 for(int a = x1 + x; a < x2 + x; a = a + 5)
+		 {
+			 for(int b = y1 + y; b < y2 +y; b = b + 5)
+			 {
+				 Game.obstacleLocation.add(new Node(a, b)); 
+			 }
+		 }
+		 
+		
 
 	}
 	

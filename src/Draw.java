@@ -1,12 +1,15 @@
 package Diablo;
 
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
@@ -22,6 +25,9 @@ class Draw extends JPanel{
 	Image darkness;
 	Image weapon;
 	Image death;
+	Image fire;
+	
+	Icon test;
 	
 	// private Player player;
 	//int genericChar.picRank;
@@ -29,7 +35,8 @@ class Draw extends JPanel{
 	int windowX;
 	int windowY;
 
-	
+	int picOrder = 0;
+	int picTimer = 0;
 	
 	static ArrayList <Entity> list;
 	static ArrayList<Entity> projectile;
@@ -49,7 +56,9 @@ class Draw extends JPanel{
 		  darkness = new ImageIcon(repository +"darkness.png").getImage();
 		  weapon = new ImageIcon(repository +"weapon.png").getImage();
 		  death = new ImageIcon(repository +"death.png").getImage();
-
+		  fire = new ImageIcon(repository +"fire.png").getImage();
+		
+		  test = new ImageIcon(repository +"test.gif");
 
 		
 	}
@@ -250,13 +259,21 @@ class Draw extends JPanel{
 			g.setColor(Color.RED);
 			g.fillRect(25, windowY - 100, hp * 2, 20);
 			
+			//System.out.println(Game.obstacleLocation.size());
+			g.setColor(Color.BLACK);
+			for(int i = 0; i < Game.obstacleLocation.size(); i ++)
+			{
+				//System.out.println(Game.obstacleLocation.get(i).x +" "+Game.obstacleLocation.get(i).y);
+				g.fillRect(windowX/2 - list.get(0).x+Game.obstacleLocation.get(i).x, windowY/2 - list.get(0).y+Game.obstacleLocation.get(i).y, 5, 5);
+			}
 			
 	
-					
+			/*		
 			g.setColor(Color.BLACK);
-			g.drawRect(windowX/2 - list.get(0).x+100,windowY/2- list.get(0).y+ 100, 200, 200);
+			g.drawRect(windowX/2 - list.get(0).x+100+0,windowY/2- list.get(0).y+ 100 + 180, 163, 232-180);
 			g.setColor(Color.BLACK);
-			g.fillRect(windowX/2 - list.get(0).x+100,windowY/2- list.get(0).y+ 100, 200, 200);
+			g.fillRect(windowX/2 - list.get(0).x+100+0,windowY/2- list.get(0).y+ 100 + 180, 163, 232-180);
+			
 			
 			if(hp == 0)
 			{
@@ -266,6 +283,12 @@ class Draw extends JPanel{
 							null);
 			}
 			
+			*/
+		    Graphics2D g2d = (Graphics2D)g;
+		    int width = 10;
+		    g2d.setStroke(new BasicStroke(width));
+		    g2d.setColor(Color.GREEN);
+		    //g2d.drawLine(x1, y1, x2, y2);
 			for(int i = 0; i < list.get(0).move.checkPoint.size(); i++)
 			{
 				
@@ -274,7 +297,7 @@ class Draw extends JPanel{
 				{
 					break;
 				}
-				g.drawLine( windowX/2 - list.get(0).x + list.get(0).move.checkPoint.get(i).x, 
+				g2d.drawLine( windowX/2 - list.get(0).x + list.get(0).move.checkPoint.get(i).x, 
 							windowY/2 - list.get(0).y + list.get(0).move.checkPoint.get(i).y, 
 							windowX/2 - list.get(0).x + list.get(0).move.checkPoint.get(i + 1).x, 
 							windowY/2 - list.get(0).y + list.get(0).move.checkPoint.get(i + 1).y);
@@ -289,6 +312,33 @@ class Draw extends JPanel{
 					windowY/2 - list.get(0).y + list.get(0).move.tempY);
 			
 			*/
+			
+			if(picTimer <= Game.gameTime)
+			{
+				picOrder++;
+			}
+			if(picOrder == 6)
+			{
+				picOrder = 0;
+			}
+			/*
+			g.drawImage(fire, 
+					windowX/2 - list.get(0).x + 100, windowY/2 - list.get(0).y + 100, 
+					windowX/2 - list.get(0).x + 163 + 100, windowY/2 - list.get(0).y + 232 + 100, 
+					picOrder*163, 0, 
+					(picOrder+1)*163, 232, 
+					null);
+			/*	
+			g.drawImage(fire, 
+					0, 0, 
+					163 , 232, 
+					0, 0, 
+					163, 232, 
+					null);
+					*/
+			picTimer = Game.gameTime + 1;
+			
+			
 		}
 	
 }

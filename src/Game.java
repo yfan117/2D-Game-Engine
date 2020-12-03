@@ -6,6 +6,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 
@@ -36,21 +38,45 @@ public class Game {
 
 
 	static int[] mapDimension = new int[2];
-	static int timer = 1000 / fps;
+	//static int timer = 1000 / fps;
 
 	static Display display;
 	static Map map;
+
 	
 	static ArrayList<Entity> list = new ArrayList<Entity>();
 	static ArrayList<Entity> projectile= new ArrayList<Entity>();
 	static MouseControl mouse = new MouseControl();
 	static KeyboardControl keyboard = new KeyboardControl();
-
+	static ArrayList<Entity> obstacle = new ArrayList<Entity>();
+	static ArrayList<Node> obstacleLocation = new ArrayList<Node>();
+	static Timer timer = new Timer();
+	static int gameTime = 0;
+	
+	 static TimerTask task = new TimerTask()
+	  {
+ 		public void run()
+ 		{
+ 			//System.out.println("here");
+ 			gameLoop();
+ 		}
+	  };
+	  
+	 static TimerTask timeCounter = new TimerTask()
+	  {
+ 		public void run()
+ 		{
+ 			//System.out.println("here");
+ 			gameTime++;
+ 		}
+	  };
 
 
 	public static void main(String[] args) throws IOException {
-		System.out.println(root);
-
+		//long time = System.currentTimeMillis();
+		//System.out.println(time);
+		
+		
 
 		try {
 			map = new Map("backGround");
@@ -61,43 +87,63 @@ public class Game {
 
 
 
-
-		list.add(new Entity("player", map.getLocation(), 100, 80));
+		
+		list.add(new Entity("player", new int[]{0, 0}, 100, 80));
 		//list.add(new Entity("enemy", new int[]{0, 0},100, 80));
-		//list.add(new Entity("enemy", new int[]{100, 0}, 100, 80));
+		//list.add(new Entity("enemy", new int[]{-50, 0}, 100, 80));
 
 		//list.get(0).move.isLineOfSight();
 		
 		display = new Display();
 		
 		
-		gameLoop();
+		//gameLoop();
+		
+		//System.out.println(System.currentTimeMillis());
 
-
+		   
+		      
+		     
+		    	
+		    		
+		    int refreshTime = 1000/fps;
+		    timer.scheduleAtFixedRate(task, 0, refreshTime);
+		    timer.scheduleAtFixedRate(timeCounter, 0, 100);
 
 
 
 	}
 
+	 
 	public static void gameLoop() {
 
 
-			while(true)
+	
+			Movement.keyBoardUpdate(list.get(0));
+	
+		
+		
+			//while(true)
 			{
 				//list.get(0).move.pathFind();
+			
 				
-				//System.out.println("here");
+				//list.get(0).move.update(list.get(0));
+				//System.out.println(list.get(0).move.checkPoint.size());
 				for(int i = 0; i < list.size(); i++)
 				{
-					
+				
+					if(list.get(i).hasPath == true)
 					{
+						if(i != 0)
+						{
+							list.get(i).ai.update();
+						}
 						list.get(i).move.update(list.get(i));
 					}
-					
-					//System.out.println(list.get(i).hp );
 
 				}
-				System.out.println(projectile.size());
+				//System.out.println(projectile.size());
 
 				for(int i = 0; i < projectile.size(); i++)
 				{
@@ -137,9 +183,10 @@ public class Game {
 				
 				if(list.get(0).hp <= 0)
 				{
-					break;
+					//break;
 				}
 
+				/*
 				try {
 					Thread.sleep(timer);
 				} catch (InterruptedException e) {
@@ -147,7 +194,7 @@ public class Game {
 					e.printStackTrace();
 				}
 
-
+				 */
 
 
 			}
