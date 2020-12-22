@@ -57,7 +57,7 @@ public class MouseControl implements MouseListener {
 
 				game.getEntityList().get(0).clickedX =Math.round(game.getEntityList().get(0).clickedX/5)*5;
 				game.getEntityList().get(0).clickedY =Math.round(game.getEntityList().get(0).clickedY/5)*5;
-				if(movement.isObstacle(game.getEntityList().get(0).clickedX, game.getEntityList().get(0).clickedY) == false)
+				if(movement.isObstacles(game.getEntityList().get(0).clickedX, game.getEntityList().get(0).clickedY) == false)
 				{
 					game.getEntityList().get(0).newClick = true;
 

@@ -174,12 +174,12 @@ public class Entity{
 
 	}
 	
-	public Entity(String name, int x, int y) throws IOException {
-
+	public Entity(Game game, String name, int x, int y) throws IOException {
+		this.game = game;
 		this.x = x;
         this.y = y;
 
-
+        System.out.println("here");
         FileReader reader = new FileReader(Game.root + "/resources/text/" + name + ".txt");
 
 		 BufferedReader bufferedReader = new BufferedReader(reader);

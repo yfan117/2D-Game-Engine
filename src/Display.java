@@ -15,7 +15,6 @@ public class Display{
 	private MainMenu mainmenu;
 	private JPanel visiblePanel;
 	private PauseScreen pause;
-	//private PauseScreen pause;
 	private CardLayout cards= new CardLayout();
 	private Draw draw;
 	private Game game;
@@ -157,22 +156,5 @@ public class Display{
 		}
 		draw.updateValue();
 	}
-	 public void CheckCollisions() {
-		  //Rectangle playerBounds = player.getBounds();
-		  //for (Enemy enemy : enemies){
-		  //Rectangle enemyBounds = enemy.getBounds();
-		  //if(playerBounds.intersects(enemyBounds)){
-		  //enemy.setVisible(false);
-		  //}
-		  //}
-		  //List<Arrows> ar = Sprite.getArrows();
-		  //for (Arrow a : ar){
-		  //Rectangle arrowBounds = a.getBounds
-		  //for (Enemy enemy : enemies){
-		  //Rectangle enemyBounds = enemy.getBounds();
-		  //if(arrowBounds.intersects(enemyBounds)){
-		  //enemy.setHP(enemy.getHP - 1);
-		  //enemy.setVisible(false);
-		  //make it so when an enemy visible
-		 }
+	
 	}

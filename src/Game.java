@@ -14,7 +14,7 @@ public class Game {
 	//static final public Path root = Paths.get(System.getProperty("user.dir")).getParent();
 	
 	//this is only works for Fan
-	static final public String root = Paths.get(System.getProperty("user.dir")).getParent()+"\\RPG";
+	static final public String root = Paths.get(System.getProperty("user.dir")).getParent()+"/Portfolio";
 
 	//GameState enum
 	public enum GameState {
@@ -24,8 +24,7 @@ public class Game {
 		DEAD_STATE
 	}
 	public static GameState gameState;
-	
-	//static String repository = "backGround/";
+
 	static int windowX = 1280;
 	static int windowY = 720;
 
@@ -45,36 +44,26 @@ public class Game {
 
 	private ArrayList<Entity> list = new ArrayList<Entity>();
 	public ArrayList<Entity> getEntityList(){return list;}
+	
 	private ArrayList<Entity> projectileList= new ArrayList<Entity>();
 	public ArrayList<Entity> getProjectileList(){return projectileList;}
+	
 	private MouseControl mouse;
 	public Diablo.MouseControl getMouseControl(){return mouse;}
+	
 	private KeyboardControl keyboard = new KeyboardControl(this);
 	public Diablo.KeyboardControl getKeyboardControl(){return keyboard;}
+	
 	private ArrayList<Entity> obstacle = new ArrayList<Entity>();
 	public ArrayList<Entity> getObstacles(){return obstacle;}
+	
 	private ArrayList<Node> obstacleLocation = new ArrayList<Node>();
 	public ArrayList<Node> getObstacleLocation(){return obstacleLocation;}
+	
 	static Timer timer = new Timer();
 	static int gameTime = 0;
 	
-	 private TimerTask task = new TimerTask()
-	  {
- 		public void run()
- 		{
- 			//System.out.println("here");
- 			gameLoop();
- 		}
-	  };
-	  
-	 private TimerTask timeCounter = new TimerTask()
-	  {
- 		public void run()
- 		{
- 			//System.out.println("here");
- 			gameTime++;
- 		}
-	  };
+	
 
 	 public Game() throws IOException
 	 {
@@ -82,7 +71,7 @@ public class Game {
 		 //System.out.println(time);
 
 		 try {
-			 map = new Map("backGround");
+			 map = new Map("backGround", this);
 		 } catch (IOException e1) {
 			 // TODO Auto-generated catch block
 			 e1.printStackTrace();
@@ -106,25 +95,37 @@ public class Game {
 		 mouse = new MouseControl(this);
 	 }
 
-
 	public static void main(String[] args) throws IOException {
 		new Game();
+		
 	}
 
 	public void changeGameState(int i) {
 		gameState = GameState.values()[i];
 	}
+	
+	 private TimerTask task = new TimerTask()
+	  {
+		public void run()
+		{
+			//System.out.println("here");
+			gameLoop();
+		}
+	  };
+	  
+	 private TimerTask timeCounter = new TimerTask()
+	  {
+		public void run()
+		{
+			//System.out.println("here");
+			gameTime++;
+		}
+	  };
 
 	public void gameLoop() {
 
-		keyBoardUpdate(list.get(0));
+		list.get(0).move.keyBoardUpdate(list.get(0));
 
-			//while(true)
-			{
-				//list.get(0).move.pathFind();
-				
-				//list.get(0).move.update(list.get(0));
-				//System.out.println(list.get(0).move.checkPoint.size());
 				for(int i = 0; i < list.size(); i++)
 				{
 					if(list.get(i).hasPath == true)
@@ -174,71 +175,8 @@ public class Game {
 					//break;
 				}
 
-				/*
-				try {
-					Thread.sleep(timer);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-				 */
-			}
+			
+			
 	}
 
-	public void keyBoardUpdate(Entity current)
-	{
-		if(current.moveRight == true)
-		{
-			if(isObstacle(current.x+10, current.y) == false)
-			{
-				//list.get(0).hasPath = true;
-				//list.get(0).move.checkPoint.add(new Node(list.get(0).x+10, list.get(0).y));
-				current.x = current.x + 10;
-			}
-		}
-
-		if(current.moveLeft == true)
-		{
-			if(isObstacle(current.x-10, current.y) == false)
-			{
-				//current.hasPath = true;
-				//current.move.checkPoint.add(new Node(current.x+10, current.y));
-				current.x = current.x - 10;
-			}
-		}
-
-		if(current.moveUp == true)
-		{
-			if(isObstacle(current.x, current.y - 10) == false)
-			{
-				//current.hasPath = true;
-				//current.move.checkPoint.add(new Node(current.x+10, current.y));
-				current.y = current.y - 10;
-			}
-		}
-
-		if(current.moveDown == true)
-		{
-			if(isObstacle(current.x, current.y+10) == false)
-			{
-				//current.hasPath = true;
-				//current.move.checkPoint.add(new Node(current.x+10, current.y));
-				current.y = current.y + 10;
-			}
-		}
-	}
-
-	public boolean isObstacle(int cx, int cy)
-	{
-		for(int i = 0; i < obstacleLocation.size(); i ++)
-		{
-			if ((obstacleLocation.get(i).x == cx) && (obstacleLocation.get(i).y == cy))
-			{
-				return true;
-			}
-		}
-
-		return false;
-	}
 }

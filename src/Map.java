@@ -17,7 +17,9 @@ public class Map{
 	int[] respawnLcation = new int[2];
 
 
-	public Map(String mapName) throws IOException  {
+	public Map(String mapName, Game game) throws IOException  {
+		
+		this.game = game;
 
 		ImageIcon icon = new ImageIcon(Game.root + "/resources/images/" + mapName + ".png");
 
@@ -38,10 +40,12 @@ public class Map{
 			{
 				//System.out.println("here");
 				//System.out.println(scan.next());
-				game.getObstacles().add(new Entity(scan.next(), Integer.parseInt(scan.next()), Integer.parseInt(scan.next())));
+				game.getObstacles().add(new Entity(game, scan.next(), Integer.parseInt(scan.next()), Integer.parseInt(scan.next())));
 			}
 		}
 
+	
+			
 		//respawnLcation[0] = Integer.parseInt(bufferedReader.readLine());
 		//respawnLcation[1] = Integer.parseInt(bufferedReader.readLine());
 
