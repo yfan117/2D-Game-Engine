@@ -9,18 +9,21 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-
-
-
-
 public class Game {
 
 	//static final public Path root = Paths.get(System.getProperty("user.dir")).getParent();
 	
 	//this is only works for Fan
-	static final public String root = Paths.get(System.getProperty("user.dir")).getParent()+"/Portfolio";
+	static final public String root = Paths.get(System.getProperty("user.dir")).getParent()+"\\RPG";
 
-
+	//GameState enum
+	public enum GameState {
+		MAINMENU_STATE,
+		MAINGAME_STATE,
+		PAUSE_STATE,
+		DEAD_STATE
+	}
+	public static GameState gameState;
 	
 	//static String repository = "backGround/";
 	static int windowX = 1280;
@@ -32,10 +35,7 @@ public class Game {
 	static int centerX = windowX /2 ;
 	static int centerY = windowY /2 ;
 
-
 	static int fps = 30;
-
-
 
 	static int[] mapDimension = new int[2];
 	//static int timer = 1000 / fps;
@@ -43,17 +43,22 @@ public class Game {
 	static Display display;
 	static Map map;
 
-	
-	static ArrayList<Entity> list = new ArrayList<Entity>();
-	static ArrayList<Entity> projectile= new ArrayList<Entity>();
-	static MouseControl mouse = new MouseControl();
-	static KeyboardControl keyboard = new KeyboardControl();
-	static ArrayList<Entity> obstacle = new ArrayList<Entity>();
-	static ArrayList<Node> obstacleLocation = new ArrayList<Node>();
+	private ArrayList<Entity> list = new ArrayList<Entity>();
+	public ArrayList<Entity> getEntityList(){return list;}
+	private ArrayList<Entity> projectileList= new ArrayList<Entity>();
+	public ArrayList<Entity> getProjectileList(){return projectileList;}
+	private MouseControl mouse;
+	public Diablo.MouseControl getMouseControl(){return mouse;}
+	private KeyboardControl keyboard = new KeyboardControl(this);
+	public Diablo.KeyboardControl getKeyboardControl(){return keyboard;}
+	private ArrayList<Entity> obstacle = new ArrayList<Entity>();
+	public ArrayList<Entity> getObstacles(){return obstacle;}
+	private ArrayList<Node> obstacleLocation = new ArrayList<Node>();
+	public ArrayList<Node> getObstacleLocation(){return obstacleLocation;}
 	static Timer timer = new Timer();
 	static int gameTime = 0;
 	
-	 static TimerTask task = new TimerTask()
+	 private TimerTask task = new TimerTask()
 	  {
  		public void run()
  		{
@@ -62,7 +67,7 @@ public class Game {
  		}
 	  };
 	  
-	 static TimerTask timeCounter = new TimerTask()
+	 private TimerTask timeCounter = new TimerTask()
 	  {
  		public void run()
  		{
@@ -71,68 +76,57 @@ public class Game {
  		}
 	  };
 
+	 public Game() throws IOException
+	 {
+		 //long time = System.currentTimeMillis();
+		 //System.out.println(time);
+
+		 try {
+			 map = new Map("backGround");
+		 } catch (IOException e1) {
+			 // TODO Auto-generated catch block
+			 e1.printStackTrace();
+		 }
+
+		 list.add(new Entity("player", new int[]{0, 0}, 100, 80, this, 100, 0));
+		 //list.add(new Entity("enemy", new int[]{0, 0},100, 80));
+		 //list.add(new Entity("enemy", new int[]{-50, 0}, 100, 80));
+
+		 //list.get(0).move.isLineOfSight();
+
+		 display = new Display(this);
+
+		 //gameLoop();
+
+		 //System.out.println(System.currentTimeMillis());
+
+		 int refreshTime = 1000/fps;
+		 timer.scheduleAtFixedRate(task, 0, refreshTime);
+		 timer.scheduleAtFixedRate(timeCounter, 0, 100);
+		 mouse = new MouseControl(this);
+	 }
+
 
 	public static void main(String[] args) throws IOException {
-		//long time = System.currentTimeMillis();
-		//System.out.println(time);
-		
-		
-
-		try {
-			map = new Map("backGround");
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-
-
-
-		
-		list.add(new Entity("player", new int[]{0, 0}, 100, 80));
-		//list.add(new Entity("enemy", new int[]{0, 0},100, 80));
-		//list.add(new Entity("enemy", new int[]{-50, 0}, 100, 80));
-
-		//list.get(0).move.isLineOfSight();
-		
-		display = new Display();
-		
-		
-		//gameLoop();
-		
-		//System.out.println(System.currentTimeMillis());
-
-		   
-		      
-		     
-		    	
-		    		
-		    int refreshTime = 1000/fps;
-		    timer.scheduleAtFixedRate(task, 0, refreshTime);
-		    timer.scheduleAtFixedRate(timeCounter, 0, 100);
-
-
-
+		new Game();
 	}
 
-	 
-	public static void gameLoop() {
+	public void changeGameState(int i) {
+		gameState = GameState.values()[i];
+	}
 
+	public void gameLoop() {
 
-	
-			Movement.keyBoardUpdate(list.get(0));
-	
-		
-		
+		keyBoardUpdate(list.get(0));
+
 			//while(true)
 			{
 				//list.get(0).move.pathFind();
-			
 				
 				//list.get(0).move.update(list.get(0));
 				//System.out.println(list.get(0).move.checkPoint.size());
 				for(int i = 0; i < list.size(); i++)
 				{
-				
 					if(list.get(i).hasPath == true)
 					{
 						if(i != 0)
@@ -141,35 +135,29 @@ public class Game {
 						}
 						list.get(i).move.update(list.get(i));
 					}
-
 				}
 				//System.out.println(projectile.size());
 
-				for(int i = 0; i < projectile.size(); i++)
+				for(int i = 0; i < projectileList.size(); i++)
 				{
-					
-					projectile.get(i).move.update(projectile.get(i));
+
+					projectileList.get(i).move.update(projectileList.get(i));
 
 					//System.out.println(projectile.get(i).collision);
 				}
-
-
 
 				display.update();
 				
 				//list.get(0).takeDamage(list.get(0), 1);
 
-				for(int i = 0; i < projectile.size(); i++)
+				for(int i = 0; i < projectileList.size(); i++)
 				{
 
-					if((projectile.get(i).visible == false)||(projectile.get(i).active == false)) {
-						projectile.remove(i);
+					if((projectileList.get(i).visible == false)||(projectileList.get(i).active == false)) {
+						projectileList.remove(i);
 					}
-			
-
 				}
-				
-			
+
 				for(int i = 0; i < list.size(); i++)
 				{
 
@@ -195,8 +183,62 @@ public class Game {
 				}
 
 				 */
-
-
 			}
+	}
+
+	public void keyBoardUpdate(Entity current)
+	{
+		if(current.moveRight == true)
+		{
+			if(isObstacle(current.x+10, current.y) == false)
+			{
+				//list.get(0).hasPath = true;
+				//list.get(0).move.checkPoint.add(new Node(list.get(0).x+10, list.get(0).y));
+				current.x = current.x + 10;
+			}
+		}
+
+		if(current.moveLeft == true)
+		{
+			if(isObstacle(current.x-10, current.y) == false)
+			{
+				//current.hasPath = true;
+				//current.move.checkPoint.add(new Node(current.x+10, current.y));
+				current.x = current.x - 10;
+			}
+		}
+
+		if(current.moveUp == true)
+		{
+			if(isObstacle(current.x, current.y - 10) == false)
+			{
+				//current.hasPath = true;
+				//current.move.checkPoint.add(new Node(current.x+10, current.y));
+				current.y = current.y - 10;
+			}
+		}
+
+		if(current.moveDown == true)
+		{
+			if(isObstacle(current.x, current.y+10) == false)
+			{
+				//current.hasPath = true;
+				//current.move.checkPoint.add(new Node(current.x+10, current.y));
+				current.y = current.y + 10;
+			}
+		}
+	}
+
+	public boolean isObstacle(int cx, int cy)
+	{
+		for(int i = 0; i < obstacleLocation.size(); i ++)
+		{
+			if ((obstacleLocation.get(i).x == cx) && (obstacleLocation.get(i).y == cy))
+			{
+				return true;
+			}
+		}
+
+		return false;
 	}
 }

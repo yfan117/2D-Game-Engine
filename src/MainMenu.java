@@ -17,8 +17,9 @@ public class MainMenu extends JPanel
     private JButton startButton;
     private Display display;
     private MusicPlayer musicPlayer;
+    private Game game;
 
-    public MainMenu(Display d)
+    public MainMenu(Display d, Game game)
     {
         try {
             musicPlayer = new MusicPlayer(Game.root + "/resources/music/PerditionsLight.wav");
@@ -27,6 +28,7 @@ public class MainMenu extends JPanel
         layout = new BorderLayout();
         this.setLayout(layout);
 
+        this.game = game;
         display = d;
         img = new ImageIcon(Game.root + "/resources/images/MainMenu.png").getImage();
 
@@ -37,7 +39,7 @@ public class MainMenu extends JPanel
         startButton.setContentAreaFilled(false);
         startButton.setFocusPainted(false);
         startButton.setBorderPainted(false);
-        startButton.addActionListener(e -> {Game.changeGameState(1); display.switchJPanels(1); musicPlayer.stop();});
+        startButton.addActionListener(e -> {game.changeGameState(1); display.switchJPanels(1); musicPlayer.stop();});
         add(startButton, BorderLayout.SOUTH);
 
         musicPlayer.play();
@@ -48,5 +50,13 @@ public class MainMenu extends JPanel
     {
         super.paintComponent(g);
         g.drawImage(img, 0, 0, getWidth(), getHeight(), this);
+    }
+
+    public void startMusic() {
+        try {
+            musicPlayer = new MusicPlayer(Game.root + "/resources/music/PerditionsLight.wav");
+        }catch(Exception e){e.printStackTrace();}
+
+        musicPlayer.play();
     }
 }

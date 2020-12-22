@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class Movement {
+
+	Game game;
 	
 	int obsXY = 100;
 	int obsSize = 0;
@@ -13,8 +15,9 @@ public class Movement {
 	ArrayList<Node> checkPoint;
 	ArrayList<Node> usedGrid;
 	
-	public Movement(final Entity current)
+	public Movement(final Entity current, Game game)
 	{
+		this.game = game;
 		this.current = current;
 		
 		checkPoint = new ArrayList<Node>();
@@ -24,53 +27,7 @@ public class Movement {
 		//checkPoint.add(new Node(current.x, current.y));
 	}
 	
-
-	
 	int nodeIndex = 0;
-	
-	public static void keyBoardUpdate(Entity current)
-	{
-		if(current.moveRight == true)
-		{
-			if(Movement.isObstacle(current.x+10, current.y) == false)
-			{
-				//list.get(0).hasPath = true;
-				//list.get(0).move.checkPoint.add(new Node(list.get(0).x+10, list.get(0).y));
-				current.x = current.x + 10;
-			}
-		}
-		
-		if(current.moveLeft == true)
-		{
-			if(Movement.isObstacle(current.x-10, current.y) == false)
-			{
-				//current.hasPath = true;
-				//current.move.checkPoint.add(new Node(current.x+10, current.y));
-				current.x = current.x - 10;
-			}
-		}
-		
-		if(current.moveUp == true)
-		{
-			if(Movement.isObstacle(current.x, current.y - 10) == false)
-			{
-				//current.hasPath = true;
-				//current.move.checkPoint.add(new Node(current.x+10, current.y));
-				current.y = current.y - 10;
-			}
-		}
-		
-		if(current.moveDown == true)
-		{
-			if(Movement.isObstacle(current.x, current.y+10) == false)
-			{
-				//current.hasPath = true;
-				//current.move.checkPoint.add(new Node(current.x+10, current.y));
-				current.y = current.y + 10;
-			}
-		}
-		
-	}
 
 	public void update(Entity current)
 	{
@@ -367,9 +324,9 @@ public class Movement {
 
 
 			public void isVisible() {
-				if(((current.x >= current.list.get(0).x - current.windowX/2) &&(current.x <= current.list.get(0).x + current.windowX/2))
+				if(((current.x >= current.getEntityList().get(0).x - Game.windowX/2) &&(current.x <= current.getEntityList().get(0).x + Game.windowX/2))
 		        		&&
-		        		((current.y >= current.list.get(0).y - current.windowY/2) &&(current.y <= current.list.get(0).y + current.windowY/2)))
+		        		((current.y >= current.getEntityList().get(0).y - Game.windowY/2) &&(current.y <= current.getEntityList().get(0).y + Game.windowY/2)))
 		        	{
 
 					current.visible = true;
@@ -384,16 +341,16 @@ public class Movement {
 				int result = 0;
 				if(current.type !="player")
 				{
-					for(int i = 1; i < current.list.size(); i++)
+					for(int i = 1; i < current.getEntityList().size(); i++)
 					{
-						if((this.current.visible == true)&&(current.list.get(i).visible == true))
+						if((this.current.visible == true)&&(current.getEntityList().get(i).visible == true))
 						{
-							if((current.list.get(i) != current)||(current.type == "projectile"))
+							if((current.getEntityList().get(i) != current)||(current.type == "projectile"))
 							{
 								//System.out.println("here");
-								if(((x + current.hitBox > current.list.get(i).x) &&(x < current.list.get(i).x + current.list.get(i).hitBox))
+								if(((x + current.hitBox > current.getEntityList().get(i).x) &&(x < current.getEntityList().get(i).x + current.getEntityList().get(i).hitBox))
 						        		&&
-						        		((y + current.hitBox > current.list.get(i).y) &&(y < current.list.get(i).y + current.list.get(i).hitBox)))
+						        		((y + current.hitBox > current.getEntityList().get(i).y) &&(y < current.getEntityList().get(i).y + current.getEntityList().get(i).hitBox)))
 						        {
 
 
@@ -402,7 +359,7 @@ public class Movement {
 											current.collision = true;
 
 											//this.collider = list.get(i);
-											takeDamage(current.list.get(i), current.damage);
+											takeDamage(current.getEntityList().get(i), current.damage);
 											//System.out.println(current.type);
 											//System.out.println(placeInList);
 											//result = true;
@@ -578,11 +535,11 @@ public class Movement {
 					return false;
 				}
 				*/
-				for(int i = 0; i < Game.obstacleLocation.size(); i ++)
+				for(int i = 0; i < game.getObstacleLocation().size(); i ++)
 				{
-					if(x == Game.obstacleLocation.get(i).x)
+					if(x == game.getObstacleLocation().get(i).x)
 					{
-						if(y == Game.obstacleLocation.get(i).y)
+						if(y == game.getObstacleLocation().get(i).y)
 						{
 							isObs = true;
 							return true;
@@ -895,11 +852,11 @@ public class Movement {
 			}
 		
 			
-			public static boolean isObstacle(int cx, int cy)
+			public boolean isObstacle(int cx, int cy)
 			{
-				for(int i = 0; i < Game.obstacleLocation.size(); i ++)
+				for(int i = 0; i < game.getObstacleLocation().size(); i ++)
 				{
-					if ((Game.obstacleLocation.get(i).x == cx) && (Game.obstacleLocation.get(i).y == cy))
+					if ((game.getObstacleLocation().get(i).x == cx) && (game.getObstacleLocation().get(i).y == cy))
 					{
 						return true;
 					}

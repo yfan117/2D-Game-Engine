@@ -8,25 +8,27 @@ import java.util.Scanner;
 
 import javax.swing.ImageIcon;
 
-public class Map extends Game{
+public class Map{
+	Game game;
 
+	public Map(Game game){this.game = game;}
 
-	static int enemyNum;
+	private int enemyNum;
 	int[] respawnLcation = new int[2];
 
 
 	public Map(String mapName) throws IOException  {
 
-		ImageIcon icon = new ImageIcon(root + "/resources/images/" + mapName + ".jpg");
-	
+		ImageIcon icon = new ImageIcon(Game.root + "/resources/images/" + mapName + ".png");
 
-		mapDimension[0] = icon.getImage().getWidth(null);
-		mapDimension[1] = icon.getImage().getHeight(null);
+
+		Game.mapDimension[0] = icon.getImage().getWidth(null);
+		Game.mapDimension[1] = icon.getImage().getHeight(null);
 
 
 		//BufferedReader bufferedReader = new BufferedReader(new FileReader(root + "/resources/text/" + mapName +".txt"));
 	
-		File map = new File(root + "/resources/text/" + mapName +".txt");
+		File map = new File(Game.root + "/resources/text/" + mapName +".txt");
 		Scanner scan = new Scanner(map);
 		
 		while(scan.hasNext())
@@ -36,16 +38,12 @@ public class Map extends Game{
 			{
 				//System.out.println("here");
 				//System.out.println(scan.next());
-				Game.obstacle.add(new Entity(scan.next(), Integer.parseInt(scan.next()), Integer.parseInt(scan.next())));
+				game.getObstacles().add(new Entity(scan.next(), Integer.parseInt(scan.next()), Integer.parseInt(scan.next())));
 			}
 		}
-			
-		
 
 		//respawnLcation[0] = Integer.parseInt(bufferedReader.readLine());
 		//respawnLcation[1] = Integer.parseInt(bufferedReader.readLine());
-
-
 
 		enemyNum = 0;
 

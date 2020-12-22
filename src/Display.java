@@ -1,6 +1,5 @@
 package Diablo;
-import java.awt.Graphics;
-import java.awt.Image;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -10,34 +9,68 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-public class Display extends Game{
+public class Display{
 
+	private JFrame frame;
+	private MainMenu mainmenu;
+	private JPanel visiblePanel;
+	private PauseScreen pause;
+	//private PauseScreen pause;
+	private CardLayout cards= new CardLayout();
+	private Draw draw;
+	private Game game;
+	private int currentPanel;
 
-	static Draw draw = new Draw(root + "/resources/images/" , windowX, windowY, list, projectile);
+	public Display(Game game){
 
-	public Display(){
+		this.game = game;
 
-		JFrame frame = new JFrame();
-		//Draw draw = new Draw();
-		frame.setSize(windowX, windowY);
+		draw = new Draw(game.root + "/resources/images/" , game.windowX, game.windowY, game.getEntityList(), game.getProjectileList(), this);
+		frame = new JFrame();
+		frame.setSize(game.windowX, game.windowY);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLocationRelativeTo(null);
-		//frame.setResizable(false);
-		//KeyboardControl keyboard = new KeyboardControl();
-		draw.addMouseListener(mouse);
-		frame.addKeyListener(keyboard);
-
-		frame.getContentPane().add(draw);
-		
-
-		
-	
-
-
+		draw.addMouseListener(new Diablo.MouseControl(this.game));
+		frame.addKeyListener(new Diablo.KeyboardControl(this.game));
+		/*
+		 * Code to create "visible layers", which displays
+		 * and switches game states
+		 */
+		visiblePanel=new JPanel();
+		visiblePanel.setLayout(cards);
+		mainmenu= new MainMenu(this, game);
+		visiblePanel.add(mainmenu,"menu");
+		visiblePanel.add(draw,"game");
+		pause=new PauseScreen(this);
+		visiblePanel.add(pause,"pause");
+		frame.add(visiblePanel);
+		cards.show(visiblePanel, "menu");
+		frame.setFocusable(true);
 		frame.setVisible(true);
+	}
 
+	public Game getGame(){return game;}
 
-
+	public void switchJPanels(int i ) {
+		switch(i) {
+			case 0://menu state
+				cards.show(visiblePanel, "menu");
+				mainmenu.startMusic();
+				currentPanel = 0;
+				break;
+			case 1: //game state
+				cards.show(visiblePanel, "game");
+				currentPanel = 1;
+				break;
+			case 2: //pause state
+				cards.show(visiblePanel,"pause");
+				currentPanel = 2;
+				break;
+			case 3://inventory
+				cards.show(visiblePanel, "inventory");
+				currentPanel = 3;
+				break;
+		}
 	}
 
 	public static void getDirection(Entity genericChar) {
@@ -116,17 +149,13 @@ public class Display extends Game{
 
 	public void update() {
 
-		for(int i = 0; i< list.size(); i++) {
+		for(int i = 0; i< game.getEntityList().size(); i++) {
 			//if(list.get(i).directionCheck == true)
-			if(list.get(i).newClick == true) {
-				getDirection(list.get(i));
+			if(game.getEntityList().get(i).newClick == true) {
+				getDirection(game.getEntityList().get(i));
 			}
 		}
 		draw.updateValue();
-
-
-
-
 	}
 	 public void CheckCollisions() {
 		  //Rectangle playerBounds = player.getBounds();
@@ -146,6 +175,4 @@ public class Display extends Game{
 		  //enemy.setVisible(false);
 		  //make it so when an enemy visible
 		 }
-
-
 	}

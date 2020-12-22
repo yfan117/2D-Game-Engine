@@ -38,10 +38,12 @@ class Draw extends JPanel{
 	int picOrder = 0;
 	int picTimer = 0;
 	
-	static ArrayList <Entity> list;
-	static ArrayList<Entity> projectile;
+	private ArrayList <Entity> list;
+	private ArrayList<Entity> projectile;
+	private Display display;
+	private Game game;
 	
-	public Draw(String repository, int windowX, int windowY, ArrayList<Entity> list, ArrayList<Entity> projectile) {
+	public Draw(String repository, int windowX, int windowY, ArrayList<Entity> list, ArrayList<Entity> projectile, Display display) {
 		
 		this.list = list;
 		this.projectile = projectile;
@@ -60,7 +62,8 @@ class Draw extends JPanel{
 		
 		  test = new ImageIcon(repository +"test.gif");
 
-		
+		this.display = display;
+		this.game = display.getGame();
 	}
 
 
@@ -261,10 +264,10 @@ class Draw extends JPanel{
 			
 			//System.out.println(Game.obstacleLocation.size());
 			g.setColor(Color.BLACK);
-			for(int i = 0; i < Game.obstacleLocation.size(); i ++)
+			for(int i = 0; i < game.getObstacleLocation().size(); i ++)
 			{
 				//System.out.println(Game.obstacleLocation.get(i).x +" "+Game.obstacleLocation.get(i).y);
-				g.fillRect(windowX/2 - list.get(0).x+Game.obstacleLocation.get(i).x, windowY/2 - list.get(0).y+Game.obstacleLocation.get(i).y, 5, 5);
+				g.fillRect(windowX/2 - list.get(0).x+game.getObstacleLocation().get(i).x, windowY/2 - list.get(0).y+game.getObstacleLocation().get(i).y, 5, 5);
 			}
 			
 	

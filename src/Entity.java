@@ -7,20 +7,17 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 
-public class Entity extends Game{
-
+public class Entity{
 
 	 int x = 0;
 	 int y = 0;
-
 
 	 int clickedX ;//destination
 	 int clickedY ;//destination
 	 boolean newClick = false;
 	 boolean directionCheck = false;
-
-
 
 	 int moveSpeed = 0;
 	 int moveCounter = 0;
@@ -29,8 +26,6 @@ public class Entity extends Game{
 	 boolean south;
 	 boolean west;
 	 boolean east;
-
-
 
 	 double slopeX;
 	 double slopeY;
@@ -71,6 +66,11 @@ public class Entity extends Game{
 	 Movement move;
 	 
 	 AI ai;
+
+	 Game game;
+
+	 int oil;
+	 int insanity;
 	 
 	 int respondX = 0;
 	 int respondY = 0;
@@ -87,16 +87,17 @@ public class Entity extends Game{
 	 
 	 boolean keyMove = false;
 
-	public Entity(String name, int[] location, int hp, int hitBox) throws IOException {
+	public Entity(String name, int[] location, int hp, int hitBox, Game game, int oil, int insanity) throws IOException {
+		this.game = game;
+		this.oil = oil;
+		this.insanity = insanity;
 
-		
 		 x = location[0];
          y = location[1];
-
          
          preX = x;
          preY = y;
-         move = new Movement(this);
+         move = new Movement(this, game);
         if(name == "player")
          {
         	type = "player";
@@ -104,7 +105,6 @@ public class Entity extends Game{
 			//this.centerX = x + windowX/2;
 			//this.centerY = y + windowY/2;
         	visible = true;
-     
          }
 
         if(name == "enemy")
@@ -116,13 +116,12 @@ public class Entity extends Game{
 
         	move.isVisible();
         	ai = new AI(this);
-   
         }
         
         target = this;
         this.hp = hp;
         this.hitBox = hitBox;
-        FileReader reader = new FileReader(root + "/resources/text/" + name + ".txt");
+        FileReader reader = new FileReader(Game.root + "/resources/text/" + name + ".txt");
 	
 
 		 BufferedReader bufferedReader = new BufferedReader(reader);
@@ -136,13 +135,13 @@ public class Entity extends Game{
 
 	public Entity(String name, int destinationX, int destinationY, int hitBox) throws IOException {
 
-		this.x = list.get(0).x;
-        this.y = list.get(0).y;
+		this.x = game.getEntityList().get(0).x;
+        this.y = game.getEntityList().get(0).y;
 
         preX = x;
         preY = y;
         
-        move = new Movement(this);
+        move = new Movement(this, game);
 
 		clickedX = destinationX ;
 		clickedY = destinationY ;
@@ -165,7 +164,7 @@ public class Entity extends Game{
         }
         
         this.hitBox = hitBox;
-        FileReader reader = new FileReader(root + "/resources/text/" + name + ".txt");
+        FileReader reader = new FileReader(Game.root + "/resources/text/" + name + ".txt");
 
 		 BufferedReader bufferedReader = new BufferedReader(reader);
 
@@ -181,7 +180,7 @@ public class Entity extends Game{
         this.y = y;
 
 
-        FileReader reader = new FileReader(root + "/resources/text/" + name + ".txt");
+        FileReader reader = new FileReader(Game.root + "/resources/text/" + name + ".txt");
 
 		 BufferedReader bufferedReader = new BufferedReader(reader);
 
@@ -200,20 +199,15 @@ public class Entity extends Game{
 		 {
 			 for(int b = y1 + y; b < y2 +y; b = b + 5)
 			 {
-				 Game.obstacleLocation.add(new Node(a, b)); 
+				 game.getObstacleLocation().add(new Node(a, b));
 			 }
 		 }
-		 
-		
-
 	}
 	
 	public void enableMovement()
 	{
-		move = new Movement(this);
+		move = new Movement(this, game);
 	}
 
-
-			
-		
+	public ArrayList<Entity> getEntityList(){return game.getEntityList();}
 }

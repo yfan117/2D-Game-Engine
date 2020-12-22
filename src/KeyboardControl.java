@@ -3,7 +3,10 @@ package Diablo;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-public class KeyboardControl extends Game implements KeyListener {
+public class KeyboardControl implements KeyListener {
+	private Game game;
+
+	public KeyboardControl(Game game){this.game = game;}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
@@ -27,47 +30,47 @@ public class KeyboardControl extends Game implements KeyListener {
 		if(input == 'm') 
 		{
 			
-			list.get(0).isMelee = !(list.get(0).isMelee);
-			System.out.println(list.get(0).isMelee);
+			game.getEntityList().get(0).isMelee = !(game.getEntityList().get(0).isMelee);
+			System.out.println(game.getEntityList().get(0).isMelee);
 		}
 		
 		if(input == 'a') 
 		{
 			
-			list.get(0).moveLeft = true;
+			game.getEntityList().get(0).moveLeft = true;
 	
 		}
 		
 		if(input == 'w') 
 		{
 			
-			list.get(0).moveUp = true;
+			game.getEntityList().get(0).moveUp = true;
 		}
 		
 		if(input == 's') 
 		{
 
-			list.get(0).moveDown = true;
+			game.getEntityList().get(0).moveDown = true;
 		}
 		
 		if(input == 'd') 
 		{
 			
-			list.get(0).moveRight = true;
+			game.getEntityList().get(0).moveRight = true;
 		}
 		
 		
-		list.get(0).newClick = true;
+		game.getEntityList().get(0).newClick = true;
 		
-		list.get(0).north = false;
-		list.get(0).south = false;
-		list.get(0).west = false;
-		list.get(0).east = false;
+		game.getEntityList().get(0).north = false;
+		game.getEntityList().get(0).south = false;
+		game.getEntityList().get(0).west = false;
+		game.getEntityList().get(0).east = false;
 		
 		
-		list.get(0).directionCheck = true;
+		game.getEntityList().get(0).directionCheck = true;
 		
-		list.get(0).target = list.get(0);
+		game.getEntityList().get(0).target = game.getEntityList().get(0);
 
 		
 	}
@@ -81,30 +84,25 @@ public class KeyboardControl extends Game implements KeyListener {
 			if(input == 'a') 
 			{
 				
-				list.get(0).moveLeft = false;
+				game.getEntityList().get(0).moveLeft = false;
 			}
 			
 			if(input == 'w') 
 			{
 				
-				list.get(0).moveUp = false;
+				game.getEntityList().get(0).moveUp = false;
 			}
 			
 			if(input == 's') 
 			{
 	
-				list.get(0).moveDown = false;
+				game.getEntityList().get(0).moveDown = false;
 			}
 			
 			if(input == 'd') 
 			{
 				
-				list.get(0).moveRight = false;
+				game.getEntityList().get(0).moveRight = false;
 			}
-	
-				
-	
 	}
-	
-
 }
