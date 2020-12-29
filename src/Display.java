@@ -16,7 +16,7 @@ public class Display{
 	private JPanel visiblePanel;
 	private PauseScreen pause;
 	private CardLayout cards= new CardLayout();
-	private Draw draw;
+	private Renderer renderer;
 	private Game game;
 	private int currentPanel;
 
@@ -24,7 +24,7 @@ public class Display{
 
 		this.game = game;
 
-		draw = new Draw(game.root + "/resources/images/" , game.windowX, game.windowY, game.getEntityList(), game.getProjectileList(), this);
+		renderer = new Renderer(game.root + "/resources/images/" , game.windowX, game.windowY, game.getEntityList(), game.getProjectileList(), this);
 		frame = new JFrame();
 		frame.setSize(game.windowX, game.windowY);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
