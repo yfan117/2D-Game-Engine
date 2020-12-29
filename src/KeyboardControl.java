@@ -59,7 +59,17 @@ public class KeyboardControl implements KeyListener {
 			game.getEntityList().get(0).moveRight = true;
 		}
 		
-		
+		if(input == 'z') 
+		{
+				
+			zoomRate += 100;
+		}
+			
+		if(input == 'x') 
+		{
+				
+			zoomRate -=100;
+		}
 		game.getEntityList().get(0).newClick = true;
 		
 		game.getEntityList().get(0).north = false;
