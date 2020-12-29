@@ -217,8 +217,8 @@ class Renderer extends JPanel{
 			g.drawImage(frameBuffer,
 						0 - KeyboardControl.zoomRate,
 						0 - KeyboardControl.zoomRate,
-						Game.windowX + KeyboardControl.zoomRate,
-						Game.windowY + KeyboardControl.zoomRate,
+						Game.windowX + KeyboardControl.zoomRate *2,
+						Game.windowY + KeyboardControl.zoomRate *2,
 						null);
 	
 			
