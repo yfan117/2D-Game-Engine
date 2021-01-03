@@ -25,11 +25,11 @@ public class Game {
 	}
 	public static GameState gameState;
 
-	static int windowX = 1280;
-	static int windowY = 720;
+	//static int windowX = 1280;
+	//static int windowY = 720;
 
-	//static int windowX = 1920;
-	//static int windowY = 1080;
+	static int windowX = 1920;
+	static int windowY = 1080;
 
 	static int centerX = windowX /2 ;
 	static int centerY = windowY /2 ;
@@ -78,7 +78,7 @@ public class Game {
 		 }
 
 		 list.add(new Entity("player", new int[]{0, 0}, 100, 80, this, 100, 0));
-		 //list.add(new Entity("enemy", new int[]{0, 0},100, 80));
+		 list.add(new Entity("enemy", new int[]{300, 300}, 100, 80, this, 100, 0));
 		 //list.add(new Entity("enemy", new int[]{-50, 0}, 100, 80));
 
 		 //list.get(0).move.isLineOfSight();
@@ -90,7 +90,8 @@ public class Game {
 		 //System.out.println(System.currentTimeMillis());
 
 		 int refreshTime = 1000/fps;
-		 timer.scheduleAtFixedRate(task, 0, refreshTime);
+		 timer.scheduleAtFixedRate(dataUpdate, 0, 30);
+		 timer.scheduleAtFixedRate(frameUpdate, 0, refreshTime);
 		 timer.scheduleAtFixedRate(timeCounter, 0, 100);
 		 mouse = new MouseControl(this);
 	 }
@@ -104,12 +105,21 @@ public class Game {
 		gameState = GameState.values()[i];
 	}
 	
-	 private TimerTask task = new TimerTask()
+	 private TimerTask dataUpdate = new TimerTask()
 	  {
 		public void run()
 		{
 			//System.out.println("here");
 			gameLoop();
+		}
+	  };
+	  
+	  private TimerTask frameUpdate = new TimerTask()
+	  {
+		public void run()
+		{
+			//System.out.println("here");
+			display.update();
 		}
 	  };
 	  
@@ -147,7 +157,7 @@ public class Game {
 					//System.out.println(projectile.get(i).collision);
 				}
 
-				display.update();
+				//display.update();
 				
 				//list.get(0).takeDamage(list.get(0), 1);
 

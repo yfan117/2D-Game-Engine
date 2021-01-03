@@ -192,14 +192,14 @@ public class Entity{
 
 		 int y2 = Integer.parseInt(bufferedReader.readLine());
 		 
-		 System.out.println(name+" "+ x+" "+ y);
-		 System.out.println(x1+" "+ y1+" "+ x2 +" " +y2);
+		 //System.out.println(name+" "+ x+" "+ y);
+		 //System.out.println(x1+" "+ y1+" "+ x2 +" " +y2);
 		 
 		 for(int a = x1 + x; a < x2 + x; a = a + 5)
 		 {
 			 for(int b = y1 + y; b < y2 +y; b = b + 5)
 			 {
-				 game.getObstacleLocation().add(new Node(a, b));
+				// game.getObstacleLocation().add(new Node(a, b));
 			 }
 		 }
 	}

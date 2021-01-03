@@ -22,32 +22,24 @@ class Renderer extends JPanel{
 
 
 	int[] backGroundBuffer;
-	int[] entityBuffer; 
+
 	
-	Image arrowIMG;
-	Image bowIMG;
-	Image temp;
-	Image explosion;
-	Image damageEntity;
-	Image darkness;
-	Image weapon;
-	Image death;
-	Image fire;
+	int resolutionX = Game.windowX;
+	int resolutionY = Game.windowY;
 	
-	int resolutionX = 1920;
-	int resolutionY = 1080;
+	//static int resolutionX = 1920;
+	//static int resolutionY = 1080;
 	
 	int mapWidth = 6900;
 	int mapHeight = 6700;
 	
-	BufferedImage frameBuffer = new BufferedImage(resolutionX, resolutionY, BufferedImage.TYPE_INT_ARGB);
-    int[] fbData = ((DataBufferInt)frameBuffer.getRaster().getDataBuffer()).getData();
-    int[] worldBuffer = new int[690 * 670 * 100];
-    
-
+	BufferedImage frameBuffer = new BufferedImage(resolutionX, resolutionY, BufferedImage.TYPE_INT_RGB);
 	
-	Icon test;
-
+    int[] fbData = ((DataBufferInt)frameBuffer.getRaster().getDataBuffer()).getData();
+    int[] worldBuffer = new int[mapWidth * mapHeight];
+    //int[] characerBuffer = new int[3608 * 1056];
+    int[] characerBuffer = new int[14432 * 4224];
+ 
 	int windowX;
 	int windowY;
 
@@ -60,7 +52,8 @@ class Renderer extends JPanel{
 	private Game game;
 	
 	
-	BufferedImage image ;
+	BufferedImage image;
+	BufferedImage character;
 
 	public Renderer(String repository, int windowX, int windowY, ArrayList<Entity> list, ArrayList<Entity> projectile, Display display) {
 		
@@ -70,13 +63,14 @@ class Renderer extends JPanel{
 		this.windowX = windowX;
 		this.windowY = windowY;
 		
+		//this.setLocation(0 + (Game.windowX - 1280)/2, 0);
+		//this.setSize(1280, 720);
 		
 		try {
 			
 			 image = ImageIO.read(new File(repository +"bigMap2.png"));
-			//backGroundBuffer = getImageArray(image);
 			
-			//entityBuffer = ((DataBufferInt)ImageIO.read(new File(repository +"character.png")).getRaster().getDataBuffer()).getData();
+			 character = ImageIO.read(new File(repository + "diablo2.png"));
 			
 			
 			
@@ -85,49 +79,115 @@ class Renderer extends JPanel{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		populateWorld();
-		tempToFrame();
+		populateArray();
+		//tempToFrame();
 
+		cameraX = list.get(0).x;
+		cameraY = list.get(0).y;
+		
 		this.display = display;
 		this.game = display.getGame();
 	}
 
+	static int cameraX;
+	static int cameraY;
+
 	public void tempToFrame()
 	{
 
-		int playerX = list.get(0).x;
-		int playerY = list.get(0).y;
+		//set camera cord to be player cord
+		cameraX = list.get(0).x;
+		cameraY = list.get(0).y;
 		
+		int fbStartX = resolutionX/2 - cameraX;
+		int fbStartY = resolutionY/2 - cameraY;
 		
-		int temp = resolutionX/2 - playerX;
-		int temp2 = resolutionY/2 - playerY;
-		
-		if(temp < 0)
+		if(fbStartX < 0)
 		{
-			temp = 0;
+			fbStartX = 0;
 
 		}
 		
-		if(temp2 < 0)
+		if(fbStartY < 0)
 		{
-			temp2 = 0;
+			fbStartY = 0;
 
 		}
 		
-		if((temp2 != 0) || (temp != 0))
+		if((fbStartX != 0) || (fbStartY != 0))
 		{
 			resetFrame();
 		}
 
-		for(int y = temp2; y < resolutionY; y++)
+		//get map data
+		for(int y = fbStartY; y < resolutionY; y++)
 		{
-			for(int x = temp; x < resolutionX; x++)
+			for(int x = fbStartX; x < resolutionX; x++)
 			{
 		
-				fbData[x + y * resolutionX] = worldBuffer[playerX + x + ((playerY + y) * mapWidth)];
+				//if((cameraX + x + ((cameraY + y) * mapWidth) < worldBuffer.length))
+				if(((cameraX + x) < mapWidth) && ((cameraY + y) < mapHeight))
+				{
+					fbData[x + y * resolutionX] = worldBuffer[cameraX + x + ((cameraY + y) * mapWidth)];
+				}
+						
+				
 				
 			}
 		}
+		
+		int playerX = list.get(0).x;
+		int playerY = list.get(0).y;
+
+		//get entity data
+		Entity current;
+		for(int i = 0; i< game.getEntityList().size(); i++) 
+		{
+			current = game.getEntityList().get(i);
+			for(int y = 0; y < 528; y++)
+			{
+				for(int x = 0; x < 656; x++)
+				{
+					
+					int colorCode =  characerBuffer[656 * current.picCounter + x + ((y + 528 * current.picRank) * character.getWidth())];
+					if( colorCode != -5592406)
+					{
+						if((resolutionX/2 + x +(current.x - 656/2 - cameraX)) >= resolutionX)
+						{
+							break;
+						}
+
+						if(resolutionY/2 + y+(current.y - 528/2 - cameraY) >= resolutionY)
+						{
+							break;
+						}
+						
+						
+						if(((resolutionX/2 + x +(current.x - 656/2 - cameraX)) <= 0) 
+								|| 
+							(resolutionY/2 + y+(current.y - 528/2 - cameraY) <= 0))
+						{
+						
+						}
+						else
+						{
+							fbData[resolutionX/2 + x +(current.x - 656/2 - cameraX) + (resolutionY/2 + y+(current.y - 528/2 - cameraY)) * resolutionX] = colorCode;
+						}
+						
+					
+						
+						
+						//fbData[resolutionX/2 + x  + (resolutionY/2 + y) * resolutionX] = characerBuffer[0 + x - cameraX + ((0 + y - cameraY) * character.getWidth())];
+	
+					}
+			
+				
+					
+				}
+			}
+		}
+		
+	
 	}
 
 	public void resetFrame()
@@ -143,7 +203,7 @@ class Renderer extends JPanel{
 		}
 	}
 
-    public void populateWorld()
+    public void populateArray()
     {
     	
     	int width = image.getWidth();
@@ -168,6 +228,16 @@ class Renderer extends JPanel{
 			}
 		}
     	
+    	for(int y = 0; y < character.getHeight(); y++)
+		{
+			for(int x = 0; x < character.getWidth(); x++)
+			{
+					characerBuffer[x + y * character.getWidth()] = character.getRGB(x,y);
+	
+				
+			}
+		}
+    	
     
     
 		
@@ -182,12 +252,12 @@ class Renderer extends JPanel{
 			
 			list.get(i).timeCounter ++;
 			
-			if(list.get(i).timeCounter == 5)
+			if(list.get(i).timeCounter == 2)
 			{
 				list.get(i).timeCounter = 0;
 				list.get(i).picCounter ++;
 				
-				if(list.get(i).picCounter == 4) 
+				if(list.get(i).picCounter == 22) 
 				{
 					list.get(i).picCounter = 0;
 				}
@@ -214,13 +284,15 @@ class Renderer extends JPanel{
 
 			super.paintComponent(g);
 			//KeyboardControl.zoomRate++;
+			
 			g.drawImage(frameBuffer,
 						0 - KeyboardControl.zoomRate,
 						0 - KeyboardControl.zoomRate,
-						Game.windowX + KeyboardControl.zoomRate *2,
-						Game.windowY + KeyboardControl.zoomRate *2,
+						Game.windowX + KeyboardControl.zoomRate*2,
+						Game.windowY + KeyboardControl.zoomRate*2,
 						null);
-	
+			
+		
 			
 		}
 	

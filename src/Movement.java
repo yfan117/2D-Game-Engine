@@ -799,7 +799,7 @@ public class Movement {
 					
 					int possibleX = tempX;
 					int possibleY = tempY;
-					System.out.println(shortestX +" "+shortestY);
+					//System.out.println(shortestX +" "+shortestY);
 					if(isLineOfSight(checkPoint.get(checkPoint.size()-1).x, checkPoint.get(checkPoint.size()-1).y, shortestX, shortestY) == false)
 					{
 						//System.out.println("from "+checkPoint.get(checkPoint.size()-1).x +" "+ checkPoint.get(checkPoint.size()-1).y +" to:" + shortestX+" "+ shortestY +" LOS is false");
@@ -839,8 +839,8 @@ public class Movement {
 					{
 						if(isLineOfSight(checkPoint.get(i).x, checkPoint.get(i).y, checkPoint.get(a).x, checkPoint.get(a).y) == true)
 						{
-							System.out.println(i +" "+a);
-							System.out.println("checkpoint size " +checkPoint.size());
+							//System.out.println(i +" "+a);
+							//System.out.println("checkpoint size " +checkPoint.size());
 
 							int numRemove = a-i-1;
 							for(int b = 0; b < numRemove; b++)
@@ -849,7 +849,7 @@ public class Movement {
 								checkPoint.remove(i+1);
 						
 							}
-							System.out.println("checkpoint size " +checkPoint.size());
+							//System.out.println("checkpoint size " +checkPoint.size());
 
 							break;
 						}

@@ -38,38 +38,42 @@ public class KeyboardControl implements KeyListener {
 		{
 			
 			game.getEntityList().get(0).moveLeft = true;
-	
+			//Renderer.cameraX-=10;
 		}
 		
 		if(input == 'w') 
 		{
 			
 			game.getEntityList().get(0).moveUp = true;
+			//Renderer.cameraY-=10;
 		}
 		
 		if(input == 's') 
 		{
 
 			game.getEntityList().get(0).moveDown = true;
+			//Renderer.cameraY+=10;
 		}
 		
 		if(input == 'd') 
 		{
 			
 			game.getEntityList().get(0).moveRight = true;
+			//Renderer.cameraX+=10;
 		}
 		
 		if(input == 'z') 
 		{
-				
+			
 			zoomRate += 100;
 		}
-			
+		
 		if(input == 'x') 
 		{
-				
+			
 			zoomRate -=100;
 		}
+		
 		game.getEntityList().get(0).newClick = true;
 		
 		game.getEntityList().get(0).north = false;
@@ -85,6 +89,7 @@ public class KeyboardControl implements KeyListener {
 		
 	}
 
+	static int zoomRate = 0;
 	@Override
 	public void keyReleased(KeyEvent e) {
 		// TODO Auto-generated method stub
@@ -95,24 +100,30 @@ public class KeyboardControl implements KeyListener {
 			{
 				
 				game.getEntityList().get(0).moveLeft = false;
+
 			}
 			
 			if(input == 'w') 
 			{
 				
 				game.getEntityList().get(0).moveUp = false;
+
 			}
 			
 			if(input == 's') 
 			{
 	
 				game.getEntityList().get(0).moveDown = false;
+
 			}
 			
 			if(input == 'd') 
 			{
 				
 				game.getEntityList().get(0).moveRight = false;
+
 			}
+			
+	
 	}
 }

@@ -16,7 +16,7 @@ public class Display{
 	private JPanel visiblePanel;
 	private PauseScreen pause;
 	private CardLayout cards= new CardLayout();
-	private Renderer renderer;
+	private Renderer render;
 	private Game game;
 	private int currentPanel;
 
@@ -24,13 +24,13 @@ public class Display{
 
 		this.game = game;
 
-		renderer = new Renderer(game.root + "/resources/images/" , game.windowX, game.windowY, game.getEntityList(), game.getProjectileList(), this);
+		render = new Renderer(game.root + "/resources/images/" , game.windowX, game.windowY, game.getEntityList(), game.getProjectileList(), this);
 		frame = new JFrame();
 		frame.setSize(game.windowX, game.windowY);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLocationRelativeTo(null);
-		draw.addMouseListener(new Diablo.MouseControl(this.game));
-		frame.addKeyListener(new Diablo.KeyboardControl(this.game));
+		render.addMouseListener(new MouseControl(this.game));
+		frame.addKeyListener(new KeyboardControl(this.game));
 		/*
 		 * Code to create "visible layers", which displays
 		 * and switches game states
@@ -39,7 +39,7 @@ public class Display{
 		visiblePanel.setLayout(cards);
 		mainmenu= new MainMenu(this, game);
 		visiblePanel.add(mainmenu,"menu");
-		visiblePanel.add(draw,"game");
+		visiblePanel.add(render,"game");
 		pause=new PauseScreen(this);
 		visiblePanel.add(pause,"pause");
 		frame.add(visiblePanel);
@@ -122,25 +122,25 @@ public class Display{
 		   genericChar.picRank = 3;
 		  }
 		  else if((genericChar.north == true) && (genericChar.east == true)) {
-		   genericChar.picRank = 1;
+		   genericChar.picRank = 5;
 		  }
 		  else if((genericChar.south == true) && (genericChar.west == true)) {
-		   genericChar.picRank = 5;
+		   genericChar.picRank = 1;
 		  }
 		  else if((genericChar.south == true) && (genericChar.east == true)) {
 		   genericChar.picRank = 7;
 		  }
 		  else if(genericChar.north == true) {
-		   genericChar.picRank = 2;
-		  }
-		  else if(genericChar.south == true) {
-		   genericChar.picRank = 6;
-		  }
-		  else if(genericChar.west == true) {
 		   genericChar.picRank = 4;
 		  }
-		  else if(genericChar.east == true) {
+		  else if(genericChar.south == true) {
 		   genericChar.picRank = 0;
+		  }
+		  else if(genericChar.west == true) {
+		   genericChar.picRank = 2;
+		  }
+		  else if(genericChar.east == true) {
+		   genericChar.picRank = 6;
 		  }
 		  genericChar.directionCheck = false;
 	}
@@ -154,7 +154,7 @@ public class Display{
 				getDirection(game.getEntityList().get(i));
 			}
 		}
-		draw.updateValue();
+		render.updateValue();
 	}
 	
 	}
