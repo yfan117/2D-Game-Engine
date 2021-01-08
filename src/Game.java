@@ -79,6 +79,8 @@ public class Game {
 
 		 list.add(new Entity("player", new int[]{0, 0}, 100, 80, this, 100, 0));
 		 list.add(new Entity("enemy", new int[]{300, 300}, 100, 80, this, 100, 0));
+		 
+		 obstacle.add(new Entity(this, "tavern", 500, 500));
 		 //list.add(new Entity("enemy", new int[]{-50, 0}, 100, 80));
 
 		 //list.get(0).move.isLineOfSight();

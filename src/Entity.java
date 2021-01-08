@@ -178,7 +178,7 @@ public class Entity{
 		this.game = game;
 		this.x = x;
         this.y = y;
-
+/*
         System.out.println("here");
         FileReader reader = new FileReader(Game.root + "/resources/text/" + name + ".txt");
 
@@ -202,6 +202,7 @@ public class Entity{
 				// game.getObstacleLocation().add(new Node(a, b));
 			 }
 		 }
+		 */
 	}
 	
 	public void enableMovement()

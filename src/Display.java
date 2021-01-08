@@ -119,28 +119,28 @@ public class Display{
 		  System.out.println("genericChar.east: "+genericChar.east);
 		  */
 		  if((genericChar.north == true) && (genericChar.west == true)) {
-		   genericChar.picRank = 3;
-		  }
-		  else if((genericChar.north == true) && (genericChar.east == true)) {
-		   genericChar.picRank = 5;
-		  }
-		  else if((genericChar.south == true) && (genericChar.west == true)) {
-		   genericChar.picRank = 1;
-		  }
-		  else if((genericChar.south == true) && (genericChar.east == true)) {
 		   genericChar.picRank = 7;
 		  }
-		  else if(genericChar.north == true) {
-		   genericChar.picRank = 4;
+		  else if((genericChar.north == true) && (genericChar.east == true)) {
+		   genericChar.picRank = 1;
 		  }
-		  else if(genericChar.south == true) {
+		  else if((genericChar.south == true) && (genericChar.west == true)) {
+		   genericChar.picRank = 5;
+		  }
+		  else if((genericChar.south == true) && (genericChar.east == true)) {
+		   genericChar.picRank = 3;
+		  }
+		  else if(genericChar.north == true) {
 		   genericChar.picRank = 0;
 		  }
+		  else if(genericChar.south == true) {
+		   genericChar.picRank = 4;
+		  }
 		  else if(genericChar.west == true) {
-		   genericChar.picRank = 2;
+		   genericChar.picRank = 6;
 		  }
 		  else if(genericChar.east == true) {
-		   genericChar.picRank = 6;
+		   genericChar.picRank = 2;
 		  }
 		  genericChar.directionCheck = false;
 	}

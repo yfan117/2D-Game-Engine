@@ -18,7 +18,7 @@ public class Map{
 
 
 	public Map(String mapName, Game game) throws IOException  {
-		
+		/*
 		this.game = game;
 
 		ImageIcon icon = new ImageIcon(Game.root + "/resources/images/" + mapName + ".png");
@@ -44,7 +44,7 @@ public class Map{
 			}
 		}
 
-	
+	*/
 			
 		//respawnLcation[0] = Integer.parseInt(bufferedReader.readLine());
 		//respawnLcation[1] = Integer.parseInt(bufferedReader.readLine());

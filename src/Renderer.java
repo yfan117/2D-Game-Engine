@@ -23,6 +23,7 @@ class Renderer extends JPanel{
 
 	int[] backGroundBuffer;
 
+	static BufferedImage temp;
 	
 	int resolutionX = Game.windowX;
 	int resolutionY = Game.windowY;
@@ -30,15 +31,27 @@ class Renderer extends JPanel{
 	//static int resolutionX = 1920;
 	//static int resolutionY = 1080;
 	
-	int mapWidth = 6900;
-	int mapHeight = 6700;
+
+	BufferedImage image ;
+	BufferedImage character;
+	BufferedImage tavern;
 	
+	int widthMultiplier = 10; 
+	int heightMultiplier = 5; 
+	
+	int mapWidth = 500 * widthMultiplier;
+	int mapHeight = 500 * heightMultiplier;
+	
+	//int mapWidth = 200*50;
+	//int mapHeight = 200 * 50;
+
 	BufferedImage frameBuffer = new BufferedImage(resolutionX, resolutionY, BufferedImage.TYPE_INT_RGB);
 	
     int[] fbData = ((DataBufferInt)frameBuffer.getRaster().getDataBuffer()).getData();
     int[] worldBuffer = new int[mapWidth * mapHeight];
     //int[] characerBuffer = new int[3608 * 1056];
-    int[] characerBuffer = new int[14432 * 4224];
+    int[] characerBuffer;
+    int[] tavernBuffer;
  
 	int windowX;
 	int windowY;
@@ -52,8 +65,6 @@ class Renderer extends JPanel{
 	private Game game;
 	
 	
-	BufferedImage image;
-	BufferedImage character;
 
 	public Renderer(String repository, int windowX, int windowY, ArrayList<Entity> list, ArrayList<Entity> projectile, Display display) {
 		
@@ -67,10 +78,12 @@ class Renderer extends JPanel{
 		//this.setSize(1280, 720);
 		
 		try {
-			
-			 image = ImageIO.read(new File(repository +"bigMap2.png"));
-			
-			 character = ImageIO.read(new File(repository + "diablo2.png"));
+			System.out.println(repository);
+
+			 image = ImageIO.read(new File(repository +"bigMap3.png"));
+			 //image = ImageIO.read(new File(repository +"dirt.png"));
+			 character = ImageIO.read(new File(repository + "sprite.png"));
+			 tavern = ImageIO.read(new File(repository + "tavern.png"));
 			
 			
 			
@@ -79,6 +92,12 @@ class Renderer extends JPanel{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		fbData = ((DataBufferInt)frameBuffer.getRaster().getDataBuffer()).getData();
+		worldBuffer = new int[mapWidth * mapHeight];
+		characerBuffer = new int[character.getWidth() * character.getHeight()];
+		tavernBuffer = new int[1145 * 1000];
+		    
 		populateArray();
 		//tempToFrame();
 
@@ -99,6 +118,9 @@ class Renderer extends JPanel{
 		cameraX = list.get(0).x;
 		cameraY = list.get(0).y;
 		
+		
+		
+		
 		int fbStartX = resolutionX/2 - cameraX;
 		int fbStartY = resolutionY/2 - cameraY;
 		
@@ -114,7 +136,7 @@ class Renderer extends JPanel{
 
 		}
 		
-		if((fbStartX != 0) || (fbStartY != 0))
+		if((fbStartX != 0) || (fbStartY != 0)||(fbStartX <= resolutionX) || (fbStartY <= resolutionY))
 		{
 			resetFrame();
 		}
@@ -141,43 +163,93 @@ class Renderer extends JPanel{
 
 		//get entity data
 		Entity current;
+		int perPicX = 200;
+		int perPicY = 200;
 		for(int i = 0; i< game.getEntityList().size(); i++) 
 		{
 			current = game.getEntityList().get(i);
-			for(int y = 0; y < 528; y++)
+			
+			for(int y = 0; y < perPicY; y++)
 			{
-				for(int x = 0; x < 656; x++)
+				for(int x = 0; x < perPicX; x++)
 				{
 					
-					int colorCode =  characerBuffer[656 * current.picCounter + x + ((y + 528 * current.picRank) * character.getWidth())];
-					if( colorCode != -5592406)
+					int colorCode =  characerBuffer[perPicX * current.picCounter + x + ((y + perPicY * current.picRank) * character.getWidth())];
+					
+					if( colorCode != -16777216)
 					{
-						if((resolutionX/2 + x +(current.x - 656/2 - cameraX)) >= resolutionX)
+						if((resolutionX/2 + x +(current.x - perPicX/2 - cameraX)) >= resolutionX)
 						{
 							break;
 						}
 
-						if(resolutionY/2 + y+(current.y - 528/2 - cameraY) >= resolutionY)
+						if(resolutionY/2 + y+(current.y - perPicY/2 - cameraY) >= resolutionY)
 						{
 							break;
 						}
 						
 						
-						if(((resolutionX/2 + x +(current.x - 656/2 - cameraX)) <= 0) 
+						if(((resolutionX/2 + x +(current.x - perPicX/2 - cameraX)) <= 0) 
 								|| 
-							(resolutionY/2 + y+(current.y - 528/2 - cameraY) <= 0))
+							(resolutionY/2 + y+(current.y - perPicY/2 - cameraY) <= 0))
 						{
 						
 						}
 						else
 						{
-							fbData[resolutionX/2 + x +(current.x - 656/2 - cameraX) + (resolutionY/2 + y+(current.y - 528/2 - cameraY)) * resolutionX] = colorCode;
+							fbData[resolutionX/2 + x +(current.x - perPicX/2 - cameraX) + (resolutionY/2 + y+(current.y - perPicY/2 - cameraY)) * resolutionX] = colorCode;
 						}
 						
 					
+	
+					}
+			
+				
+					
+				}
+			}
+		}
+		
+		for(int i = 0; i< game.getObstacles().size(); i++) 
+		{
+			current = game.getObstacles().get(i);
+			System.out.println(i);
+			int width = tavern.getWidth();
+			int height = tavern.getHeight();
+			
+			for(int y = 0; y < height; y++)
+			{
+				for(int x = 0; x < width; x++)
+				{
+				
+					int colorCode =  tavernBuffer[x + y * tavern.getWidth()];
+					//System.out.println(colorCode);
+					if( colorCode != -15658735)
+					{
+						
+						if((resolutionX/2 + x +(current.x - cameraX)) >= resolutionX)
+						{
+							break;
+						}
+
+						if(resolutionY/2 + y+(current.y - cameraY) >= resolutionY)
+						{
+							break;
+						}
 						
 						
-						//fbData[resolutionX/2 + x  + (resolutionY/2 + y) * resolutionX] = characerBuffer[0 + x - cameraX + ((0 + y - cameraY) * character.getWidth())];
+						if(((resolutionX/2 + x +(current.x  - cameraX)) <= 0) 
+								|| 
+							(resolutionY/2 + y+(current.y - cameraY) <= 0))
+						{
+						
+						}
+						else
+						{
+							fbData[resolutionX/2 + x +(current.x - cameraX) + (resolutionY/2 + y+(current.y - cameraY)) * resolutionX] = colorCode;
+						}
+						
+					
 	
 					}
 			
@@ -209,9 +281,9 @@ class Renderer extends JPanel{
     	int width = image.getWidth();
     	int height = image.getHeight();
     
-    	for(int y2 = 0; y2 < 10* height; y2 = y2 + height)
+    	for(int y2 = 0; y2 < heightMultiplier * height; y2 = y2 + height)
 		{
-			for(int x2 = 0; x2 < 10 *width; x2 = x2 + width)
+			for(int x2 = 0; x2 < widthMultiplier *width; x2 = x2 + width)
 			{
 				
 				for(int y = 0; y < height; y++)
@@ -227,12 +299,22 @@ class Renderer extends JPanel{
 				
 			}
 		}
-    	
+    	System.out.println(character.getRGB(0,0));
     	for(int y = 0; y < character.getHeight(); y++)
 		{
 			for(int x = 0; x < character.getWidth(); x++)
 			{
 					characerBuffer[x + y * character.getWidth()] = character.getRGB(x,y);
+	
+				
+			}
+		}
+    	
+    	for(int y = 0; y < tavern.getHeight(); y++)
+		{
+			for(int x = 0; x < tavern.getWidth(); x++)
+			{
+				tavernBuffer[x + y * tavern.getWidth()] = tavern.getRGB(x,y);
 	
 				
 			}
@@ -257,7 +339,7 @@ class Renderer extends JPanel{
 				list.get(i).timeCounter = 0;
 				list.get(i).picCounter ++;
 				
-				if(list.get(i).picCounter == 22) 
+				if(list.get(i).picCounter == 19) 
 				{
 					list.get(i).picCounter = 0;
 				}
@@ -291,6 +373,13 @@ class Renderer extends JPanel{
 						Game.windowX + KeyboardControl.zoomRate*2,
 						Game.windowY + KeyboardControl.zoomRate*2,
 						null);
+			
+			g.drawImage(temp,
+					0 - KeyboardControl.zoomRate,
+					0 - KeyboardControl.zoomRate,
+					Game.windowX + KeyboardControl.zoomRate*2,
+					Game.windowY + KeyboardControl.zoomRate*2,
+					null);
 			
 		
 			
