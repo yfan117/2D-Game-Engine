@@ -1,11 +1,13 @@
 
 package Diablo;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Scanner;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
 public class Map{
@@ -18,6 +20,25 @@ public class Map{
 
 
 	public Map(String mapName, Game game) throws IOException  {
+		
+		BufferedImage image = ImageIO.read(new File(Game.root + "/resources/images/tavern_Obs.png"));
+		
+		
+		for(int y = 0; y < image.getHeight(); y++)
+		{
+			for(int x = 0; x < image.getWidth(); x++)
+			{
+				int colorCode = image.getRGB(x, y);
+				
+				if( colorCode != 0)
+				{
+					//System.out.println(colorCode);
+					game.obsMap[500 + x + (500 + y) * 5000] = 1;
+
+				}
+			}
+		}
+		
 		/*
 		this.game = game;
 

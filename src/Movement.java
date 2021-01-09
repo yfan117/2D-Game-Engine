@@ -566,23 +566,7 @@ public class Movement {
 			{
 				
 				/*
-				
-				if(((x >= obsXY) &&(x <= obsXY + obsSize ))
-		        		&&
-		        		((y >= obsXY) &&(y <= obsXY + obsSize)))
-				{
-					//System.out.println("x is:"+x +" y is:"+y +"obs is true");
-					isObs = true;
-					return true;
-				}
-				else
-				{
-					//System.out.println("x is:"+x +" y is:"+y +"obs is false");
-					isObs = false;
-					return false;
-				}
-				*/
-				for(int i = 0; i < game.getObstacleLocation().size(); i ++)
+					for(int i = 0; i < game.getObstacleLocation().size(); i ++)
 				{
 					if(x == game.getObstacleLocation().get(i).x)
 					{
@@ -593,6 +577,18 @@ public class Movement {
 						}
 					}
 				}
+				*/
+				//System.out.println("here");
+				
+				
+				if((x <= 0 ) || ( y <= 0) || (game.obsMap[x + y * game.mapWidth] == 1))
+				{
+					System.out.println("no go");
+					isObs = true;
+					return true;
+				}
+				
+				
 				
 				isObs = false;
 				return false;

@@ -23,7 +23,6 @@ class Renderer extends JPanel{
 
 	int[] backGroundBuffer;
 
-	static BufferedImage temp;
 	
 	int resolutionX = Game.windowX;
 	int resolutionY = Game.windowY;
@@ -37,10 +36,10 @@ class Renderer extends JPanel{
 	BufferedImage tavern;
 	
 	int widthMultiplier = 10; 
-	int heightMultiplier = 5; 
+	int heightMultiplier = 10; 
 	
-	int mapWidth = 500 * widthMultiplier;
-	int mapHeight = 500 * heightMultiplier;
+	int mapWidth = 5000;
+	int mapHeight = 5000;
 	
 	//int mapWidth = 200*50;
 	//int mapHeight = 200 * 50;
@@ -49,6 +48,8 @@ class Renderer extends JPanel{
 	
     int[] fbData = ((DataBufferInt)frameBuffer.getRaster().getDataBuffer()).getData();
     int[] worldBuffer = new int[mapWidth * mapHeight];
+    
+  
     //int[] characerBuffer = new int[3608 * 1056];
     int[] characerBuffer;
     int[] tavernBuffer;
@@ -213,7 +214,7 @@ class Renderer extends JPanel{
 		for(int i = 0; i< game.getObstacles().size(); i++) 
 		{
 			current = game.getObstacles().get(i);
-			System.out.println(i);
+			//System.out.println(i);
 			int width = tavern.getWidth();
 			int height = tavern.getHeight();
 			
@@ -224,7 +225,7 @@ class Renderer extends JPanel{
 				
 					int colorCode =  tavernBuffer[x + y * tavern.getWidth()];
 					//System.out.println(colorCode);
-					if( colorCode != -15658735)
+					if(( colorCode != -15658735) && ( colorCode != -16777216))
 					{
 						
 						if((resolutionX/2 + x +(current.x - cameraX)) >= resolutionX)
@@ -274,6 +275,22 @@ class Renderer extends JPanel{
 			}
 		}
 	}
+	
+	public void showObs()
+	{
+		
+		for(int i = 500 + 500 *5000; i < worldBuffer.length; i++)
+    	{
+			int colorCode = game.obsMap[i];
+			
+			if(colorCode == 1)
+			{
+				//System.out.println(i);
+				worldBuffer[i] = Color.GREEN.getRGB();
+			}
+				
+    	}
+	}
 
     public void populateArray()
     {
@@ -299,7 +316,9 @@ class Renderer extends JPanel{
 				
 			}
 		}
-    	System.out.println(character.getRGB(0,0));
+    	
+    	
+    	//System.out.println(character.getRGB(0,0));
     	for(int y = 0; y < character.getHeight(); y++)
 		{
 			for(int x = 0; x < character.getWidth(); x++)
@@ -357,6 +376,7 @@ class Renderer extends JPanel{
 		}
 
 		tempToFrame();
+		//showObs();
 		repaint();
 	}
 	
@@ -374,13 +394,7 @@ class Renderer extends JPanel{
 						Game.windowY + KeyboardControl.zoomRate*2,
 						null);
 			
-			g.drawImage(temp,
-					0 - KeyboardControl.zoomRate,
-					0 - KeyboardControl.zoomRate,
-					Game.windowX + KeyboardControl.zoomRate*2,
-					Game.windowY + KeyboardControl.zoomRate*2,
-					null);
-			
+		
 		
 			
 		}

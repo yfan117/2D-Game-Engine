@@ -25,11 +25,11 @@ public class Game {
 	}
 	public static GameState gameState;
 
-	//static int windowX = 1280;
-	//static int windowY = 720;
-
-	static int windowX = 1920;
-	static int windowY = 1080;
+	static int windowX = 1280;
+	static int windowY = 720;
+	
+	//static int windowX = 1920;
+	//static int windowY = 1080;
 
 	static int centerX = windowX /2 ;
 	static int centerY = windowY /2 ;
@@ -60,6 +60,9 @@ public class Game {
 	private ArrayList<Node> obstacleLocation = new ArrayList<Node>();
 	public ArrayList<Node> getObstacleLocation(){return obstacleLocation;}
 	
+	int mapWidth = 5000;
+	int[] obsMap = new int[mapWidth * mapWidth];
+	
 	static Timer timer = new Timer();
 	static int gameTime = 0;
 	
@@ -77,7 +80,7 @@ public class Game {
 			 e1.printStackTrace();
 		 }
 
-		 list.add(new Entity("player", new int[]{0, 0}, 100, 80, this, 100, 0));
+		 list.add(new Entity("player", new int[]{500, 500}, 100, 80, this, 100, 0));
 		 list.add(new Entity("enemy", new int[]{300, 300}, 100, 80, this, 100, 0));
 		 
 		 obstacle.add(new Entity(this, "tavern", 500, 500));
