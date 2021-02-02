@@ -34,7 +34,6 @@ public class Game {
 	static int centerX = windowX /2 ;
 	static int centerY = windowY /2 ;
 
-	static int fps = 30;
 
 	static int[] mapDimension = new int[2];
 	//static int timer = 1000 / fps;
@@ -63,7 +62,9 @@ public class Game {
 	int mapWidth = 5000;
 	int[] obsMap = new int[mapWidth * mapWidth];
 	
-	static Timer timer = new Timer();
+	static Timer dataTimer = new Timer();
+	static Timer renderTimer = new Timer();
+	static Timer timeTimer = new Timer();
 	static int gameTime = 0;
 	
 	
@@ -73,33 +74,72 @@ public class Game {
 		 //long time = System.currentTimeMillis();
 		 //System.out.println(time);
 
-		 try {
-			 map = new Map("backGround", this);
-		 } catch (IOException e1) {
-			 // TODO Auto-generated catch block
-			 e1.printStackTrace();
-		 }
+		
 
-		 list.add(new Entity("player", new int[]{500, 500}, 100, 80, this, 100, 0));
+		 list.add(new Entity("player", new int[]{300, 300}, 100, 80, this, 100, 0));
 		 list.add(new Entity("enemy", new int[]{300, 300}, 100, 80, this, 100, 0));
+		 //list.add(new Entity("enemy", new int[]{10000, 10000}, 100, 80, this, 100, 0));
 		 
-		 obstacle.add(new Entity(this, "tavern", 500, 500));
+		 //obstacle.add(new Entity(this, "tavern", 500, 500));
+		 //obstacle.add(new Entity(this, "house", 300, 300));
 		 //list.add(new Entity("enemy", new int[]{-50, 0}, 100, 80));
 
 		 //list.get(0).move.isLineOfSight();
 
+		 
+		 
+		 try {
+			 map = new Map("map1", this);
+		 } catch (IOException e1) {
+			 // TODO Auto-generated catch block
+			 System.out.println("map file not found");
+		 }
 		 display = new Display(this);
-
 		 //gameLoop();
 
 		 //System.out.println(System.currentTimeMillis());
 
+		 int fps = 30;
 		 int refreshTime = 1000/fps;
-		 timer.scheduleAtFixedRate(dataUpdate, 0, 30);
-		 timer.scheduleAtFixedRate(frameUpdate, 0, refreshTime);
-		 timer.scheduleAtFixedRate(timeCounter, 0, 100);
+		
+		//DataThread dataUpdate = new DataThread(this);
+		DisplayThread displayUpdate = new DisplayThread(this);
+	
+		//Thread dataThread = new Thread(dataUpdate);
+		
+		//dataThread.start();
+		dataTimer.scheduleAtFixedRate(dataUpdate, 0, 30);
+		//new Thread(displayUpdate).start();
+		
+		//displayThread.start();
+		
+		//new Thread(dataUpdate).start();
+		renderTimer.scheduleAtFixedRate(frameUpdate, 0, 1000/30);
+		timeTimer.scheduleAtFixedRate(timeCounter, 0, 10);
 		 mouse = new MouseControl(this);
+		 
+		 /*
+		 while(true)
+		 {
+			
+			 display.update();
+		 }
+		 */
+	
 	 }
+	 
+	  private TimerTask frameUpdate = new TimerTask()
+	  {
+		  
+		public void run()
+		{
+
+			//System.out.println("repainting");
+			display.update();
+			//display.getRendererObject().repaintt();
+			
+		}
+	  };
 
 	public static void main(String[] args) throws IOException {
 		new Game();
@@ -110,29 +150,24 @@ public class Game {
 		gameState = GameState.values()[i];
 	}
 	
+	boolean cycleDone = true;
+	
 	 private TimerTask dataUpdate = new TimerTask()
 	  {
 		public void run()
 		{
-			//System.out.println("here");
+			
 			gameLoop();
+			
+			
+			
 		}
 	  };
-	  
-	  private TimerTask frameUpdate = new TimerTask()
-	  {
-		public void run()
-		{
-			//System.out.println("here");
-			display.update();
-		}
-	  };
-	  
+
 	 private TimerTask timeCounter = new TimerTask()
 	  {
 		public void run()
 		{
-			//System.out.println("here");
 			gameTime++;
 		}
 	  };
@@ -189,9 +224,62 @@ public class Game {
 				{
 					//break;
 				}
-
+				
+	
 			
 			
 	}
+	
+	
 
+
+
+}
+
+
+class DisplayThread implements Runnable
+{
+	Game game;
+	Timer timer = new Timer();
+	int preTime = 0;
+	int fps = 25;
+	int waitTime = 1000/fps;
+	public DisplayThread(Game game)
+	{
+		this.game = game;
+	}
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		while(true)
+		{
+			
+			//timer.scheduleAtFixedRate(frameUpdate, 0, waitTime);
+			
+			if(Game.gameTime >= preTime + waitTime)
+			{
+				preTime = Game.gameTime;
+				//System.out.println("repainting");
+				game.display.update();
+			}
+			//System.out.println();
+		}
+		
+	}
+	
+	/*
+	  private TimerTask frameUpdate = new TimerTask()
+	  {
+		  
+		public void run()
+		{
+
+			System.out.println("repainting");
+			game.display.update();
+			//display.getRendererObject().repaintt();
+			
+		}
+	  };
+	  */
+	
 }

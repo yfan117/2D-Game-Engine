@@ -42,7 +42,7 @@ public class MouseControl implements MouseListener {
 				
 
 				player.collision = false;
-				System.out.println("clicked " +eX + " " + eY);
+				//System.out.println("clicked " +eX + " " + eY);
 
 				
 				if(eX < Game.centerX ) {

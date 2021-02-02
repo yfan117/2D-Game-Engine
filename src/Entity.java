@@ -2,6 +2,7 @@ package Diablo;
 
 
 
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -41,7 +42,7 @@ public class Entity{
 
 	 int range;
 
-	 String type;
+	 String type = "";
 
 	 boolean visible = false;
 	 boolean collision = false;
@@ -86,6 +87,12 @@ public class Entity{
 	 boolean moveDown = false;
 	 
 	 boolean keyMove = false;
+	 
+	int layerY;
+	int[] imageData;
+	int picX;
+	int picY;
+	int spriteWidth;
 
 	public Entity(String name, int[] location, int hp, int hitBox, Game game, int oil, int insanity) throws IOException {
 		this.game = game;
@@ -98,6 +105,10 @@ public class Entity{
          preX = x;
          preY = y;
          move = new Movement(this, game);
+         
+         System.out.println(name);
+         this.imageData = Renderer.getImageData(name);
+         
         if(name == "player")
          {
         	type = "player";
@@ -126,7 +137,12 @@ public class Entity{
 
 		 BufferedReader bufferedReader = new BufferedReader(reader);
 
-		//moveSpeed = Integer.parseInt(bufferedReader.readLine());
+		 layerY = Integer.parseInt(bufferedReader.readLine());
+		 picX = Integer.parseInt(bufferedReader.readLine());
+		 picY = Integer.parseInt(bufferedReader.readLine());
+		 spriteWidth = Integer.parseInt(bufferedReader.readLine());
+		 
+		// System.out.printf("%d %d %d \n", layerY, picX, picY);
 
 		 moveSpeed = 5;
 		 
@@ -174,41 +190,30 @@ public class Entity{
 
 	}
 	
-	public Entity(Game game, String name, int x, int y) throws IOException {
+
+	public Entity(Game game, int[] imageData, int x, int y, int layerY, int picX, int picY) throws IOException {
 		this.game = game;
 		this.x = x;
         this.y = y;
-/*
-        System.out.println("here");
-        FileReader reader = new FileReader(Game.root + "/resources/text/" + name + ".txt");
-
-		 BufferedReader bufferedReader = new BufferedReader(reader);
-
-		 int x1 = Integer.parseInt(bufferedReader.readLine());
-
-		 int y1 = Integer.parseInt(bufferedReader.readLine());
-		 
-		 int x2 = Integer.parseInt(bufferedReader.readLine());
-
-		 int y2 = Integer.parseInt(bufferedReader.readLine());
-		 
-		 //System.out.println(name+" "+ x+" "+ y);
-		 //System.out.println(x1+" "+ y1+" "+ x2 +" " +y2);
-		 
-		 for(int a = x1 + x; a < x2 + x; a = a + 5)
-		 {
-			 for(int b = y1 + y; b < y2 +y; b = b + 5)
-			 {
-				// game.getObstacleLocation().add(new Node(a, b));
-			 }
-		 }
-		 */
+        this.layerY = layerY;
+        this.imageData = imageData;
+        this.picX = picX;
+        this.picY = picY;
+        spriteWidth = picX;
+        
+        
+ 
 	}
 	
 	public void enableMovement()
 	{
 		move = new Movement(this, game);
 	}
+	
+	public ArrayList<Entity> getEntityList()
+	{
+		return game.getEntityList();
+	}
 
-	public ArrayList<Entity> getEntityList(){return game.getEntityList();}
+	
 }

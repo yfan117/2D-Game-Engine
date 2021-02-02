@@ -24,7 +24,7 @@ public class Display{
 
 		this.game = game;
 
-		render = new Renderer(game.root + "/resources/images/" , game.windowX, game.windowY, game.getEntityList(), game.getProjectileList(), this);
+		render = new Renderer(game, game.root + "/resources/images/" , game.windowX, game.windowY, game.getEntityList(), game.getProjectileList(), this);
 		frame = new JFrame();
 		frame.setSize(game.windowX, game.windowY);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -110,7 +110,7 @@ public class Display{
 		   genericChar.west = true;
 		  }
 		  /*
-		  /*
+		   *
 		   * save this for testing purposes
 		  System.out.println();
 		  System.out.println("genericChar.north: "+genericChar.north);
@@ -145,16 +145,36 @@ public class Display{
 		  genericChar.directionCheck = false;
 	}
 
-
-	public void update() {
-
-		for(int i = 0; i< game.getEntityList().size(); i++) {
-			//if(list.get(i).directionCheck == true)
-			if(game.getEntityList().get(i).newClick == true) {
-				getDirection(game.getEntityList().get(i));
+	
+		public void update() {
+	
+			for(int i = 0; i< game.getEntityList().size(); i++) {
+				//if(list.get(i).directionCheck == true)
+				if(game.getEntityList().get(i).newClick == true) {
+					getDirection(game.getEntityList().get(i));
+				}
 			}
+			
+			if(render.renderReady == true)
+			{
+				render.updateValue();
+			}
+			else
+			{
+				//System.out.println("not ready");
+			}
+			
+		
+			
 		}
-		render.updateValue();
-	}
+		
+		public Renderer getRendererObject()
+		{
+			return render;
+		}
 	
 	}
+
+
+
+	

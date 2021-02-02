@@ -32,8 +32,9 @@ class Renderer extends JPanel{
 	
 
 	BufferedImage image ;
-	BufferedImage character;
-	BufferedImage tavern;
+
+	
+	ArrayList<int[]> test = new ArrayList<>();
 	
 	int widthMultiplier = 10; 
 	int heightMultiplier = 10; 
@@ -44,15 +45,18 @@ class Renderer extends JPanel{
 	//int mapWidth = 200*50;
 	//int mapHeight = 200 * 50;
 
-	BufferedImage frameBuffer = new BufferedImage(resolutionX, resolutionY, BufferedImage.TYPE_INT_RGB);
+	BufferedImage frameBuffer1 = new BufferedImage(resolutionX, resolutionY, BufferedImage.TYPE_INT_RGB);
+	BufferedImage frameBuffer2 = new BufferedImage(resolutionX, resolutionY, BufferedImage.TYPE_INT_RGB);
 	
-    int[] fbData = ((DataBufferInt)frameBuffer.getRaster().getDataBuffer()).getData();
+	
+    int[] fbData1 = ((DataBufferInt)frameBuffer1.getRaster().getDataBuffer()).getData();
+    int[] fbData2 = ((DataBufferInt)frameBuffer2.getRaster().getDataBuffer()).getData();
+    
+    
+    
     int[] worldBuffer = new int[mapWidth * mapHeight];
     
-  
-    //int[] characerBuffer = new int[3608 * 1056];
-    int[] characerBuffer;
-    int[] tavernBuffer;
+
  
 	int windowX;
 	int windowY;
@@ -64,11 +68,12 @@ class Renderer extends JPanel{
 	private ArrayList<Entity> projectile;
 	private Display display;
 	private Game game;
-	
-	
 
-	public Renderer(String repository, int windowX, int windowY, ArrayList<Entity> list, ArrayList<Entity> projectile, Display display) {
+	LayerThread layerThread;
+			
+	public Renderer(Game game, String repository, int windowX, int windowY, ArrayList<Entity> list, ArrayList<Entity> projectile, Display display) {
 		
+		this.game = game;
 		this.list = list;
 		this.projectile = projectile;
 
@@ -82,43 +87,200 @@ class Renderer extends JPanel{
 			System.out.println(repository);
 
 			 image = ImageIO.read(new File(repository +"bigMap3.png"));
-			 //image = ImageIO.read(new File(repository +"dirt.png"));
-			 character = ImageIO.read(new File(repository + "sprite.png"));
-			 tavern = ImageIO.read(new File(repository + "tavern.png"));
+		
 			
 			
-			
-			
-		} catch (IOException e) {
+		} catch (IOException e) 
+		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+			cameraX = list.get(0).x;
+			cameraY = list.get(0).y;
+			
+			this.display = display;
+			this.game = display.getGame();
+			
+			populateArray();
+			
+			layerThread = new LayerThread(this, game);
+			
+			new Thread(layerThread).start();
+			
+			initObsOrder();
+			layerOrder();
+			tempToFrame();
 		
-		fbData = ((DataBufferInt)frameBuffer.getRaster().getDataBuffer()).getData();
-		worldBuffer = new int[mapWidth * mapHeight];
-		characerBuffer = new int[character.getWidth() * character.getHeight()];
-		tavernBuffer = new int[1145 * 1000];
-		    
-		populateArray();
-		//tempToFrame();
-
-		cameraX = list.get(0).x;
-		cameraY = list.get(0).y;
+			//layerFlag = true;
+	
+	
 		
-		this.display = display;
-		this.game = display.getGame();
 	}
+	
+	
+	public void initObsOrder()
+	{
+		
+		Entity temp;
+	
+		int leastIndex;
+		
+		ArrayList<Entity> obs = game.getObstacles();
 
+		for(int a = 0; a < obs.size(); a++)
+		{
+			leastIndex = a;
+			for(int i = a; i < obs.size(); i++)
+			{
+				if(obs.get(leastIndex).layerY + obs.get(leastIndex).y > obs.get(i).layerY + obs.get(i).y)
+				{
+					temp = obs.get(i);
+					obs.set(i, obs.get(leastIndex));
+					obs.set(leastIndex, temp);
+					
+				}
+			}
+		}
+		/*
+		for(int a = 0; a < game.getObstacles().size(); a++)
+		{
+			System.out.println(game.getObstacles().get(a).layerY + game.getObstacles().get(a).y);
+		}
+		
+		try {
+			Thread.sleep(500000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		*/
+	}
 	static int cameraX;
 	static int cameraY;
+	
+	ArrayList<Entity> entityInFB = new ArrayList<>(); 
+	boolean layerDone = false;
+	boolean layerFlag = true;
 
+
+	public boolean isInFrame(Entity current)
+	{
+		
+		//if((current.layerY + current.y > cameraY + resolutionY)&&(current.layerY + current.y < cameraY + resolutionY))
+			
+			
+			
+		return false;
+	}
+	public void layerOrder()
+	{
+		
+				entityInFB = new ArrayList<>();
+				Entity current;
+
+				for(int i = 0; i< game.getObstacles().size(); i++)
+				{
+					current = game.getObstacles().get(i);
+					
+					
+					if(current.y > cameraY + resolutionY)
+					{
+						break;
+					}
+					
+					entityInFB.add(current);
+					
+					
+				}
+				
+				
+				for(int i = 0; i< game.getEntityList().size(); i++)
+				{
+					current = game.getEntityList().get(i);
+					
+					for(int a = 0; a< entityInFB.size(); a++)
+					{
+						//System.out.println(entityInFB.size());
+						/*
+						if(current.y > cameraY + resolutionY)
+						{
+							break;
+						}
+						*/
+						
+						if(a == 0)
+						{
+							if(current.layerY + current.y < entityInFB.get(a).layerY + entityInFB.get(a).y)
+							{
+								entityInFB.add(0, current);
+								break;
+							}
+
+							
+						}
+						
+						else if(a == entityInFB.size() - 1)
+						{
+							if(current.layerY + current.y >= entityInFB.get(a).layerY + entityInFB.get(a).y)
+							{
+								entityInFB.add(current);
+							}
+							else
+							{
+								entityInFB.add(entityInFB.size() - 1, current);
+							}
+							
+							break;
+						}
+						
+						else if((current.layerY + current.y >= entityInFB.get(a).layerY + entityInFB.get(a).y)
+								&& (current.layerY + current.y <= entityInFB.get(a + 1).layerY + entityInFB.get(a + 1).y))
+							{
+								System.out.println("here");
+								entityInFB.add(a + 1, current);
+								break;
+							}
+						
+						
+						
+					
+						
+						
+					}
+				
+				}
+				
+				
+				
+				/*
+			
+				for(int a = 0; a < entityInFB.size(); a++)
+				{
+					System.out.println(entityInFB.get(a).layerY + entityInFB.get(a).y);
+				}
+				
+				try {
+					Thread.sleep(500000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				 */
+			//System.out.println("stuck");
+			//	Entity current;
+				
+		}
+			
+		
+	
 	public void tempToFrame()
 	{
-
+		
+		
+	
 		//set camera cord to be player cord
 		cameraX = list.get(0).x;
 		cameraY = list.get(0).y;
-		
 		
 		
 		
@@ -139,7 +301,7 @@ class Renderer extends JPanel{
 		
 		if((fbStartX != 0) || (fbStartY != 0)||(fbStartX <= resolutionX) || (fbStartY <= resolutionY))
 		{
-			resetFrame();
+			resetFrame(fbData1);
 		}
 
 		//get map data
@@ -151,12 +313,14 @@ class Renderer extends JPanel{
 				//if((cameraX + x + ((cameraY + y) * mapWidth) < worldBuffer.length))
 				if(((cameraX + x) < mapWidth) && ((cameraY + y) < mapHeight))
 				{
-					fbData[x + y * resolutionX] = worldBuffer[cameraX + x + ((cameraY + y) * mapWidth)];
+					fbData1[x + y * resolutionX] = worldBuffer[cameraX + x + ((cameraY + y) * mapWidth)];
+					//System.out.println(worldBuffer[cameraX + x + ((cameraY + y) * mapWidth)]);
 				}
 						
 				
 				
 			}
+
 		}
 		
 		int playerX = list.get(0).x;
@@ -164,113 +328,73 @@ class Renderer extends JPanel{
 
 		//get entity data
 		Entity current;
-		int perPicX = 200;
-		int perPicY = 200;
-		for(int i = 0; i< game.getEntityList().size(); i++) 
 		{
-			current = game.getEntityList().get(i);
-			
-			for(int y = 0; y < perPicY; y++)
-			{
-				for(int x = 0; x < perPicX; x++)
-				{
-					
-					int colorCode =  characerBuffer[perPicX * current.picCounter + x + ((y + perPicY * current.picRank) * character.getWidth())];
-					
-					if( colorCode != -16777216)
-					{
-						if((resolutionX/2 + x +(current.x - perPicX/2 - cameraX)) >= resolutionX)
-						{
-							break;
-						}
-
-						if(resolutionY/2 + y+(current.y - perPicY/2 - cameraY) >= resolutionY)
-						{
-							break;
-						}
-						
-						
-						if(((resolutionX/2 + x +(current.x - perPicX/2 - cameraX)) <= 0) 
-								|| 
-							(resolutionY/2 + y+(current.y - perPicY/2 - cameraY) <= 0))
-						{
-						
-						}
-						else
-						{
-							fbData[resolutionX/2 + x +(current.x - perPicX/2 - cameraX) + (resolutionY/2 + y+(current.y - perPicY/2 - cameraY)) * resolutionX] = colorCode;
-						}
-						
-					
-	
-					}
-			
+		
+			//System.out.println("stuck");
 				
+				for(int i = 0; i< entityInFB.size(); i++) 
+				{
+					current = entityInFB.get(i);
 					
+					for(int y = 0; y < current.picY; y++)
+					{
+						for(int x = 0; x < current.picX; x++)
+						{
+							int colorCode = 0;
+							if(current.type != "")
+							{
+								colorCode =  current.imageData[current.picX * current.picCounter + x + ((current.picY * current.picRank + y) * current.spriteWidth)];
+
+							}
+							else
+							{
+								colorCode =  current.imageData[x + y * current.spriteWidth];
+
+							}
+							
+							if( colorCode != 0)
+							{
+								if((resolutionX/2 + x +(current.x - cameraX)) >= resolutionX)
+								{
+									break;
+								}
+
+								if(resolutionY/2 + y+(current.y - cameraY) >= resolutionY)
+								{
+									break;
+								}
+								
+								
+								if(((resolutionX/2 + x +(current.x  - cameraX)) <= 0) 
+										|| 
+									(resolutionY/2 + y+(current.y - cameraY) <= 0))
+								{
+								
+								}
+								else
+								{
+									fbData1[resolutionX/2 + x +(current.x - cameraX) + (resolutionY/2 + y+(current.y - cameraY)) * resolutionX] = colorCode;
+								}
+							
+					
+						
+							
+							}
+					}
+					}
 				}
-			}
 		}
 		
-		for(int i = 0; i< game.getObstacles().size(); i++) 
-		{
-			current = game.getObstacles().get(i);
-			//System.out.println(i);
-			int width = tavern.getWidth();
-			int height = tavern.getHeight();
-			
-			for(int y = 0; y < height; y++)
-			{
-				for(int x = 0; x < width; x++)
-				{
-				
-					int colorCode =  tavernBuffer[x + y * tavern.getWidth()];
-					//System.out.println(colorCode);
-					if(( colorCode != -15658735) && ( colorCode != -16777216))
-					{
-						
-						if((resolutionX/2 + x +(current.x - cameraX)) >= resolutionX)
-						{
-							break;
-						}
-
-						if(resolutionY/2 + y+(current.y - cameraY) >= resolutionY)
-						{
-							break;
-						}
-						
-						
-						if(((resolutionX/2 + x +(current.x  - cameraX)) <= 0) 
-								|| 
-							(resolutionY/2 + y+(current.y - cameraY) <= 0))
-						{
-						
-						}
-						else
-						{
-							fbData[resolutionX/2 + x +(current.x - cameraX) + (resolutionY/2 + y+(current.y - cameraY)) * resolutionX] = colorCode;
-						}
-						
-					
-	
-					}
-			
-				
-					
-				}
-			}
-		}
-		
-	
 	}
 
-	public void resetFrame()
+	public void resetFrame(int[] tempBuffer)
 	{
 		for(int y = 0; y < resolutionY; y++)
 		{
 			for(int x = 0; x < resolutionX; x++)
 			{
 		
-				fbData[x + y * resolutionX] = 0;
+				tempBuffer[x + y * resolutionX] = 0;
 				
 			}
 		}
@@ -279,7 +403,7 @@ class Renderer extends JPanel{
 	public void showObs()
 	{
 		
-		for(int i = 500 + 500 *5000; i < worldBuffer.length; i++)
+		for(int i = 0; i < worldBuffer.length; i++)
     	{
 			int colorCode = game.obsMap[i];
 			
@@ -290,10 +414,14 @@ class Renderer extends JPanel{
 			}
 				
     	}
+    	
+		
+		
 	}
 
     public void populateArray()
     {
+    	System.out.println("here");
     	
     	int width = image.getWidth();
     	int height = image.getHeight();
@@ -309,6 +437,7 @@ class Renderer extends JPanel{
 					{
 	
 						worldBuffer[x + x2 + ((y2 + y) * mapWidth)] = image.getRGB(x,y);
+						//System.out.println(image.getRGB(x,y));
 						
 					}
 				}
@@ -317,35 +446,33 @@ class Renderer extends JPanel{
 			}
 		}
     	
-    	
-    	//System.out.println(character.getRGB(0,0));
-    	for(int y = 0; y < character.getHeight(); y++)
-		{
-			for(int x = 0; x < character.getWidth(); x++)
-			{
-					characerBuffer[x + y * character.getWidth()] = character.getRGB(x,y);
-	
-				
-			}
-		}
-    	
-    	for(int y = 0; y < tavern.getHeight(); y++)
-		{
-			for(int x = 0; x < tavern.getWidth(); x++)
-			{
-				tavernBuffer[x + y * tavern.getWidth()] = tavern.getRGB(x,y);
-	
-				
-			}
-		}
-    	
-    
-    
+
 		
     }
+    
+  	public static int[] getImageData(String imageName) throws IOException
+	{
+  		BufferedImage image = ImageIO.read(new File(Game.root +"/resources/images/"+ imageName +".png"));
+  		
+    	int width = image.getWidth();
+    	int height = image.getHeight();
+		int[] imageData = new int[width * height];
+		
+		for(int y = 0; y < height; y++)
+		{
+			for(int x = 0; x < width; x++)
+			{
+				imageData[x + y * width] = image.getRGB(x, y);
+			}
+		}
+		
+		return imageData;
+	}
 
 	public void updateValue() {
-		
+		System.out.print("");
+		renderReady = false;
+		this.layerFlag = true;
 		for(int i = 0; i< list.size(); i++) {
 			
 		if((list.get(i).x != list.get(i).preX) || (list.get(i).y != list.get(i).preY)) 
@@ -374,29 +501,66 @@ class Renderer extends JPanel{
 			list.get(i).preY = list.get(i).y;
 		
 		}
-
-		tempToFrame();
+		//System.out.println("1");
 		//showObs();
+		LayerThread.go = true;
+		tempToFrame();
+		layerOrder();
+		//System.out.println("2");
 		repaint();
+		//System.out.println("3");
 	}
-	
-	//static int zoom = 0;
-	
+
+	boolean renderReady = true;
 	protected void paintComponent(Graphics g) {
 
 			super.paintComponent(g);
 			//KeyboardControl.zoomRate++;
-			
-			g.drawImage(frameBuffer,
+	
+			layerDone = false;
+		
+				g.drawImage(frameBuffer1,
 						0 - KeyboardControl.zoomRate,
 						0 - KeyboardControl.zoomRate,
 						Game.windowX + KeyboardControl.zoomRate*2,
 						Game.windowY + KeyboardControl.zoomRate*2,
 						null);
-			
-		
-		
-			
+	
+			//System.out.println("repainted");
+				renderReady = true;
 		}
+
+	
+}
+
+class LayerThread implements Runnable 
+{
+	Renderer renderer;
+	Game game;
+	static boolean go = true;
+
+	
+	
+	public LayerThread(Renderer renderer, Game game)
+	{
+		this.renderer = renderer;
+		this.game = game;
+	}
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		while(true)
+			{
+			
+			if(go == true)
+				{
+					
+					//renderer.layerOrder();
+				
+				}	
+			}
+		
+	}
 	
 }

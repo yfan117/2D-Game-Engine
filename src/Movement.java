@@ -769,6 +769,12 @@ public class Movement {
 						
 					}
 					*/
+					
+					if(grid.size() == 0)
+					{
+						System.out.println("ERROR, unknown error by passed");
+						break;
+					}
 					shortestX = grid.get(0).x;
 					shortestY = grid.get(0).y;
 					int smallestIndex = 0;
