@@ -109,7 +109,18 @@ public class MouseControl implements MouseListener {
 					player.move.checkPoint.add(new Node(player.x, player.y));
 					player.move.pathFind();
 					player.hasPath = true;
+					
+					/*
+					try {
+						game.sender.sending();
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					*/
 				}
+				
+				
 
 
 			}

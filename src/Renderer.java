@@ -445,9 +445,7 @@ class Renderer extends JPanel{
 				
 			}
 		}
-    	
-
-		
+   
     }
     
   	public static int[] getImageData(String imageName) throws IOException
@@ -470,7 +468,7 @@ class Renderer extends JPanel{
 	}
 
 	public void updateValue() {
-		System.out.print("");
+		System.out.println("");
 		renderReady = false;
 		this.layerFlag = true;
 		for(int i = 0; i< list.size(); i++) {

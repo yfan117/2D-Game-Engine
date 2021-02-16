@@ -109,7 +109,7 @@ public class Entity{
          System.out.println(name);
          this.imageData = Renderer.getImageData(name);
          
-        if(name == "player")
+        if((name == "player"))
          {
         	type = "player";
         	//isPlayer = true;
@@ -117,16 +117,15 @@ public class Entity{
 			//this.centerY = y + windowY/2;
         	visible = true;
          }
-
-        if(name == "enemy")
+        else
         {
-        	type = "enemy";
+        	type = name;
         	
-        	int respondX = x;
-        	int respondY = y;
+        	respondX = x;
+        	respondY = y;
 
         	move.isVisible();
-        	ai = new AI(this);
+        	ai = new AI(this, game);
         }
         
         target = this;

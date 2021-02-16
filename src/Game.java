@@ -2,6 +2,7 @@ package Diablo;
 
 import java.awt.Dimension;
 import java.io.IOException;
+import java.net.SocketException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -25,11 +26,11 @@ public class Game {
 	}
 	public static GameState gameState;
 
-	static int windowX = 1280;
-	static int windowY = 720;
+	//static int windowX = 1280;
+	//static int windowY = 720;
 	
-	//static int windowX = 1920;
-	//static int windowY = 1080;
+	static int windowX = 1920/2;
+	static int windowY = 1080;
 
 	static int centerX = windowX /2 ;
 	static int centerY = windowY /2 ;
@@ -65,10 +66,13 @@ public class Game {
 	static Timer dataTimer = new Timer();
 	static Timer renderTimer = new Timer();
 	static Timer timeTimer = new Timer();
+	static Timer receiveTimer = new Timer();
+	static Timer sendTimer = new Timer();
 	static int gameTime = 0;
 	
-	
-
+	Sender sender;
+	Receiver receiver;
+	Thread senderThread;
 	 public Game() throws IOException
 	 {
 		 //long time = System.currentTimeMillis();
@@ -76,8 +80,9 @@ public class Game {
 
 		
 
-		 list.add(new Entity("player", new int[]{300, 300}, 100, 80, this, 100, 0));
-		 list.add(new Entity("enemy", new int[]{300, 300}, 100, 80, this, 100, 0));
+		 list.add(new Entity("player", new int[]{500, 500}, 100, 80, this, 100, 0));
+		 //list.add(new Entity("enemy", new int[]{500, 500}, 100, 80, this, 100, 0));
+		 list.add(new Entity("player2", new int[]{200, 200}, 100, 80, this, 100, 0));
 		 //list.add(new Entity("enemy", new int[]{10000, 10000}, 100, 80, this, 100, 0));
 		 
 		 //obstacle.add(new Entity(this, "tavern", 500, 500));
@@ -103,8 +108,17 @@ public class Game {
 		 int refreshTime = 1000/fps;
 		
 		//DataThread dataUpdate = new DataThread(this);
-		DisplayThread displayUpdate = new DisplayThread(this);
-	
+		//DisplayThread displayUpdate = new DisplayThread(this);
+		 
+		 //Sending sender = new Sending(this, 10000);
+		 //Receiving receiver = new Receiving(this, 20000);
+		 
+		 //senderThread = new Thread(sender);
+		 //senderThread.start();
+		 
+		 //Thread thread2 = new Thread(receiver);
+		 //thread2.start();
+		  
 		//Thread dataThread = new Thread(dataUpdate);
 		
 		//dataThread.start();
@@ -118,6 +132,13 @@ public class Game {
 		timeTimer.scheduleAtFixedRate(timeCounter, 0, 10);
 		 mouse = new MouseControl(this);
 		 
+		 
+		 receiver = new Receiver(this, 20000);
+		 receiveTimer.scheduleAtFixedRate(receive, 0, 1);
+		 
+		 sender = new Sender(this, 10000);
+		 sendTimer.scheduleAtFixedRate(send, 0, 1);
+		 
 		 /*
 		 while(true)
 		 {
@@ -127,6 +148,74 @@ public class Game {
 		 */
 	
 	 }
+	
+	
+	 
+	  private TimerTask send = new TimerTask()
+	  {
+		  
+		public void run()
+		{
+			try {
+				sender.sending();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
+	  };
+	  
+	  private TimerTask receive = new TimerTask()
+	  {
+		  
+		public void run()
+		{
+			 try {
+					receiver.receiving();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			/*
+			 if(list.get(2).move.isObstacles(list.get(2).clickedX , list.get(2).clickedY) == false)
+					//if((x <= 0 ) || ( y <= 0) || (game.obsMap[x + y * game.mapWidth] == 1))
+					{
+						list.get(2).north = false;
+						list.get(2).south = false;
+						list.get(2).west = false;
+						list.get(2).east = false;
+						list.get(2).directionCheck = true;
+		
+						//list.get(2).clickedX = list.get(2).list.get(0).x - (int)(Math.random()*100);
+						//list.get(2).clickedY = list.get(2).list.get(0).y - (int)(Math.random()*100);
+						//clickedX = list.get(0).x;
+						//clickedY = list.get(0).y;
+		
+		
+		
+						list.get(2).newClick = true;
+						
+						//list.get(2).target = list.get(2).list.get(0);
+						
+						//list.get(2).target = list.get(2);
+		
+						//System.out.println(Math.sqrt(Math.pow(list.get(2).clickedX - 105, 2)+Math.pow(list.get(2).clickedY - 95, 2)));
+						//System.out.println("here");
+		
+						list.get(2).clickedX =Math.round(list.get(2).clickedX/5)*5;
+						list.get(2).clickedY =Math.round(list.get(2).clickedY/5)*5;
+						
+						list.get(2).move.nodeIndex = 1;
+						list.get(2).move.checkPoint = new ArrayList<Node>();
+						list.get(2).move.usedGrid   = new ArrayList<Node>();
+						list.get(2).move.checkPoint.add(new Node(list.get(2).x, list.get(2).y));
+						list.get(2).move.pathFind();
+						list.get(2).hasPath = true;
+					}
+					*/
+		}
+	  };
 	 
 	  private TimerTask frameUpdate = new TimerTask()
 	  {
@@ -180,12 +269,18 @@ public class Game {
 				{
 					if(list.get(i).hasPath == true)
 					{
-						if(i != 0)
-						{
-							list.get(i).ai.update();
-						}
+						
 						list.get(i).move.update(list.get(i));
 					}
+				}
+				
+				for(int i = 1; i < list.size(); i++)
+				{
+					
+						//System.out.println("ai");
+						list.get(i).ai.update();
+			
+			
 				}
 				//System.out.println(projectile.size());
 
@@ -235,6 +330,62 @@ public class Game {
 
 
 }
+
+class Sending implements Runnable
+{
+	Game game;
+	Sender sender;
+	public Sending(Game game, int portNumber)
+	{
+		this.game = game;
+		sender = new Sender(game, portNumber);
+	}
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		//while(true)
+		{
+			System.out.println("stuck");
+			try {
+				sender.sending();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+	}
+}
+
+class Receiving implements Runnable
+{
+	Game game;
+	Receiver receiver;
+	public Receiving(Game game, int portNumber) throws SocketException
+	{
+		this.game = game;
+		receiver = new Receiver(game, portNumber);
+	}
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		//while(true)
+		{
+			try {
+				receiver.receiving();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	
+	}
+}
+
+
+
 
 
 class DisplayThread implements Runnable
