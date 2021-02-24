@@ -1,11 +1,12 @@
 package Diablo;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.SwingUtilities;
-public class MouseControl implements MouseListener {
+public class MouseControl implements MouseListener, MouseMotionListener {
 	private Game game;
 	private Movement movement;
 	Entity player;
@@ -20,17 +21,13 @@ public class MouseControl implements MouseListener {
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
 		// TODO Auto-generated method stub
-
 		if(SwingUtilities.isLeftMouseButton(e)) {
-
 			//System.out.println("left click");
-
 			//if(outBound(e.getX(), e.getY(), player) == false)
 			{
 				//player.clickedX = e.getX() + player.x;
@@ -38,13 +35,11 @@ public class MouseControl implements MouseListener {
 
 				int eX = e.getX();
 				int eY = e.getY();
-				
-				
-
+		
 				player.collision = false;
-				//System.out.println("clicked " +eX + " " + eY);
-
+				System.out.println("clicked " +eX + " " + eY);
 				
+					
 				if(eX < Game.centerX ) {
 					player.clickedX = Renderer.cameraX- (Game.centerX - eX);
 				}
@@ -84,6 +79,22 @@ public class MouseControl implements MouseListener {
 				player.clickedX =Math.round(player.clickedX/5)*5;
 				player.clickedY =Math.round(player.clickedY/5)*5;
 				
+				System.out.println("player coordinates: " +player.clickedX+" "+player.clickedY);
+		
+				/*
+				 * check for entity 
+				 * starting from index 1
+				 */
+				for(int i =1; i < game.getEntityList().size();i++)
+				{	
+					Entity entity= game.getEntityList().get(i);//check for click collision
+					if(entity.isEntity(player.clickedX,player.clickedY)) {
+						System.out.println("entity here");
+						entity.doAction();
+					}
+				}
+				
+				
 				if(movement.isObstacles(player.clickedX, player.clickedY) == false)
 				{
 					player.newClick = true;
@@ -109,18 +120,7 @@ public class MouseControl implements MouseListener {
 					player.move.checkPoint.add(new Node(player.x, player.y));
 					player.move.pathFind();
 					player.hasPath = true;
-					
-					/*
-					try {
-						game.sender.sending();
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-					*/
 				}
-				
-				
 
 
 			}
@@ -251,6 +251,59 @@ public class MouseControl implements MouseListener {
 	public void mouseExited(MouseEvent e) {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	/*
+	 * implements MouseMotionListener Functions
+	 */
+	@Override
+	public void mouseMoved(MouseEvent e) {
+		/*
+		 * get eX and eY in terms of 'world-coordinates'
+		 */
+		int eX=e.getX();
+		int eY=e.getY();
+		if(eX < Game.centerX ) {
+			eX = Renderer.cameraX- (Game.centerX - eX);
+		}
+		else if(eX > Game.centerX ) {
+			eX = Renderer.cameraX + (eX - Game.centerX);
+		}
+
+		if(eY < Game.centerY ) {
+			eY = Renderer.cameraY- (Game.centerY - eY);
+		}
+		else if(eY > Game.centerY ) {
+			eY = Renderer.cameraY  + (eY - Game.centerY);
+		}
+		eX =Math.round(eX/5)*5;
+		eY=Math.round(eY/5)*5;
+
+		/*
+		 * Check if mouse hovering over an action
+		 */
+		for(int i =1; i < game.getEntityList().size();i++){	
+			Entity entity= game.getEntityList().get(i);//check for entity collision
+			if(entity.isEntity(eX,eY) && entity.actionable()==true ) {
+				if(game.dialogue==true){
+					game.hovering=false;
+					return;
+				}
+				else {
+					game.hovering=true;
+					return;
+				}
+			}	
+			else {
+				game.hovering=false;
+			}
+		}
+	}
+	
+
+	@Override
+	public void mouseDragged(MouseEvent arg0) {
+		// TODO Auto-generated method stub
 	}
 
 }

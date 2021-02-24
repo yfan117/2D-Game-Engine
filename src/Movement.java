@@ -3,7 +3,7 @@ package Diablo;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class Movement{
+public class Movement {
 	
 	int obsXY = 100;
 	int obsSize = 0;
@@ -583,7 +583,7 @@ public class Movement{
 				
 				if((x <= 0 ) || ( y <= 0) || (game.obsMap[x + y * game.mapWidth] == 1))
 				{
-					System.out.println("obs detected");
+					System.out.println("no go");
 					isObs = true;
 					return true;
 				}
@@ -769,12 +769,6 @@ public class Movement{
 						
 					}
 					*/
-					
-					if(grid.size() == 0)
-					{
-						System.out.println("ERROR, unknown error by passed");
-						break;
-					}
 					shortestX = grid.get(0).x;
 					shortestY = grid.get(0).y;
 					int smallestIndex = 0;

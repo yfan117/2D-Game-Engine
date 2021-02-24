@@ -3,7 +3,6 @@ package Diablo;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Paths;
 
@@ -70,7 +69,7 @@ public class SpriteMaker {
 
 		}
 		
-		BufferedImage finalImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage finalImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 		
 		int[] temp = ((DataBufferInt)finalImage.getRaster().getDataBuffer()).getData();
 		
@@ -83,13 +82,6 @@ public class SpriteMaker {
 			temp[i] = rgbMatrix[i];
 		}
 		
-		FileWriter outputFile = new FileWriter("sprite.txt");
-		for(int i = 0; i < width * height; i++)
-		{
-			//System.out.println(temp[i]);
-			
-			outputFile.write(temp[i] +" ");
-		}
 		ImageIO.write(finalImage, "png", new File("C:\\Users\\Fan\\eclipse-workspace/Portfolio/resources/images/sprite.png"));
 		
 		
