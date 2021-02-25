@@ -33,8 +33,44 @@ public class KeyboardControl implements KeyListener {
 			game.getEntityList().get(0).isMelee = !(game.getEntityList().get(0).isMelee);
 			System.out.println(game.getEntityList().get(0).isMelee);
 		}
+
+		if(input == '1')
+		{
+			try{
+				game.getEntityList().get(0).getItem(0).useItem();
+				if(game.getEntityList().get(0).getItem(0).isDisposable())
+					game.getEntityList().get(0).removeItem(0);
+			}catch(Exception ex){}
+		}
+
+		if(input == '2')
+		{
+			try{
+				game.getEntityList().get(0).getItem(1).useItem();
+				if(game.getEntityList().get(0).getItem(1).isDisposable())
+					game.getEntityList().get(0).removeItem(1);
+			}catch(Exception ex){}
+		}
+
+		if(input == '3')
+		{
+			try{
+				game.getEntityList().get(0).getItem(2).useItem();
+				if(game.getEntityList().get(0).getItem(2).isDisposable())
+					game.getEntityList().get(0).removeItem(2);
+			}catch(Exception ex){}
+		}
+
+		if(input == '4')
+		{
+			try{
+				game.getEntityList().get(0).getItem(3).useItem();
+				if(game.getEntityList().get(0).getItem(3).isDisposable())
+					game.getEntityList().get(0).removeItem(3);
+			}catch(Exception ex){}
+		}
 		
-		if(input == 'a') 
+		if(input == 'a')
 		{
 			
 			game.getEntityList().get(0).moveLeft = true;
@@ -72,6 +108,14 @@ public class KeyboardControl implements KeyListener {
 		{
 			
 			zoomRate -=100;
+		}
+
+		if(input == 't')
+		{
+			if(game.getEntityList().get(0).inventory.getInvOpen())
+				game.getEntityList().get(0).inventory.setInvOpen(false);
+			else
+				game.getEntityList().get(0).inventory.setInvOpen(true);
 		}
 		
 		game.getEntityList().get(0).newClick = true;

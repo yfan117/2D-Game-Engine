@@ -1,16 +1,24 @@
 package Diablo;
+import Items.Item;
+
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.swing.SwingUtilities;
 public class MouseControl implements MouseListener {
 	private Game game;
 	private Movement movement;
+	boolean[] invBools = new boolean[4];
+	//boolean[] backpackBools = new boolean[game.getEntityList().get(0).inventory.getCapacity()];
+	boolean[] backpackBools = new boolean[12];
 	Entity player;
 	public MouseControl(Game game)
 	{
+		Arrays.fill(invBools, Boolean.FALSE);
+		Arrays.fill(backpackBools, Boolean.FALSE);
 		this.game = game;
 		player = game.getEntityList().get(0);
 		movement = new Movement(player, game);
@@ -38,8 +46,63 @@ public class MouseControl implements MouseListener {
 
 				int eX = e.getX();
 				int eY = e.getY();
-				
-				
+
+				//Player clicked inside
+				//the items inventory
+				if(eX > (game.windowX / 2) - 100 && eX < (game.windowX / 2) + 100 && eY > game.windowY - 50)
+				{
+					System.out.println("Items");
+					System.out.println("clicked " +eX + " " + eY);
+					if(eX > (game.windowX / 2) - 100 && eX < (game.windowX / 2) - 50 && eY > game.windowY - 50)//Player has clicked inside the item 1 slot
+					{
+						invBools[0] = true;
+					}
+					if(eX > (game.windowX / 2) - 50 && eX < (game.windowX / 2) && eY > game.windowY - 50)//Player has clicked inside the item 2 slot
+					{
+						invBools[1] = true;
+					}
+					if(eX > (game.windowX / 2) && eX < (game.windowX / 2) + 50 && eY > game.windowY - 50)//Player has clicked inside the item 3 slot
+					{
+						invBools[2] = true;
+					}
+					if(eX > (game.windowX / 2) + 50 && eX < (game.windowX / 2) + 100 && eY > game.windowY - 50)//Player has clicked inside the item 4 slot
+					{
+						invBools[3] = true;
+					}
+					return;
+				}
+
+				//Player clicked inside spell slots
+				if(eX > (game.windowX / 2) - 74 && eX < (game.windowX / 2) + 74 && eY > game.windowY - 87 && eY < game.windowY - 50)
+				{
+					for(int i = 0; i < 4; i++)
+					{
+						if(eX > ((game.windowX / 2) - (74 - (i * 37))) && eX < ((game.windowX / 2) - (74 - ((i+1) * 37))) && eY > game.windowY - 87 && eY < game.windowY - 50)
+						{
+							if(i == 0)//Spell slot 0
+							{
+								System.out.println("0");
+							}
+							if(i == 1)//Spell slot 1
+							{
+								System.out.println("1");
+							}
+							if(i == 2)//Spell slot 2
+							{
+								System.out.println("2");
+							}
+							if(i == 3)//Spell slot 3
+							{
+								System.out.println("3");
+							}
+						}
+					}
+					return;
+				}
+
+				//Player clicked inside backpack while it is open
+				if(checkBackpack(eX, eY))
+					return;
 
 				player.collision = false;
 				System.out.println("clicked " +eX + " " + eY);
@@ -226,8 +289,134 @@ public class MouseControl implements MouseListener {
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
+		int eX = e.getX();
+		int eY = e.getY();
+		int check = 0;
+
+		//Check backpack
+		checkBackpack(eX, eY);
+
+		for(int i = 0; i < backpackBools.length; i++)
+		{
+			if(backpackBools[i])
+				check++;
+		}
+		for(int j = 0; j < invBools.length; j++)
+		{
+			if(invBools[j])
+				check++;
+		}
+		System.out.println(check);
+		if(check == 0)//player clicked an item
+		{
+
+		}
+		if (check == 1)//Player dragged an item onto the ground
+		{
+
+
+		}
+		if(check == 2)//player is swapping two items
+		{
+
+		}
+
+		if(invBools[0] == true)
+		{
+			if(eX > (game.windowX / 2) - 100 && eX < (game.windowX / 2) - 50 && eY > game.windowY - 90)//Player has clicked inside the item 1 slot
+			{
+				try{
+					game.getEntityList().get(0).getItem(0).useItem();
+					if(game.getEntityList().get(0).getItem(0).isDisposable())
+						game.getEntityList().get(0).removeItem(0);
+				}catch(Exception ex){}
+			}
+			if(eX > (game.windowX / 2) - 50 && eX < (game.windowX / 2) && eY > game.windowY - 90)//Player has clicked inside the item 2 slot
+			{
+				swapInvToInv(0, 1);
+			}
+			if(eX > (game.windowX / 2) && eX < (game.windowX / 2) + 50 && eY > game.windowY - 90)//Player has clicked inside the item 3 slot
+			{
+				swapInvToInv(0, 2);
+			}
+			if(eX > (game.windowX / 2) + 50 && eX < (game.windowX / 2) + 100 && eY > game.windowY - 90)//Player has clicked inside the item 4 slot
+			{
+				swapInvToInv(0, 3);
+			}
+			invBools[0] = false;
+		}
+		if(invBools[1] == true)
+		{
+			if(eX > (game.windowX / 2) - 100 && eX < (game.windowX / 2) - 50 && eY > game.windowY - 90)//Player has clicked inside the item 1 slot
+			{
+				swapInvToInv(1, 0);
+			}
+			if(eX > (game.windowX / 2) - 50 && eX < (game.windowX / 2) && eY > game.windowY - 90)//Player has clicked inside the item 2 slot
+			{
+				try{
+					game.getEntityList().get(0).getItem(1).useItem();
+					if(game.getEntityList().get(0).getItem(1).isDisposable())
+						game.getEntityList().get(0).removeItem(1);
+				}catch(Exception ex){}
+			}
+			if(eX > (game.windowX / 2) && eX < (game.windowX / 2) + 50 && eY > game.windowY - 90)//Player has clicked inside the item 3 slot
+			{
+				swapInvToInv(1, 2);
+			}
+			if(eX > (game.windowX / 2) + 50 && eX < (game.windowX / 2) + 100 && eY > game.windowY - 90)//Player has clicked inside the item 4 slot
+			{
+				swapInvToInv(1, 3);
+			}
+			invBools[1] = false;
+		}
+		if(invBools[2] == true)
+		{
+			if(eX > (game.windowX / 2) - 100 && eX < (game.windowX / 2) - 50 && eY > game.windowY - 90)//Player has clicked inside the item 1 slot
+			{
+				swapInvToInv(2, 0);
+			}
+			if(eX > (game.windowX / 2) - 50 && eX < (game.windowX / 2) && eY > game.windowY - 90)//Player has clicked inside the item 2 slot
+			{
+				swapInvToInv(2, 1);
+			}
+			if(eX > (game.windowX / 2) && eX < (game.windowX / 2) + 50 && eY > game.windowY - 90)//Player has clicked inside the item 3 slot
+			{
+				try{
+					game.getEntityList().get(0).getItem(2).useItem();
+					if(game.getEntityList().get(0).getItem(2).isDisposable())
+						game.getEntityList().get(0).removeItem(2);
+				}catch(Exception ex){}
+			}
+			if(eX > (game.windowX / 2) + 50 && eX < (game.windowX / 2) + 100 && eY > game.windowY - 90)//Player has clicked inside the item 4 slot
+			{
+				swapInvToInv(2, 3);
+			}
+			invBools[2] = false;
+		}
+		if(invBools[3] == true)
+		{
+			if(eX > (game.windowX / 2) - 100 && eX < (game.windowX / 2) - 50 && eY > game.windowY - 90)//Player has clicked inside the item 1 slot
+			{
+				swapInvToInv(3, 0);
+			}
+			if(eX > (game.windowX / 2) - 50 && eX < (game.windowX / 2) && eY > game.windowY - 90)//Player has clicked inside the item 2 slot
+			{
+				swapInvToInv(3, 1);
+			}
+			if(eX > (game.windowX / 2) && eX < (game.windowX / 2) + 50 && eY > game.windowY - 90)//Player has clicked inside the item 3 slot
+			{
+				swapInvToInv(3, 2);
+			}
+			if(eX > (game.windowX / 2) + 50 && eX < (game.windowX / 2) + 100 && eY > game.windowY - 90)//Player has clicked inside the item 4 slot
+			{
+				try{
+					game.getEntityList().get(0).getItem(3).useItem();
+					if(game.getEntityList().get(0).getItem(3).isDisposable())
+						game.getEntityList().get(0).removeItem(3);
+				}catch(Exception ex){}
+			}
+			invBools[3] = false;
+		}
 	}
 
 	@Override
@@ -242,4 +431,45 @@ public class MouseControl implements MouseListener {
 		
 	}
 
+	private void swapInvToInv(int i, int j)
+	{
+		Item temp = game.getEntityList().get(0).getItem(i);
+		game.getEntityList().get(0).addItem(i, game.getEntityList().get(0).getItem(j));
+		game.getEntityList().get(0).addItem(j, temp);
+	}
+
+	private boolean checkBackpack(int eX, int eY)
+	{
+		boolean b = false;
+		if(game.getEntityList().get(0).inventory.getInvOpen())
+		{
+			if( eX > ((Diablo.Game.windowX) - game.getEntityList().get(0).inventory.getCols() * 50) && eY > ((Diablo.Game.windowY / 2) - ((game.getEntityList().get(0).inventory.getRows() / 2) * 50)) && eY < ((Diablo.Game.windowY / 2) + ((game.getEntityList().get(0).inventory.getRows() / 2) * 50)))
+			{
+				for(int i = 0; i < game.getEntityList().get(0).inventory.getRows(); i++)
+				{
+					for(int j = 0; j < game.getEntityList().get(0).inventory.getCols(); j++)
+					{
+						int col = ((Diablo.Game.windowX) - (game.getEntityList().get(0).inventory.getCols() * 50) + (50 * j));
+						int row = ((Diablo.Game.windowY / 2) - ((game.getEntityList().get(0).inventory.getRows() / 2) *  50) + (50 * i));
+						if( eX > col && eX < col + 50 && eY > row && eY < row + 50)
+						{
+							for(int y = 1; y <= game.getEntityList().get(0).inventory.getRows(); y++)
+							{
+								for(int x = 0; x <= game.getEntityList().get(0).inventory.getCols(); x++)
+								{
+									if(j == (game.getEntityList().get(0).inventory.getRows() - y) && i == (game.getEntityList().get(0).inventory.getCols() - x))
+									{
+										//i*3+j to access elements in array
+										backpackBools[(i*game.getEntityList().get(0).inventory.getCols()) + j] = !backpackBools[(i*game.getEntityList().get(0).inventory.getCols()) + j];
+									}
+								}
+							}
+						}
+					}
+				}
+				b = true;
+			}
+		}
+		return b;
+	}
 }

@@ -26,11 +26,12 @@ public class Display{
 
 		render = new Renderer(game.root + "/resources/images/" , game.windowX, game.windowY, game.getEntityList(), game.getProjectileList(), this);
 		frame = new JFrame();
-		frame.setSize(game.windowX, game.windowY);
+		frame.setSize(game.windowX + 16, game.windowY + 39);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLocationRelativeTo(null);
 		render.addMouseListener(new MouseControl(this.game));
 		frame.addKeyListener(new KeyboardControl(this.game));
+		frame.setResizable(false);
 		/*
 		 * Code to create "visible layers", which displays
 		 * and switches game states

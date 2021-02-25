@@ -1,182 +1,187 @@
 package Diablo;
 
-
+import Items.Item;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class Entity{
+public class Entity
+{
 
-	 int x = 0;
-	 int y = 0;
+    int x = 0;
+    int y = 0;
 
-	 int clickedX ;//destination
-	 int clickedY ;//destination
-	 boolean newClick = false;
-	 boolean directionCheck = false;
+    int clickedX;//destination
+    int clickedY;//destination
+    boolean newClick = false;
+    boolean directionCheck = false;
 
-	 int moveSpeed = 0;
-	 int moveCounter = 0;
+    int moveSpeed = 0;
+    int moveCounter = 0;
 
-	 boolean north;
-	 boolean south;
-	 boolean west;
-	 boolean east;
+    boolean north;
+    boolean south;
+    boolean west;
+    boolean east;
 
-	 double slopeX;
-	 double slopeY;
-	 double maxSlope = 1;
+    double slopeX;
+    double slopeY;
+    double maxSlope = 1;
 
-	 int preX;
-	 int preY;
+    int preX;
+    int preY;
 
-	 int picCounter = 0;
-	 int timeCounter = 0;
+    int picCounter = 0;
+    int timeCounter = 0;
 
-	 int picRank = 6;
+    int picRank = 6;
 
-	 int range;
+    int range;
 
-	 String type;
+    String type;
 
-	 boolean visible = false;
-	 boolean collision = false;
-	 boolean active = true;
-	 
-	 boolean isMelee = false;
-	 
-	 boolean tookDamage = false;
-	 
-	 boolean hasDoneDmage = false;
-	 
-	 boolean hasPath = false;
+    boolean visible = false;
+    boolean collision = false;
+    boolean active = true;
 
-	 int hp;
-	 
-	 int damage;
-	 
-	 int hitBox;
+    boolean isMelee = false;
 
-	 Entity target;
-	 
-	 Movement move;
-	 
-	 AI ai;
+    boolean tookDamage = false;
 
-	 Game game;
+    boolean hasDoneDmage = false;
 
-	 int oil;
-	 int insanity;
-	 
-	 int respondX = 0;
-	 int respondY = 0;
-	/* 
-	static boolean moveLeft = false;
-	static boolean moveRight = false;
-	static boolean moveUp = false;
-	static boolean moveDown = false;
-	*/
-	 boolean moveLeft = false;
-	 boolean moveRight = false;
-	 boolean moveUp = false;
-	 boolean moveDown = false;
-	 
-	 boolean keyMove = false;
+    boolean hasPath = false;
 
-	public Entity(String name, int[] location, int hp, int hitBox, Game game, int oil, int insanity) throws IOException {
-		this.game = game;
-		this.oil = oil;
-		this.insanity = insanity;
+    int hp;
 
-		 x = location[0];
-         y = location[1];
-         
-         preX = x;
-         preY = y;
-         move = new Movement(this, game);
-        if(name == "player")
-         {
-        	type = "player";
-        	//isPlayer = true;
-			//this.centerX = x + windowX/2;
-			//this.centerY = y + windowY/2;
-        	visible = true;
-         }
+    int mana;
 
-        if(name == "enemy")
+    int damage;
+
+    int hitBox;
+
+    Entity target;
+
+    Movement move;
+
+    AI ai;
+
+    Game game;
+
+    int oil;
+    int insanity;
+
+    int respondX = 0;
+    int respondY = 0;
+    /*
+    static boolean moveLeft = false;
+    static boolean moveRight = false;
+    static boolean moveUp = false;
+    static boolean moveDown = false;
+    */
+    boolean moveLeft = false;
+    boolean moveRight = false;
+    boolean moveUp = false;
+    boolean moveDown = false;
+
+    boolean keyMove = false;
+
+    Item[] itemsList = new Item[4];
+    public Diablo.Inventory inventory = new Diablo.Inventory(12, 4, 3);
+
+    public Entity(String name, int[] location, int hp, int hitBox, Game game, int oil, int insanity, int mana) throws IOException
+    {
+        this.mana = mana;
+        this.game = game;
+        this.oil = oil;
+        this.insanity = insanity;
+
+        x = location[0];
+        y = location[1];
+
+        preX = x;
+        preY = y;
+        move = new Movement(this, game);
+        if (name == "player")
         {
-        	type = "enemy";
-        	
-        	int respondX = x;
-        	int respondY = y;
-
-        	move.isVisible();
-        	ai = new AI(this);
+            type = "player";
+            //isPlayer = true;
+            //this.centerX = x + windowX/2;
+            //this.centerY = y + windowY/2;
+            visible = true;
         }
-        
+
+        if (name == "enemy")
+        {
+            type = "enemy";
+
+            int respondX = x;
+            int respondY = y;
+
+            move.isVisible();
+            ai = new AI(this);
+        }
+
         target = this;
         this.hp = hp;
         this.hitBox = hitBox;
         FileReader reader = new FileReader(Game.root + "/resources/text/" + name + ".txt");
-	
 
-		 BufferedReader bufferedReader = new BufferedReader(reader);
 
-		//moveSpeed = Integer.parseInt(bufferedReader.readLine());
+        BufferedReader bufferedReader = new BufferedReader(reader);
 
-		 moveSpeed = 5;
-		 
-		
-	}
+        //moveSpeed = Integer.parseInt(bufferedReader.readLine());
 
-	public Entity(String name, int destinationX, int destinationY, int hitBox) throws IOException {
 
-		this.x = game.getEntityList().get(0).x;
+        moveSpeed = 5;
+    }
+
+    public Entity(String name, int destinationX, int destinationY, int hitBox) throws IOException
+    {
+
+        this.x = game.getEntityList().get(0).x;
         this.y = game.getEntityList().get(0).y;
 
         preX = x;
         preY = y;
-        
+
         move = new Movement(this, game);
 
-		clickedX = destinationX ;
-		clickedY = destinationY ;
+        clickedX = destinationX;
+        clickedY = destinationY;
 
-		newClick = true;
+        newClick = true;
 
-        if(name == "arrow")
+        if (name == "arrow")
         {
-        	type = "projectile";
-        	visible = true;
-        
-		
+            type = "projectile";
+            visible = true;
+
+
         }
-        if(name == "melee")
+        if (name == "melee")
         {
-        	type = "melee";
-        	visible = true;
-        
-		
+            type = "melee";
+            visible = true;
         }
-        
+
         this.hitBox = hitBox;
         FileReader reader = new FileReader(Game.root + "/resources/text/" + name + ".txt");
 
-		 BufferedReader bufferedReader = new BufferedReader(reader);
+        BufferedReader bufferedReader = new BufferedReader(reader);
 
-		 moveSpeed = Integer.parseInt(bufferedReader.readLine());
+        moveSpeed = Integer.parseInt(bufferedReader.readLine());
 
-		 damage = Integer.parseInt(bufferedReader.readLine());
+        damage = Integer.parseInt(bufferedReader.readLine());
 
-	}
-	
-	public Entity(Game game, String name, int x, int y) throws IOException {
-		this.game = game;
-		this.x = x;
+    }
+
+    public Entity(Game game, String name, int x, int y) throws IOException
+    {
+        this.game = game;
+        this.x = x;
         this.y = y;
 /*
         System.out.println("here");
@@ -203,12 +208,57 @@ public class Entity{
 			 }
 		 }
 		 */
-	}
-	
-	public void enableMovement()
-	{
-		move = new Movement(this, game);
-	}
+    }
 
-	public ArrayList<Entity> getEntityList(){return game.getEntityList();}
+    public void enableMovement()
+    {
+        move = new Movement(this, game);
+    }
+
+    public ArrayList<Entity> getEntityList()
+    {
+        return game.getEntityList();
+    }
+
+    public void setHP(int i)
+    {
+        this.hp = i;
+    }
+
+    public int getHP()
+    {
+        return this.hp;
+    }
+
+    public void setMana(int i)
+    {
+        this.mana = i;
+    }
+
+    public int getMana()
+    {
+        return this.mana;
+    }
+
+    public void addItem(int i, Item it)
+    {
+        this.itemsList[i] = it;
+    }
+
+    public Item getItem(int i)
+    {
+        return itemsList[i];
+    }
+
+    public void removeItem(int i)
+    {
+        this.itemsList[i] = null;
+    }
+
+    public void setMovespeed(double i)
+    {
+        moveSpeed = (int) Math.round(5 * i);
+        if (moveSpeed <= 0)
+            moveSpeed = 1;
+    }
 }

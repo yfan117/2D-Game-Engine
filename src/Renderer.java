@@ -1,15 +1,11 @@
 package Diablo;
 
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferInt;
+import java.awt.*;
+import java.awt.image.*;
 import java.io.File;
 import java.io.IOException;
+import java.nio.Buffer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +27,7 @@ class Renderer extends JPanel{
 	//static int resolutionY = 1080;
 	
 
-	BufferedImage image ;
+	BufferedImage image;
 	BufferedImage character;
 	BufferedImage tavern;
 	
@@ -85,10 +81,6 @@ class Renderer extends JPanel{
 			 //image = ImageIO.read(new File(repository +"dirt.png"));
 			 character = ImageIO.read(new File(repository + "sprite.png"));
 			 tavern = ImageIO.read(new File(repository + "tavern.png"));
-			
-			
-			
-			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -382,21 +374,144 @@ class Renderer extends JPanel{
 	
 	//static int zoom = 0;
 	
-	protected void paintComponent(Graphics g) {
+	protected void paintComponent(Graphics g)
+	{
 
-			super.paintComponent(g);
+		super.paintComponent(g);
 			//KeyboardControl.zoomRate++;
 			
-			g.drawImage(frameBuffer,
-						0 - KeyboardControl.zoomRate,
-						0 - KeyboardControl.zoomRate,
-						Game.windowX + KeyboardControl.zoomRate*2,
-						Game.windowY + KeyboardControl.zoomRate*2,
-						null);
-			
-		
-		
-			
+		g.drawImage(frameBuffer,
+				0 - KeyboardControl.zoomRate,
+				0 - KeyboardControl.zoomRate,
+				Game.windowX + KeyboardControl.zoomRate*2,
+				Game.windowY + KeyboardControl.zoomRate*2,
+				null);
+
+		//UI
+		g.setColor(Color.RED);
+		g.fillRect(25, 10, list.get(0).hp * 2, 20);
+		g.setColor(Color.BLUE);
+		g.fillRect(25, 40, list.get(0).mana, 20);
+
+		try
+		{
+			BufferedImage image = ImageIO.read(new File(Game.root + "/resources/images/playerHead.png"));
+
+			int color = image.getRGB(1, 1);
+			Image img = makeColorTransparent(image, new Color(color));
+			BufferedImage transImg = imageToBufferedImage(img);
+
+			g.drawImage(transImg, 25, 75, 75, 75, null);
+		}catch(Exception ex){ex.printStackTrace();}
+
+		//Inventory slots
+		g.setColor(Color.darkGray);
+		g.fillRect(((Diablo.Game.windowX/2)-100), (Diablo.Game.windowY - 50), 200, 50);
+		g.setColor(Color.LIGHT_GRAY);
+		for(int i = 0; i < 4; i++)
+		{
+			g.drawRect(((Diablo.Game.windowX/2)-99)+(i*50), Diablo.Game.windowY - 49, 48, 48);
 		}
-	
+		g.setColor(Color.WHITE);
+		for(int i = 0; i < 4; i++)
+		{
+			g.drawRect(((Diablo.Game.windowX/2)-98)+(i*50), Diablo.Game.windowY - 48, 46, 46);
+		}
+		g.setColor(Color.LIGHT_GRAY);
+		for(int i = 0; i < 4; i++)
+		{
+			g.drawRect(((Diablo.Game.windowX/2)-97)+(i*50), Diablo.Game.windowY - 47, 44, 44);
+		}
+
+		//Backpack slots
+		if(game.getEntityList().get(0).inventory.getInvOpen())
+		{
+			g.setColor(Color.darkGray);
+			g.fillRect(((Diablo.Game.windowX) - game.getEntityList().get(0).inventory.getCols() * 50), ((Diablo.Game.windowY / 2) - ((game.getEntityList().get(0).inventory.getRows() / 2) * 50)), game.getEntityList().get(0).inventory.getCols() * 50, game.getEntityList().get(0).inventory.getRows() * 50);
+			g.setColor(Color.LIGHT_GRAY);
+			for (int i = 0; i < game.getEntityList().get(0).inventory.getCols(); i++)
+			{
+				for (int j = 0; j < game.getEntityList().get(0).inventory.getRows(); j++)
+				{
+					g.drawRect(((((Diablo.Game.windowX) - game.getEntityList().get(0).inventory.getCols() * 50)) + (i * 50)), (((Diablo.Game.windowY / 2) - ((game.getEntityList().get(0).inventory.getRows() / 2) * 50)) + 1) + (j * 50), 48, 48);
+				}
+			}
+
+			//Backpack items
+			int counter = -1;
+			for (int i = 0; i < game.getEntityList().get(0).inventory.getRows(); i++)
+			{
+				for (int j = 0; j < game.getEntityList().get(0).inventory.getCols(); j++)
+				{
+					try
+					{
+						counter++;
+						BufferedImage img = game.getEntityList().get(0).inventory.getItemImage(counter);
+						g.drawImage(img, ((((Diablo.Game.windowX) - game.getEntityList().get(0).inventory.getCols() * 50) + 9) + (j * 50)), (((Diablo.Game.windowY / 2) - ((game.getEntityList().get(0).inventory.getRows() / 2) * 50)) + 9) + (i * 50), 32, 32, null);
+					}catch(Exception ex){}
+				}
+			}
+		}
+
+		//Spell slots
+		g.setColor(Color.DARK_GRAY);
+		g.fillRect(((Diablo.Game.windowX/2)-74), (Diablo.Game.windowY - 87), 148, 37);
+		g.setColor(Color.blue);
+		for(int i = 0; i < 4; i++)
+		{
+			g.drawRect(((Diablo.Game.windowX/2)-74)+(i*37), Diablo.Game.windowY - 86, 35, 35);
+		}
+		g.setColor(Color.CYAN);
+		for(int i = 0; i < 4; i++)
+		{
+			g.drawRect(((Diablo.Game.windowX/2)-73)+(i*37), Diablo.Game.windowY - 85, 33, 33);
+		}
+		g.setColor(Color.blue);
+		for(int i = 0; i < 4; i++)
+		{
+			g.drawRect(((Diablo.Game.windowX/2)-72)+(i*37), Diablo.Game.windowY - 84, 31, 31);
+		}
+
+		//Draw items
+		for(int i = 0; i < 4; i++)
+		{
+			try
+			{
+				BufferedImage img = game.getEntityList().get(0).getItem(i).getImage();
+				g.drawImage(img, ((Diablo.Game.windowX/2) - (90 - (i*50))), (Diablo.Game.windowY - 41), 32, 32, null);
+			}catch(Exception ex){}
+		}
+	}
+
+	private static BufferedImage imageToBufferedImage(Image image) {
+
+		BufferedImage bufferedImage = new BufferedImage(image.getWidth(null), image.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g2 = bufferedImage.createGraphics();
+		g2.drawImage(image, 0, 0, null);
+		g2.dispose();
+
+		return bufferedImage;
+
+	}
+
+	public static Image makeColorTransparent(BufferedImage im, final Color color) {
+		ImageFilter filter = new RGBImageFilter() {
+
+			// the color we are looking for... Alpha bits are set to opaque
+			public int markerRGB = color.getRGB() | 0xFF000000;
+
+			public final int filterRGB(int x, int y, int rgb) {
+				if ((rgb | 0xFF000000) == markerRGB) {
+					// Mark the alpha bits as zero - transparent
+					return 0x00FFFFFF & rgb;
+				} else {
+					// nothing to do
+					return rgb;
+				}
+			}
+		};
+
+		ImageProducer ip = new FilteredImageSource(im.getSource(), filter);
+		return Toolkit.getDefaultToolkit().createImage(ip);
+	}
 }
