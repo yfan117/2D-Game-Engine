@@ -469,6 +469,15 @@ class Renderer extends JPanel{
 
 	public void updateValue() {
 		System.out.println("");
+		
+		/*
+		try {
+			Thread.sleep(10);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		*/
 		renderReady = false;
 		this.layerFlag = true;
 		for(int i = 0; i< list.size(); i++) {

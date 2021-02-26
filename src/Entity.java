@@ -55,6 +55,10 @@ public class Entity{
 	 boolean hasDoneDmage = false;
 	 
 	 boolean hasPath = false;
+	 
+	 boolean newCheckPoint = true;
+	 
+	 double moveAngle;
 
 	 int hp;
 	 

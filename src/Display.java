@@ -75,40 +75,7 @@ public class Display{
 	public static void getDirection(Entity genericChar) {
 
 			//Entity genericChar = list.get(i);
-		  int differenceX = Math.abs(genericChar.x-genericChar.clickedX);
-		  int differenceY = Math.abs(genericChar.y-genericChar.clickedY);
-
-		  int acceptableDifference = 75;
-
-		  if((differenceX < acceptableDifference) && (genericChar.y < genericChar.clickedY)) {
-		   genericChar.south = true;
-		  }
-		  else if((differenceX < acceptableDifference) && (genericChar.y > genericChar.clickedY)) {
-		   genericChar.north = true;
-		  }
-		  else if((differenceY < acceptableDifference) && (genericChar.x < genericChar.clickedX)) {
-		   genericChar.east = true;
-		  }
-		  else if((differenceY < acceptableDifference) && (genericChar.x > genericChar.clickedX)) {
-		   genericChar.west = true;
-		  }
-		
-		  else if((differenceX >= acceptableDifference) && (genericChar.y < genericChar.clickedY) && (genericChar.x < genericChar.clickedX)) {
-		   genericChar.south = true;
-		   genericChar.east = true;
-		  }
-		  else if((differenceX >= acceptableDifference) && (genericChar.y < genericChar.clickedY) && (genericChar.x > genericChar.clickedX)) {
-		   genericChar.south = true;
-		   genericChar.west = true;
-		  }
-		  else if((differenceX >=  acceptableDifference) && (genericChar.y > genericChar.clickedY)&& (genericChar.x < genericChar.clickedX)) {
-		   genericChar.north = true;
-		   genericChar.east = true;
-		  }
-		  else if((differenceX >=  acceptableDifference) && (genericChar.y > genericChar.clickedY)&& (genericChar.x > genericChar.clickedX)) {
-		   genericChar.north = true;
-		   genericChar.west = true;
-		  }
+		  
 		  /*
 		   *
 		   * save this for testing purposes
@@ -118,31 +85,32 @@ public class Display{
 		  System.out.println("genericChar.west: "+genericChar.west);
 		  System.out.println("genericChar.east: "+genericChar.east);
 		  */
-		  if((genericChar.north == true) && (genericChar.west == true)) {
+		int angleDiff = 15;
+		  if((genericChar.moveAngle > 90 + angleDiff) && (genericChar.moveAngle < 180 - angleDiff)) {
 		   genericChar.picRank = 7;
 		  }
-		  else if((genericChar.north == true) && (genericChar.east == true)) {
+		  else if((genericChar.moveAngle > 0 + angleDiff) && (genericChar.moveAngle < 90 - angleDiff)) {
 		   genericChar.picRank = 1;
 		  }
-		  else if((genericChar.south == true) && (genericChar.west == true)) {
+		  else if((genericChar.moveAngle > 180 + angleDiff) && (genericChar.moveAngle < 270 - angleDiff)) {
 		   genericChar.picRank = 5;
 		  }
-		  else if((genericChar.south == true) && (genericChar.east == true)) {
+		  else if((genericChar.moveAngle > 270 + angleDiff) && (genericChar.moveAngle < 360 - angleDiff)) {
 		   genericChar.picRank = 3;
 		  }
-		  else if(genericChar.north == true) {
+		  else if((genericChar.moveAngle > 90 - angleDiff) && (genericChar.moveAngle < 90 + angleDiff)) {
 		   genericChar.picRank = 0;
 		  }
-		  else if(genericChar.south == true) {
+		  else if((genericChar.moveAngle > 270 - angleDiff) && (genericChar.moveAngle < 270 + angleDiff)) {
 		   genericChar.picRank = 4;
 		  }
-		  else if(genericChar.west == true) {
+		  else if((genericChar.moveAngle > 180 - angleDiff) && (genericChar.moveAngle < 180 + angleDiff)) {
 		   genericChar.picRank = 6;
 		  }
-		  else if(genericChar.east == true) {
+		  else if((genericChar.moveAngle < 0 + angleDiff) || (genericChar.moveAngle > 360 - angleDiff)) {
 		   genericChar.picRank = 2;
 		  }
-		  genericChar.directionCheck = false;
+		  //genericChar.directionCheck = false;
 	}
 
 	
@@ -150,8 +118,8 @@ public class Display{
 	
 			for(int i = 0; i< game.getEntityList().size(); i++) {
 				//if(list.get(i).directionCheck == true)
-				if(game.getEntityList().get(i).newClick == true) {
-					getDirection(game.getEntityList().get(i));
+				if(game.getEntityList().get(i).newCheckPoint == true) {
+					//getDirection(game.getEntityList().get(i));
 				}
 			}
 			

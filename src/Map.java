@@ -59,7 +59,8 @@ public class Map{
 						
 				image = ImageIO.read(new File(Game.root + "/resources/images/" +obsName +"Floor.png"));
 				
-				
+				obsLocationX = obsLocationX - 100;
+				obsLocationY = obsLocationY - 100;
 				for(int y = 0; y < image.getHeight(); y++)
 				{
 					for(int x = 0; x < image.getWidth(); x++)

@@ -92,7 +92,7 @@ public class MouseControl implements MouseListener {
 					player.south = false;
 					player.west = false;
 					player.east = false;
-
+					player.newCheckPoint = true;
 
 					player.directionCheck = true;
 
