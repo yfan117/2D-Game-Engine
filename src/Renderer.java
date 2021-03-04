@@ -61,8 +61,8 @@ class Renderer extends JPanel{
 	int windowX;
 	int windowY;
 
-	int picOrder = 0;
-	int picTimer = 0;
+	//int picOrder = 0;
+	//int picTimer = 0;
 	
 	private ArrayList <Entity> list;
 	private ArrayList<Entity> projectile;
@@ -343,7 +343,21 @@ class Renderer extends JPanel{
 							int colorCode = 0;
 							if(current.type != "")
 							{
-								colorCode =  current.imageData[current.picX * current.picCounter + x + ((current.picY * current.picRank + y) * current.spriteWidth)];
+								//System.out.println(current.state);
+								//System.out.println(current.picX * current.picCounter + x + ((current.picY * current.picRank + y) * current.spriteWidth));
+
+								
+								try {
+									colorCode =  current.imageData[current.picX * current.picCounter + x + ((current.picY * current.picRank + y) * current.spriteWidth)];
+								}
+								catch(ArrayIndexOutOfBoundsException e)
+								{
+									System.out.println(current.state +"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+									System.out.println(current.picX * current.picCounter + x + ((current.picY * current.picRank + y) * current.spriteWidth));
+									break;
+								}
+								
+								
 
 							}
 							else
@@ -373,7 +387,14 @@ class Renderer extends JPanel{
 								}
 								else
 								{
-									fbData1[resolutionX/2 + x +(current.x - cameraX) + (resolutionY/2 + y+(current.y - cameraY)) * resolutionX] = colorCode;
+									if(current.type != "") 
+									{
+										fbData1[resolutionX/2 + x - current.picX/2 + (current.x - cameraX) + (resolutionY/2 + y +(current.y - cameraY - current.picY/2)) * resolutionX] = colorCode;
+									}
+									else
+									{
+										fbData1[resolutionX/2 + x +(current.x - cameraX) + (resolutionY/2 + y+(current.y - cameraY)) * resolutionX] = colorCode;
+									}
 								}
 							
 					
@@ -469,6 +490,7 @@ class Renderer extends JPanel{
 
 	public void updateValue() {
 		System.out.println("");
+		System.out.println("");
 		
 		/*
 		try {
@@ -480,32 +502,42 @@ class Renderer extends JPanel{
 		*/
 		renderReady = false;
 		this.layerFlag = true;
+		
+		Entity current;
 		for(int i = 0; i< list.size(); i++) {
 			
-		if((list.get(i).x != list.get(i).preX) || (list.get(i).y != list.get(i).preY)) 
-		{
-			
-			list.get(i).timeCounter ++;
-			
-			if(list.get(i).timeCounter == 2)
+		//if((list.get(i).x != list.get(i).preX) || (list.get(i).y != list.get(i).preY)) 
+			current = list.get(i);
+			if(current.state == "run") 
 			{
-				list.get(i).timeCounter = 0;
-				list.get(i).picCounter ++;
+			
+				current.updateAnimationData(current.run);
+			
+				if(list.get(i).picCounter < list.get(i).numOfFrame) 
+				{
+					list.get(i).picCounter++;
+				}
+				else
+				{
+					list.get(i).picCounter = 0;
+				}
 				
-				if(list.get(i).picCounter == 19) 
+			
+			}
+			else if(current.state == "idle")
+			{
+				current.updateAnimationData(current.idle);
+				
+				if(list.get(i).picCounter < list.get(i).numOfFrame) 
+				{
+					list.get(i).picCounter++;
+				}
+				else
 				{
 					list.get(i).picCounter = 0;
 				}
 			}
-		
-		}
-		else {
-			list.get(i).picCounter = 0;
-		}
-		
-		
-			list.get(i).preX = list.get(i).x;
-			list.get(i).preY = list.get(i).y;
+
 		
 		}
 		//System.out.println("1");

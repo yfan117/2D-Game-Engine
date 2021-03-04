@@ -29,7 +29,11 @@ public class Display{
 		frame.setSize(game.windowX, game.windowY);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLocationRelativeTo(null);
+	
 		render.addMouseListener(new MouseControl(this.game));
+		
+		
+		
 		frame.addKeyListener(new KeyboardControl(this.game));
 		/*
 		 * Code to create "visible layers", which displays
@@ -84,8 +88,8 @@ public class Display{
 		  System.out.println("genericChar.south: "+genericChar.south);
 		  System.out.println("genericChar.west: "+genericChar.west);
 		  System.out.println("genericChar.east: "+genericChar.east);
-		  */
-		int angleDiff = 15;
+		  
+		double angleDiff = 15;
 		  if((genericChar.moveAngle > 90 + angleDiff) && (genericChar.moveAngle < 180 - angleDiff)) {
 		   genericChar.picRank = 7;
 		  }
@@ -111,6 +115,20 @@ public class Display{
 		   genericChar.picRank = 2;
 		  }
 		  //genericChar.directionCheck = false;
+		   * */
+	
+		/*
+		System.out.println("angle is: " +genericChar.moveAngle);
+		System.out.println(genericChar.moveAngle / 22.5);
+		System.out.println(genericChar.picRank);
+		System.out.println();
+		*/
+		genericChar.picRank = (int) Math.round(genericChar.moveAngle / 22.5);
+		
+		if(genericChar.picRank == 16)
+		{
+			genericChar.picRank = 15;
+		}
 	}
 
 	
@@ -118,8 +136,9 @@ public class Display{
 	
 			for(int i = 0; i< game.getEntityList().size(); i++) {
 				//if(list.get(i).directionCheck == true)
-				if(game.getEntityList().get(i).newCheckPoint == true) {
-					//getDirection(game.getEntityList().get(i));
+				if(game.getEntityList().get(i).newClick == true) 
+				{
+					getDirection(game.getEntityList().get(i));
 				}
 			}
 			

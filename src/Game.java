@@ -26,11 +26,14 @@ public class Game {
 	}
 	public static GameState gameState;
 
-	//static int windowX = 1280;
-	//static int windowY = 720;
+	//static int windowX = 1920;
+	//static int windowY = 1080;
 	
-	static int windowX = 1920/2;
-	static int windowY = 1080;
+	static int windowX = 1280;
+	static int windowY = 720;
+	
+	//static int windowX = 1920/2;
+	//static int windowY = 1080;
 
 	static int centerX = windowX /2 ;
 	static int centerY = windowY /2 ;
@@ -80,9 +83,16 @@ public class Game {
 
 		
 
-		 list.add(new Entity("player", new int[]{500, 500}, 100, 80, this, 100, 0));
+		 list.add(new Entity("player", "wizard", new int[]{500, 500}, 100, 80, this, 100, 0));
 		 //list.add(new Entity("enemy", new int[]{500, 500}, 100, 80, this, 100, 0));
-		 //list.add(new Entity("friend", new int[]{600, 500}, 100, 80, this, 100, 0));
+		 /*
+		 list.add(new Entity("npc", "lucy", new int[]{1700, 1000}, 100, 80, this, 100, 0));
+		 list.add(new Entity("npc", "lucy", new int[]{1500, 1200}, 100, 80, this, 100, 0));
+	
+		 
+		 list.get(1).moveAngle = 220;
+		 list.get(2).moveAngle = 330;
+		 */
 		 //list.add(new Entity("player2", new int[]{200, 200}, 100, 80, this, 100, 0));
 		 //list.add(new Entity("enemy", new int[]{10000, 10000}, 100, 80, this, 100, 0));
 		 

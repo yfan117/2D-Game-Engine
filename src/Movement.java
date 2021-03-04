@@ -159,6 +159,7 @@ public class Movement{
 				//obsY = current.y;
 				current.newCheckPoint = false;
 				//System.out.println(obsX +" " +obsY);
+				/*
 				int angleDiff = 15;
 				  if((current.moveAngle > 90 + angleDiff) && (current.moveAngle < 180 - angleDiff)) {
 				   current.picRank = 7;
@@ -184,6 +185,7 @@ public class Movement{
 				  else if((current.moveAngle < 0 + angleDiff) || (current.moveAngle > 360 - angleDiff)) {
 				   current.picRank = 2;
 				  }
+				  */
 			}
 			//current.clickedX = 100;
 			//current.clickedX = 100;
@@ -327,7 +329,8 @@ public class Movement{
 				if(checkPoint.size() == 1)
 				{
 					current.newCheckPoint = false;
-					//current.newCheckPoint = false;
+					current.state = "idle";
+					current.picCounter = 0;
 					current.newClick = false;
 					current.hasPath = false;
 				}
@@ -865,7 +868,7 @@ public class Movement{
 					
 					if(grid.size() == 0)
 					{
-						System.out.println("ERROR, unknown error by passed");
+						System.out.println("ERROR, unknown error bypassed");
 						break;
 					}
 					shortestX = grid.get(0).x;

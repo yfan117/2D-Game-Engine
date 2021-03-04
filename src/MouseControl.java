@@ -3,17 +3,37 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Timer;
 
 import javax.swing.SwingUtilities;
 public class MouseControl implements MouseListener {
 	private Game game;
 	private Movement movement;
 	Entity player;
+	
+	public void constantCheck()
+	{
+		Timer time = new Timer();
+		//time.scheduleAtFixedRate(, 0, 30);
+		
+	}
 	public MouseControl(Game game)
 	{
 		this.game = game;
 		player = game.getEntityList().get(0);
 		movement = new Movement(player, game);
+		mouse1 = this;
+	}
+	
+	MouseControl mouse1;
+	boolean isSecond = false;
+	public MouseControl(Game game, MouseControl mouse1)
+	{
+		isSecond = true;
+		this.game = game;
+		player = game.getEntityList().get(0);
+		movement = new Movement(player, game);
+		this.mouse1 = mouse1;
 	}
 	//public MouseControl(Movement movement){this.movement = movement;}
 
@@ -23,12 +43,20 @@ public class MouseControl implements MouseListener {
 
 	}
 
+	boolean isPressed = false;
 	@Override
 	public void mousePressed(MouseEvent e) {
 		// TODO Auto-generated method stub
-
+		
+		//if(isSecond == false)
+		{
+		isPressed = true;
+		
+		//while(isPressed == true)
+		{
+			System.out.println("here1");
 		if(SwingUtilities.isLeftMouseButton(e)) {
-
+			System.out.println("here2");
 			//System.out.println("left click");
 
 			//if(outBound(e.getX(), e.getY(), player) == false)
@@ -86,29 +114,26 @@ public class MouseControl implements MouseListener {
 				
 				if(movement.isObstacles(player.clickedX, player.clickedY) == false)
 				{
-					player.newClick = true;
-
-					player.north = false;
-					player.south = false;
-					player.west = false;
-					player.east = false;
-					player.newCheckPoint = true;
-
-					player.directionCheck = true;
+			
+					player.newClick = false;
+					player.newCheckPoint = false;
 
 					player.target = player;
 
 					//System.out.println(Math.sqrt(Math.pow(player.clickedX - 105, 2)+Math.pow(player.clickedY - 95, 2)));
 					//System.out.println(Math.sqrt(Math.pow(player.clickedX - 95, 2)+Math.pow(player.clickedY - 95, 2)));
 
-
-
+					
 					player.move.nodeIndex = 1;
 					player.move.checkPoint = new ArrayList<Node>();
 					player.move.usedGrid   = new ArrayList<Node>();
 					player.move.checkPoint.add(new Node(player.x, player.y));
 					player.move.pathFind();
+					player.newClick = true;
+					player.newCheckPoint = true;
 					player.hasPath = true;
+					player.state = "run";
+					//player.picCounter = 0;
 					
 					/*
 					try {
@@ -119,9 +144,7 @@ public class MouseControl implements MouseListener {
 					}
 					*/
 				}
-				
-				
-
+		
 
 			}
 		}
@@ -232,12 +255,15 @@ public class MouseControl implements MouseListener {
 				
 			}
 		}
-		
+		}
+		}
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		// TODO Auto-generated method stub
+		System.out.println("released");
+		mouse1.isPressed = false;
 		
 	}
 

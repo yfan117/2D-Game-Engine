@@ -92,62 +92,88 @@ public class Entity{
 	 
 	 boolean keyMove = false;
 	 
+	 String state;
+	 
 	int layerY;
 	int[] imageData;
 	int picX;
 	int picY;
 	int spriteWidth;
-
-	public Entity(String name, int[] location, int hp, int hitBox, Game game, int oil, int insanity) throws IOException {
+	int numOfFrame;
+	//int frameTiming;
+	
+	Animation idle;
+	Animation run;
+	
+	String characterName;
+	
+	public void updateAnimationData(Animation current)
+	{
+		imageData = current.imageData;
+		picX = current.picWidth;
+		picY = current.picHeight;
+		spriteWidth = current.spritWidth;
+		numOfFrame = current.numOfFrame;
+	}
+	
+	public Entity(String type, String name, int[] location, int hp, int hitBox, Game game, int oil, int insanity) throws IOException {
 		this.game = game;
-		this.oil = oil;
-		this.insanity = insanity;
 
 		 x = location[0];
          y = location[1];
          
          preX = x;
          preY = y;
-         move = new Movement(this, game);
-         
-         System.out.println(name);
-         this.imageData = Renderer.getImageData(name);
-         
-        if((name == "player"))
+
+         this.type = type;
+         characterName = name;
+        if(type == "player")
          {
-        	type = "player";
+        	
         	//isPlayer = true;
 			//this.centerX = x + windowX/2;
 			//this.centerY = y + windowY/2;
         	visible = true;
+        	//move = new Movement(this, game);
+        	enableMovement();
          }
         else
         {
-        	type = name;
+        	
         	
         	respondX = x;
         	respondY = y;
 
-        	move.isVisible();
+        	//move.isVisible();
         	ai = new AI(this, game);
         }
         
         target = this;
         this.hp = hp;
         this.hitBox = hitBox;
-        FileReader reader = new FileReader(Game.root + "/resources/text/" + name + ".txt");
-	
-
+         FileReader reader = new FileReader(Game.root + "/resources/text/" + name + ".txt");
 		 BufferedReader bufferedReader = new BufferedReader(reader);
 
 		 layerY = Integer.parseInt(bufferedReader.readLine());
+		 /*
 		 picX = Integer.parseInt(bufferedReader.readLine());
 		 picY = Integer.parseInt(bufferedReader.readLine());
 		 spriteWidth = Integer.parseInt(bufferedReader.readLine());
+		 spriteFrame = Integer.parseInt(bufferedReader.readLine());
+		 frameTiming = Integer.parseInt(bufferedReader.readLine());
+		 */
+		 //System.out.println(name);
+	     idle = new Animation(Renderer.getImageData(name), 
+				        	  Integer.parseInt(bufferedReader.readLine()),
+				        	  Integer.parseInt(bufferedReader.readLine()),
+				        	  Integer.parseInt(bufferedReader.readLine()),
+				        	  Integer.parseInt(bufferedReader.readLine()));
 		 
 		// System.out.printf("%d %d %d \n", layerY, picX, picY);
 
 		 moveSpeed = 5;
+		 
+		 state = "idle";
 		 
 		
 	}
@@ -208,8 +234,16 @@ public class Entity{
  
 	}
 	
-	public void enableMovement()
+	public void enableMovement() throws NumberFormatException, IOException
 	{
+		 FileReader reader = new FileReader(Game.root + "/resources/text/" + characterName + "@run.txt");
+		 BufferedReader bufferedReader = new BufferedReader(reader);
+
+	     run = new Animation(Renderer.getImageData(characterName + "@run"), 
+				        	 Integer.parseInt(bufferedReader.readLine()),
+				        	 Integer.parseInt(bufferedReader.readLine()),
+				        	 Integer.parseInt(bufferedReader.readLine()),
+				        	 Integer.parseInt(bufferedReader.readLine()));	
 		move = new Movement(this, game);
 	}
 	
