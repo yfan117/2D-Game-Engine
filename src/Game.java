@@ -83,7 +83,7 @@ public class Game {
 
 		
 
-		 list.add(new Entity("player", "wizard", new int[]{500, 500}, 100, 80, this, 100, 0));
+		 list.add(new Entity("player", "wizard", new int[]{10, 10}, 100, 80, this, 100, 0));
 		 //list.add(new Entity("enemy", new int[]{500, 500}, 100, 80, this, 100, 0));
 		 /*
 		 list.add(new Entity("npc", "lucy", new int[]{1700, 1000}, 100, 80, this, 100, 0));

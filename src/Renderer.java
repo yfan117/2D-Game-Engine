@@ -272,20 +272,36 @@ class Renderer extends JPanel{
 		}
 			
 		
-	
+	static int cameraControlX;
+	static int cameraControlY;
 	public void tempToFrame()
 	{
+		cameraControlX = list.get(0).x;
+		cameraControlY = list.get(0).y;
 		
-		
+		cameraX = cameraControlX - resolutionX/2;
+		cameraY = cameraControlY - resolutionY/2;
 	
 		//set camera cord to be player cord
-		cameraX = list.get(0).x;
-		cameraY = list.get(0).y;
+		/*
+		cameraX = list.get(0).x - resolutionX/2;
+		cameraY = list.get(0).y - resolutionY/2;
 		
+		*/
+		if(cameraX < 0)
+		{
+			cameraX = 0;
+
+		}
 		
-		
-		int fbStartX = resolutionX/2 - cameraX;
-		int fbStartY = resolutionY/2 - cameraY;
+		if(cameraY < 0)
+		{
+			cameraY = 0;
+
+		}
+		//System.out.println(cameraX +" " +cameraY);
+		int fbStartX = resolutionX/2 - cameraControlX;
+		int fbStartY = resolutionY/2 - cameraControlY;
 		
 		if(fbStartX < 0)
 		{
@@ -311,9 +327,15 @@ class Renderer extends JPanel{
 			{
 		
 				//if((cameraX + x + ((cameraY + y) * mapWidth) < worldBuffer.length))
-				if(((cameraX + x) < mapWidth) && ((cameraY + y) < mapHeight))
+				if((cameraX + x < mapWidth) && (cameraY + y < mapHeight))
 				{
-					fbData1[x + y * resolutionX] = worldBuffer[cameraX + x + ((cameraY + y) * mapWidth)];
+					/*
+					int tempX = resolutionX/2 - fbStartX;
+					int tempY = resolutionY/2 - fbStartY;
+					*/
+					//System.out.println(cameraX +" " +cameraY);
+					int i = 0;
+					fbData1[x + y * resolutionX] = worldBuffer[cameraX + x -fbStartX + ((cameraY - fbStartY + y) * mapWidth)];
 					//System.out.println(worldBuffer[cameraX + x + ((cameraY + y) * mapWidth)]);
 				}
 						
@@ -352,7 +374,7 @@ class Renderer extends JPanel{
 								}
 								catch(ArrayIndexOutOfBoundsException e)
 								{
-									System.out.println(current.state +"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+									System.out.println(current.state +"!!!!!!!!!! UNEXPLAINED ERROR !!!!!!!!!!");
 									System.out.println(current.picX * current.picCounter + x + ((current.picY * current.picRank + y) * current.spriteWidth));
 									break;
 								}
@@ -368,20 +390,20 @@ class Renderer extends JPanel{
 							
 							if( colorCode != 0)
 							{
-								if((resolutionX/2 + x +(current.x - cameraX)) >= resolutionX)
+								if((resolutionX/2 + x +(current.x - cameraControlX)) >= resolutionX)
 								{
 									break;
 								}
 
-								if(resolutionY/2 + y+(current.y - cameraY) >= resolutionY)
+								if(resolutionY/2 + y+(current.y - cameraControlY) >= resolutionY)
 								{
 									break;
 								}
 								
 								
-								if(((resolutionX/2 + x +(current.x  - cameraX)) <= 0) 
+								if(((resolutionX/2 + x +(current.x  - cameraControlX)) <= 0) 
 										|| 
-									(resolutionY/2 + y+(current.y - cameraY) <= 0))
+									(resolutionY/2 + y+(current.y - cameraControlY) <= 0))
 								{
 								
 								}
@@ -389,11 +411,11 @@ class Renderer extends JPanel{
 								{
 									if(current.type != "") 
 									{
-										fbData1[resolutionX/2 + x - current.picX/2 + (current.x - cameraX) + (resolutionY/2 + y +(current.y - cameraY - current.picY/2)) * resolutionX] = colorCode;
+										fbData1[resolutionX/2 + x - current.picX/2 + (current.x - cameraControlX) + (resolutionY/2 + y +(current.y - cameraControlY - current.picY/2)) * resolutionX] = colorCode;
 									}
 									else
 									{
-										fbData1[resolutionX/2 + x +(current.x - cameraX) + (resolutionY/2 + y+(current.y - cameraY)) * resolutionX] = colorCode;
+										fbData1[resolutionX/2 + x +(current.x - cameraControlX) + (resolutionY/2 + y+(current.y - cameraControlY)) * resolutionX] = colorCode;
 									}
 								}
 							
@@ -489,8 +511,8 @@ class Renderer extends JPanel{
 	}
 
 	public void updateValue() {
-		System.out.println("");
-		System.out.println("");
+		//System.out.println("");
+
 		
 		/*
 		try {
@@ -541,7 +563,7 @@ class Renderer extends JPanel{
 		
 		}
 		//System.out.println("1");
-		//showObs();
+		showObs();
 		LayerThread.go = true;
 		tempToFrame();
 		layerOrder();
