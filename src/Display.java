@@ -30,9 +30,10 @@ public class Display{
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLocationRelativeTo(null);
 	
-		render.addMouseListener(new MouseControl(this.game));
+		MouseControl mouseControl = new MouseControl(this.game);
+		render.addMouseListener(mouseControl);
 		
-		
+		render.addMouseMotionListener(mouseControl);
 		
 		frame.addKeyListener(new KeyboardControl(this.game));
 		/*

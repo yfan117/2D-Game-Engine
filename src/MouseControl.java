@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.awt.PointerInfo;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Timer;
@@ -11,13 +12,14 @@ import java.util.TimerTask;
 
 import javax.swing.SwingUtilities;
 
-public class MouseControl implements MouseListener {
+public class MouseControl implements MouseListener, MouseMotionListener {
 	private Game game;
 	private Movement movement;
 	Entity player;
 	
 
 	boolean pathFinding = false;
+	
 	public TimerTask constandCheck = new TimerTask()
 	{
 		
@@ -54,14 +56,14 @@ public class MouseControl implements MouseListener {
 				}
 
 				if(eY < Game.centerY ) {
-					player.clickedY = Renderer.cameraControlX- (Game.centerY - eY);
+					player.clickedY = Renderer.cameraControlY- (Game.centerY - eY);
 				}
 				else if(eY > Game.centerY ) {
-					player.clickedY = Renderer.cameraControlX  + (eY - Game.centerY);
+					player.clickedY = Renderer.cameraControlY  + (eY - Game.centerY);
 				}
 				
-				System.out.println(player.x +" " +player.y);
-				System.out.println(player.clickedX +" " +player.clickedY);
+				//System.out.println(player.x +" " +player.y);
+				//System.out.println(player.clickedX +" " +player.clickedY);
 				 
 				
 				//int offsetX = Renderer.resolutionX / Game.windowX;
@@ -152,7 +154,9 @@ public class MouseControl implements MouseListener {
 
 	}
 
+
 	boolean isPressed = false;
+	//int 
 	@Override
 	public void mousePressed(MouseEvent e) {
 		// TODO Auto-generated method stub
@@ -164,94 +168,21 @@ public class MouseControl implements MouseListener {
 		if(SwingUtilities.isLeftMouseButton(e)) 
 		{
 	
-			isPressed = true;
+			
+			
 			int eX = e.getX();
 			int eY = e.getY();
 			
-			
-
-			player.collision = false;
-			//System.out.println("clicked " +eX + " " + eY);
-
-			
-			if(eX < Game.centerX ) {
-				player.clickedX = Renderer.cameraControlX- (Game.centerX - eX);
-			}
-			else if(eX > Game.centerX ) {
-				player.clickedX = Renderer.cameraControlX + (eX - Game.centerX);
-			}
-
-			if(eY < Game.centerY ) {
-				player.clickedY = Renderer.cameraControlX- (Game.centerY - eY);
-			}
-			else if(eY > Game.centerY ) {
-				player.clickedY = Renderer.cameraControlX  + (eY - Game.centerY);
-			}
-			
-			System.out.println(player.x +" " +player.y);
-			System.out.println(player.clickedX +" " +player.clickedY);
-			 
-			
-			//int offsetX = Renderer.resolutionX / Game.windowX;
-			//int offsetY = Renderer.resolutionY / Game.windowY;
-			/*
-			int offsetX = Game.windowX / eX * Renderer.resolutionX;
-			int offsetY = Game.windowY / eY * Renderer.resolutionY;
-			
-			
-			if(eX < Game.centerX ) {
-				player.clickedX = Renderer.cameraX - (Game.centerX- eX) * offsetX;
-			}
-			else if(eX > Game.centerX ) {
-				player.clickedX = Renderer.cameraX + (offsetX - Renderer.resolutionX/2);
-			}
-
-			if(eY < Game.centerY ) {
-				player.clickedY = Renderer.cameraY - (Game.centerX - eY) * offsetX;
-			}
-			else if(eY > Game.centerY ) {
-				player.clickedY = Renderer.cameraY + (eY - Game.centerY) * offsetX;
-			}
-			*/
-			player.clickedX =Math.round(player.clickedX/5)*5;
-			player.clickedY =Math.round(player.clickedY/5)*5;
-			
-			if(movement.isObstacles(player.clickedX, player.clickedY) == false)
+			if((eX > 0) && (eY >0))
 			{
-				pathFinding = true;
-				player.hasPath = true;
-				player.newClick = false;
-				player.newCheckPoint = false;
-		
-
-				player.target = player;
-
-				//System.out.println(Math.sqrt(Math.pow(player.clickedX - 105, 2)+Math.pow(player.clickedY - 95, 2)));
-				//System.out.println(Math.sqrt(Math.pow(player.clickedX - 95, 2)+Math.pow(player.clickedY - 95, 2)));
-
-				
-				player.move.nodeIndex = 1;
-				player.move.checkPoint = new ArrayList<Node>();
-				player.move.usedGrid   = new ArrayList<Node>();
-				player.move.checkPoint.add(new Node(player.x, player.y));
-				player.move.pathFind();
-				player.state = "run";
-				pathFinding = false;
-				player.newClick = true;
-				player.newCheckPoint = true;
-				
-				player.state = "run";
-				//player.picCounter = 0;
-				
-				/*
-				try {
-					game.sender.sending();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				*/
+				isPressed = true;
+				player.collision = false;
 			}
+
+			
+			System.out.println("clicked " +eX + " " + eY);
+
+			
 	
 
 		}
@@ -386,6 +317,123 @@ public class MouseControl implements MouseListener {
 
 	@Override
 	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseDragged(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+		//if(pathFinding == false)
+		{
+			//player.clickedX = e.getX() + player.x;
+			//player.clickedY = e.getY() + player.y;
+			/*
+			PointerInfo a = MouseInfo.getPointerInfo();
+			Point point = new Point(a.getLocation());
+			SwingUtilities.convertPointFromScreen(point, e.getComponent());
+			*/
+			/*
+			Point p = MouseInfo.getPointerInfo().getLocation();
+			System.out.println(p.x);
+			System.out.println(p.y);
+			int eX = p.x;
+			int eY = p.y;
+			*/
+			int eX = e.getX();
+			int eY = e.getY();
+			
+
+			player.collision = false;
+			//System.out.println("clicked " +eX + " " + eY);
+
+			
+			if(eX < Game.centerX ) {
+				player.clickedX = Renderer.cameraControlX- (Game.centerX - eX);
+			}
+			else if(eX > Game.centerX ) {
+				player.clickedX = Renderer.cameraControlX + (eX - Game.centerX);
+			}
+
+			if(eY < Game.centerY ) {
+				player.clickedY = Renderer.cameraControlY- (Game.centerY - eY);
+			}
+			else if(eY > Game.centerY ) {
+				player.clickedY = Renderer.cameraControlY  + (eY - Game.centerY);
+			}
+			
+			//System.out.println(player.x +" " +player.y);
+			//System.out.println(player.clickedX +" " +player.clickedY);
+			 
+			
+			//int offsetX = Renderer.resolutionX / Game.windowX;
+			//int offsetY = Renderer.resolutionY / Game.windowY;
+			/*
+			int offsetX = Game.windowX / eX * Renderer.resolutionX;
+			int offsetY = Game.windowY / eY * Renderer.resolutionY;
+			
+			
+			if(eX < Game.centerX ) {
+				player.clickedX = Renderer.cameraX - (Game.centerX- eX) * offsetX;
+			}
+			else if(eX > Game.centerX ) {
+				player.clickedX = Renderer.cameraX + (offsetX - Renderer.resolutionX/2);
+			}
+
+			if(eY < Game.centerY ) {
+				player.clickedY = Renderer.cameraY - (Game.centerX - eY) * offsetX;
+			}
+			else if(eY > Game.centerY ) {
+				player.clickedY = Renderer.cameraY + (eY - Game.centerY) * offsetX;
+			}
+			*/
+			player.clickedX =Math.round(player.clickedX/5)*5;
+			player.clickedY =Math.round(player.clickedY/5)*5;
+			
+			if(movement.isObstacles(player.clickedX, player.clickedY) == false)
+			{
+				pathFinding = true;
+				player.hasPath = true;
+				player.newClick = false;
+				player.newCheckPoint = false;
+		
+
+				player.target = player;
+
+				//System.out.println(Math.sqrt(Math.pow(player.clickedX - 105, 2)+Math.pow(player.clickedY - 95, 2)));
+				//System.out.println(Math.sqrt(Math.pow(player.clickedX - 95, 2)+Math.pow(player.clickedY - 95, 2)));
+
+				
+				player.move.nodeIndex = 1;
+				player.move.checkPoint = new ArrayList<Node>();
+				player.move.usedGrid   = new ArrayList<Node>();
+				player.move.checkPoint.add(new Node(player.x, player.y));
+				player.move.pathFind();
+				player.state = "run";
+				pathFinding = false;
+				player.newClick = true;
+				player.newCheckPoint = true;
+				
+				player.state = "run";
+				//player.picCounter = 0;
+				
+				/*
+				try {
+					game.sender.sending();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				*/
+			}
+	
+
+		}
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent e) {
 		// TODO Auto-generated method stub
 		
 	}
