@@ -60,6 +60,7 @@ public class Display{
 				break;
 			case 1: //game state
 				cards.show(visiblePanel, "game");
+				game.map.playMapMusic();
 				currentPanel = 1;
 				break;
 			case 2: //pause state

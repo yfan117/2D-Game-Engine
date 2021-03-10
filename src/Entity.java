@@ -88,11 +88,12 @@ public class Entity
 
     boolean keyMove = false;
 
-    Item[] itemsList = new Item[4];
-    public Diablo.Inventory inventory = new Diablo.Inventory(12, 4, 3);
+    public Diablo.Inventory inventory;
 
-    public Entity(String name, int[] location, int hp, int hitBox, Game game, int oil, int insanity, int mana) throws IOException
+    public Entity(String name, int[] location, int hp, int hitBox, Game game, int oil, int insanity, int mana) throws IOException//characters
     {
+        inventory = new Diablo.Inventory();
+
         this.mana = mana;
         this.game = game;
         this.oil = oil;
@@ -238,21 +239,6 @@ public class Entity
     public int getMana()
     {
         return this.mana;
-    }
-
-    public void addItem(int i, Item it)
-    {
-        this.itemsList[i] = it;
-    }
-
-    public Item getItem(int i)
-    {
-        return itemsList[i];
-    }
-
-    public void removeItem(int i)
-    {
-        this.itemsList[i] = null;
     }
 
     public void setMovespeed(double i)

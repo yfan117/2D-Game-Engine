@@ -21,17 +21,6 @@ public class Game
     //this is only works for Fan
     static final public String root = Paths.get(System.getProperty("user.dir")).getParent() + "/RPG";
 
-    //GameState enum
-    public enum GameState
-    {
-        MAINMENU_STATE,
-        MAINGAME_STATE,
-        PAUSE_STATE,
-        DEAD_STATE
-    }
-
-    public static GameState gameState;
-
     static int windowX = 1280;
     static int windowY = 720;
 
@@ -72,10 +61,7 @@ public class Game
 
     private KeyboardControl keyboard = new KeyboardControl(this);
 
-    public Diablo.KeyboardControl getKeyboardControl()
-    {
-        return keyboard;
-    }
+    public Diablo.KeyboardControl getKeyboardControl() { return keyboard; }
 
     private ArrayList<Entity> obstacle = new ArrayList<Entity>();
 
@@ -105,7 +91,7 @@ public class Game
 
         try
         {
-            map = new Map("backGround", this);
+            map = new Map("city", this);
         } catch (IOException e1)
         {
             // TODO Auto-generated catch block
@@ -133,32 +119,27 @@ public class Game
         mouse = new MouseControl(this);
 
         //temporary for testing
-        list.get(0).addItem(0, new HealthPotion(this));
-        list.get(0).addItem(1, new HealthPotion(this));
-        list.get(0).addItem(2, new ManaPotion(this));
-        list.get(0).addItem(3, new SpeedPotion(this));
-        list.get(0).inventory.addItem(new HealthPotion(this), 0);
-        list.get(0).inventory.addItem(new HealthPotion(this), 1);
-        list.get(0).inventory.addItem(new HealthPotion(this), 2);
-        list.get(0).inventory.addItem(new ManaPotion(this), 3);
-        list.get(0).inventory.addItem(new ManaPotion(this), 4);
-        list.get(0).inventory.addItem(new ManaPotion(this), 5);
-        list.get(0).inventory.addItem(new SpeedPotion(this), 6);
-        list.get(0).inventory.addItem(new SpeedPotion(this), 7);
-        list.get(0).inventory.addItem(new SpeedPotion(this), 8);
-        list.get(0).inventory.addItem(new HealthPotion(this), 9);
-        list.get(0).inventory.addItem(new ManaPotion(this), 10);
-        list.get(0).inventory.addItem(new SpeedPotion(this), 11);
+        list.get(0).inventory.setInventoryItem(0, new ManaPotion(this, 10));
+        list.get(0).inventory.setInventoryItem(1, new ManaPotion(this, 1));
+        list.get(0).inventory.setInventoryItem(2, new ManaPotion(this, 1));
+        list.get(0).inventory.setInventoryItem(3, new SpeedPotion(this));
+        list.get(0).inventory.setBackpackItem(0, new ManaPotion(this, 1));
+        list.get(0).inventory.setBackpackItem(1, new ManaPotion(this, 1));
+        list.get(0).inventory.setBackpackItem(2, new ManaPotion(this, 1));
+        list.get(0).inventory.setBackpackItem(3, new ManaPotion(this, 1));
+        list.get(0).inventory.setBackpackItem(4, new ManaPotion(this, 1));
+        list.get(0).inventory.setBackpackItem(5, new ManaPotion(this, 1));
+        list.get(0).inventory.setBackpackItem(6, new ManaPotion(this, 1));
+        list.get(0).inventory.setBackpackItem(7, new ManaPotion(this, 1));
+        list.get(0).inventory.setBackpackItem(8, new ManaPotion(this, 1));
+        list.get(0).inventory.setBackpackItem(9, new ManaPotion(this, 1));
+        list.get(0).inventory.setBackpackItem(10, new ManaPotion(this, 1));
+        list.get(0).inventory.setBackpackItem(11, new ManaPotion(this, 1));
     }
 
     public static void main(String[] args) throws IOException
     {
         new Game();
-    }
-
-    public void changeGameState(int i)
-    {
-        gameState = GameState.values()[i];
     }
 
     private TimerTask dataUpdate = new TimerTask()

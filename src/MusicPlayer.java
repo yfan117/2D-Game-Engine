@@ -23,6 +23,7 @@ public class MusicPlayer
         clip = AudioSystem.getClip();
         clip.open(audioInputStream);
         clip.loop(Clip.LOOP_CONTINUOUSLY);
+        clip.stop();
     }
 
     public void play()
@@ -47,5 +48,10 @@ public class MusicPlayer
     {
         clip.setMicrosecondPosition(currentTime);
         clip.start();
+    }
+
+    public boolean isRunning()
+    {
+        return clip.isRunning();
     }
 }

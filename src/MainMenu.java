@@ -21,10 +21,6 @@ public class MainMenu extends JPanel
 
     public MainMenu(Display d, Game game)
     {
-        try {
-            musicPlayer = new MusicPlayer(Game.root + "/resources/music/PerditionsLight.wav");
-        }catch(Exception e){e.printStackTrace();}
-
         layout = new BorderLayout();
         this.setLayout(layout);
 
@@ -39,10 +35,10 @@ public class MainMenu extends JPanel
         startButton.setContentAreaFilled(false);
         startButton.setFocusPainted(false);
         startButton.setBorderPainted(false);
-        startButton.addActionListener(e -> {game.changeGameState(1); display.switchJPanels(1); musicPlayer.stop();});
+        startButton.addActionListener(e -> {display.switchJPanels(1); musicPlayer.stop();});
         add(startButton, BorderLayout.SOUTH);
 
-        musicPlayer.play();
+        startMusic();
     }
 
     @Override

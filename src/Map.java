@@ -12,6 +12,10 @@ import javax.swing.ImageIcon;
 
 public class Map{
 	Game game;
+	String mapName;
+	public MusicPlayer musicPlayer;
+	BufferedReader br;
+	String currLine;
 
 	public Map(Game game){this.game = game;}
 
@@ -20,9 +24,28 @@ public class Map{
 
 
 	public Map(String mapName, Game game) throws IOException  {
+		this.mapName = mapName;
+
+		try
+		{
+			br = new BufferedReader(new FileReader(Game.root + "/resources/text/music.txt"));
+			currLine = br.readLine();
+
+			while(currLine != null)
+			{
+				if(currLine.startsWith("/"))
+				{
+					if(currLine.substring(1).equals(mapName))
+					{
+						currLine = br.readLine();
+						musicPlayer = new MusicPlayer(Game.root + "/resources/music/" + mapName + ".WAV");
+					}
+				}
+				currLine = br.readLine();
+			}
+		}catch(Exception ex){ex.printStackTrace();}
 		
 		BufferedImage image = ImageIO.read(new File(Game.root + "/resources/images/tavern_Obs.png"));
-		
 		
 		for(int y = 0; y < image.getHeight(); y++)
 		{
@@ -79,6 +102,9 @@ public class Map{
 		return respawnLcation;
 	}
 
-
+	public void playMapMusic()
+	{
+		musicPlayer.play();
+	}
 }
 
