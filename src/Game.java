@@ -63,8 +63,8 @@ public class Game {
 	private ArrayList<Node> obstacleLocation = new ArrayList<Node>();
 	public ArrayList<Node> getObstacleLocation(){return obstacleLocation;}
 	
-	int mapWidth = 5000;
-	int[] obsMap = new int[mapWidth * mapWidth];
+	static int mapWidth = 5000;
+	boolean[] obsMap = new boolean[mapWidth * mapWidth];
 	
 	static Timer dataTimer = new Timer();
 	static Timer renderTimer = new Timer();

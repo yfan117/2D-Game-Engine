@@ -677,7 +677,7 @@ public class Movement{
 				//System.out.println("here");
 				
 				
-				if((x <= 0 ) || ( y <= 0) || (game.obsMap[x + y * game.mapWidth] == 1))
+				if((x <= 0 ) || ( y <= 0) || (game.obsMap[x + y * game.mapWidth] == true))
 				{
 					System.out.println("obs detected");
 					isObs = true;

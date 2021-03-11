@@ -39,8 +39,8 @@ class Renderer extends JPanel{
 	int widthMultiplier = 10; 
 	int heightMultiplier = 10; 
 	
-	int mapWidth = 5000;
-	int mapHeight = 5000;
+	int mapWidth = Game.mapWidth;
+	int mapHeight = Game.mapWidth;
 	
 	//int mapWidth = 200*50;
 	//int mapHeight = 200 * 50;
@@ -448,9 +448,9 @@ class Renderer extends JPanel{
 		
 		for(int i = 0; i < worldBuffer.length; i++)
     	{
-			int colorCode = game.obsMap[i];
+			//int colorCode = game.obsMap[i];
 			
-			if(colorCode == 1)
+			if(game.obsMap[i] == true)
 			{
 				//System.out.println(i);
 				worldBuffer[i] = Color.GREEN.getRGB();

@@ -70,7 +70,7 @@ public class Map{
 						if( colorCode != 0)
 						{
 							//System.out.println(colorCode);
-							game.obsMap[obsLocationX + x + (obsLocationY + y) * 5000] = 1;
+							game.obsMap[obsLocationX + x + (obsLocationY + y) * Game.mapWidth] = true;
 
 						}
 					}
