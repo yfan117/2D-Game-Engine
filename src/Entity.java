@@ -11,6 +11,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import Diablo.items.Item;
+
 public class Entity{
 	
 	 int x = 0;
@@ -89,6 +91,10 @@ public class Entity{
 	 boolean keyMove = false;
 	 
 	 private boolean actionable=false;
+	 
+	 public Inventory inventory;
+	 int mana;
+	 
 	 /*
 	  * Friendly NPC variables 
 	  */
@@ -104,43 +110,7 @@ public class Entity{
 	  /*
 	  * Friendly NPC constructor
 	  */
-	 public Entity(String type, int[] location, int hp, int hitBox, Game game, int oil, int insanity, 
-		Image NpcPortrait,String[] dialogue, int[] collisionBox)throws IOException
-	 { 
-		this.game = game;
-		this.oil = oil;
-		this.insanity = insanity;
-		
-		 x = location[0];
-		 y = location[1];
-		 preX = x;
-		 preY = y;
-		 move = new Movement(this, game);
-    	int respondX = x;
-    	int respondY = y;
-    	move.isVisible();
-    	ai = new AI(this);
-	    target = this;
-        this.hp = hp;
-        this.hitBox = hitBox;
-        moveSpeed = 5;
-        
-        //friendly NPC Variables
-		this.type=type;
- 		this.npcPortrait=NpcPortrait;
- 		this.dialogue=dialogue;
- 		currentDialogue=0;
- 		this.collisionBox=collisionBox;
- 		if(type.equals("friendly")) {
- 			actionable=true;
- 		}
- 		if(type.equals("enemy")) {
- 			actionable=true;
- 		}
- 		width= collisionBox[0];
- 		height=collisionBox[1];
-	 }
-	 public Entity(String type, int[] location, int hp, int hitBox, Game game, int oil, int insanity, 
+	 public Entity(String type, int[] location, int hp,int mana, int hitBox, Game game, int oil, int insanity, 
 				Image NpcPortrait,Dialogue dialogue, int[] collisionBox)throws IOException
 			 { 
 				this.game = game;
@@ -161,6 +131,8 @@ public class Entity{
 		        this.hitBox = hitBox;
 		        moveSpeed = 5;
 		        
+		        this.mana = mana;
+		        inventory = new Inventory();
 		        //friendly NPC Variables
 				this.type=type;
 		 		this.npcPortrait=NpcPortrait;
@@ -176,9 +148,7 @@ public class Entity{
 		 		width= collisionBox[0];
 		 		height=collisionBox[1];
 			 }
-	 /*
-	 * new NPC functions
-	 */
+
  	public void doAction(){
  		if(type.equals("friendly")) {
  			if(game.dialogue==true) {
@@ -225,6 +195,11 @@ public class Entity{
 	* Player and enemy constructor
 	*/
 	public Entity(String name, int[] location, int hp, int hitBox, Game game, int oil, int insanity) throws IOException {
+		//new stuff
+		this.mana = mana;
+        inventory = new Inventory();
+        //
+        
 		this.game = game;
 		this.oil = oil;
 		this.insanity = insanity;
@@ -339,13 +314,15 @@ public class Entity{
 		 }
 		 */
 	}
-	public void setDialogue(Dialogue d) {
-		this.d=d;
-		
-	}
+	
 	public void enableMovement()
 	{
 		move = new Movement(this, game);
+	}
+	
+	public void setDialogue(Dialogue d) {
+		this.d=d;
+		
 	}
 
 	public ArrayList<Entity> getEntityList(){return game.getEntityList();}
@@ -369,5 +346,32 @@ public class Entity{
     }
     public ArrayList<Objective> getQuestlog(){
     	return questlog;
+    }
+    
+    public void setHP(int i)
+    {
+        this.hp = i;
+    }
+
+    public int getHP()
+    {
+        return this.hp;
+    }
+
+    public void setMana(int i)
+    {
+        this.mana = i;
+    }
+
+    public int getMana()
+    {
+        return this.mana;
+    }
+
+    public void setMovespeed(double i)
+    {
+        moveSpeed = (int) Math.round(5 * i);
+        if (moveSpeed <= 0)
+            moveSpeed = 1;
     }
 }

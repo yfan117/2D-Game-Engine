@@ -12,6 +12,10 @@ import java.util.TimerTask;
 
 import javax.imageio.ImageIO;
 
+import Diablo.items.Item;
+import Diablo.items.ManaPotion;
+import Diablo.items.SpeedPotion;
+
 public class Game {
 
 	//static final public Path root = Paths.get(System.getProperty("user.dir")).getParent();
@@ -123,7 +127,7 @@ public class Game {
 		 Dialogue d1= new Dialogue("Hello Traveler, I am the Tavern girl.  It is nice to meet you.  You have a trusthworthy face, will you help me for a reward?  I require assistance with a mission, would you like to hear more?",responses);
 		 
 		 
-		 Item reward= new SeansItem();
+	//	 Item reward= new SeansItem();
 		 Dialogue EncounteredSeanDialogue=new Dialogue("Oh, the Tavern Girl sent you, here is proof you met me");
 		 Objective EncounteredSean= new DialogueObjective(EncounteredSeanDialogue,this );
 		 Objective EncounterSean= new QuestObjective(this, encounterSeanDialogue, EncounteredSean);
@@ -136,18 +140,18 @@ public class Game {
 			System.out.println("loading previous data");
 			int[] loadData=loadFile.loadGame(); //load the game file
 			 list.add(new Entity("player", new int[]{0, 0}, 100, 80, this, 100, 0));
-				list.add(new Entity("friendly", new int[]{300, 300}, 100, 80, this, 100, 0,ImageIO.read(new File(repo+"tavernGirl.png")),new Dialogue("Hello, good day", new Dialogue("Hello again")),collisionBox)); 
-				list.add(new Entity("friendly", new int[]{600, 300}, 100, 80, this, 100, 0,ImageIO.read(new File(repo+"player.png")),new Dialogue("Greetings"),collisionBox)); 
-				list.add(new Entity("friendly", new int[]{1200, 300}, 100, 80, this, 100, 0,ImageIO.read(new File(repo+"player.png")),d1,collisionBox)); 
+				list.add(new Entity("friendly", new int[]{300, 300}, 100, 100, 80, this, 100, 0,ImageIO.read(new File(repo+"tavernGirl.png")),new Dialogue("Hello, good day", new Dialogue("Hello again")),collisionBox)); 
+				list.add(new Entity("friendly", new int[]{600, 300}, 100, 100, 80, this, 100, 0,ImageIO.read(new File(repo+"player.png")),new Dialogue("Greetings"),collisionBox)); 
+				list.add(new Entity("friendly", new int[]{1200, 300}, 100, 100, 80, this, 100, 0,ImageIO.read(new File(repo+"player.png")),d1,collisionBox)); 
 			obstacle.add(new Entity(this, "tavern", 500, 500));
 		 }
 		 
 		 else {
 			 
 		 list.add(new Entity("player", new int[]{0, 0}, 100, 80, this, 100, 0));
-		list.add(new Entity("friendly", new int[]{300, 300}, 100, 80, this, 100, 0,ImageIO.read(new File(repo+"tavernGirl.png")),new Dialogue("hello", new Dialogue("next")),collisionBox)); 
-		list.add(new Entity("friendly", new int[]{600, 300}, 100, 80, this, 100, 0,ImageIO.read(new File(repo+"player.png")),new Dialogue("Tester"),collisionBox)); 
-		list.add(new Entity("friendly", new int[]{1200, 300}, 100, 80, this, 100, 0,ImageIO.read(new File(repo+"player.png")),d1,collisionBox)); 
+		list.add(new Entity("friendly", new int[]{300, 300}, 100,100, 80, this, 100, 0,ImageIO.read(new File(repo+"tavernGirl.png")),new Dialogue("hello", new Dialogue("next")),collisionBox)); 
+		list.add(new Entity("friendly", new int[]{600, 300}, 100, 100, 80, this, 100, 0,ImageIO.read(new File(repo+"player.png")),new Dialogue("Tester"),collisionBox)); 
+		list.add(new Entity("friendly", new int[]{1200, 300}, 100, 100, 80, this, 100, 0,ImageIO.read(new File(repo+"player.png")),d1,collisionBox)); 
 		obstacle.add(new Entity(this, "tavern", 500, 500));
 		 //list.add(new Entity("enemy", new int[]{0, 0},100, 80));
 		 //list.add(new Entity("enemy", new int[]{-50, 0}, 100, 80));
@@ -167,6 +171,25 @@ public class Game {
 		 timer.scheduleAtFixedRate(frameUpdate, 0, refreshTime);
 		 timer.scheduleAtFixedRate(timeCounter, 0, 100);
 		 mouse = new MouseControl(this);
+		 
+		 //new stuff
+	        //temporary for testing
+	        list.get(0).inventory.setInventoryItem(0, new ManaPotion(this, 10));
+	        list.get(0).inventory.setInventoryItem(1, new ManaPotion(this, 1));
+	        list.get(0).inventory.setInventoryItem(2, new ManaPotion(this, 1));
+	        list.get(0).inventory.setInventoryItem(3, new SpeedPotion(this));
+	        list.get(0).inventory.setBackpackItem(0, new ManaPotion(this, 1));
+	        list.get(0).inventory.setBackpackItem(1, new ManaPotion(this, 1));
+	        list.get(0).inventory.setBackpackItem(2, new ManaPotion(this, 1));
+	        list.get(0).inventory.setBackpackItem(3, new ManaPotion(this, 1));
+	        list.get(0).inventory.setBackpackItem(4, new ManaPotion(this, 1));
+	        list.get(0).inventory.setBackpackItem(5, new ManaPotion(this, 1));
+	        list.get(0).inventory.setBackpackItem(6, new ManaPotion(this, 1));
+	        list.get(0).inventory.setBackpackItem(7, new ManaPotion(this, 1));
+	        list.get(0).inventory.setBackpackItem(8, new ManaPotion(this, 1));
+	        list.get(0).inventory.setBackpackItem(9, new ManaPotion(this, 1));
+	        list.get(0).inventory.setBackpackItem(10, new ManaPotion(this, 1));
+	        list.get(0).inventory.setBackpackItem(11, new ManaPotion(this, 1));
 	 }
 
 	public static void main(String[] args) throws IOException {

@@ -1,5 +1,7 @@
 package Diablo;
 
+import Diablo.items.Item;
+
 public class Dialogue {
 	/*
 	 * an object representing dialogue

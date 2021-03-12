@@ -1,5 +1,7 @@
 package Diablo;
 
+import Diablo.items.Item;
+
 public class Objective {
 	//private Shop shop;
 	//private Item item;
@@ -38,7 +40,7 @@ class DialogueObjective extends Objective{
 }
 
 class ShopObjective extends Objective{
-	private Item reward=null;
+	private Item reward;
 	private Dialogue transition=null;
 	@Override
 	public void doObjective(){

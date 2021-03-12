@@ -6,10 +6,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.SwingUtilities;
+
+import Diablo.items.Item;
 public class MouseControl implements MouseListener, MouseMotionListener {
 	private Game game;
 	private Movement movement;
 	Entity player;
+	//new
+	int itemClickedNumber = -1;
+    int backpackClickedNumber = -1;
+    
 	public MouseControl(Game game)
 	{
 		this.game = game;
@@ -81,7 +87,7 @@ public class MouseControl implements MouseListener, MouseMotionListener {
 				
 				System.out.println("player coordinates: " +player.clickedX+" "+player.clickedY);
 		
-				/*
+				/*new stuff
 				 * check for entity 
 				 * starting from index 1
 				 */
@@ -93,8 +99,44 @@ public class MouseControl implements MouseListener, MouseMotionListener {
 						entity.doAction();
 					}
 				}
-				
-				
+
+//				//Player clicked inside spell slots
+//				if(eX > (game.windowX / 2) - 74 && eX < (game.windowX / 2) + 74 && eY > game.windowY - 87 && eY < game.windowY - 50)
+//				{
+//					for(int i = 0; i < 4; i++)
+//					{
+//						if(eX > ((game.windowX / 2) - (74 - (i * 37))) && eX < ((game.windowX / 2) - (74 - ((i+1) * 37))) && eY > game.windowY - 87 && eY < game.windowY - 50)
+//						{
+//							if(i == 0)//Spell slot 0
+//							{
+//								System.out.println("0");
+//							}
+//							if(i == 1)//Spell slot 1
+//							{
+//								System.out.println("1");
+//							}
+//							if(i == 2)//Spell slot 2
+//							{
+//								System.out.println("2");
+//							}
+//							if(i == 3)//Spell slot 3
+//							{
+//								System.out.println("3");
+//							}
+//						}
+//					}
+//					return;
+//				}
+
+                //Player clicked inside the inventory while it is open
+                if (checkInventory(eX, eY))
+                    return;
+
+                //Player clicked inside backpack while it is open
+                if (checkBackpack(eX, eY))
+                    return;
+
+				//end of new stuff
 				if(movement.isObstacles(player.clickedX, player.clickedY) == false)
 				{
 					player.newClick = true;
@@ -238,7 +280,115 @@ public class MouseControl implements MouseListener, MouseMotionListener {
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
+        int eX = e.getX();
+        int eY = e.getY();
+        int check = 0;
+
+        //Check backpack
+        checkBackpack(eX, eY);
+
+        //Check inventory
+        checkInventory(eX, eY);
+
+        for (int i = 0; i < game.getEntityList().get(0).inventory.getBackpackCapacity(); i++)
+        {
+            if (game.getEntityList().get(0).inventory.getBackpackBool(i))
+                check++;
+        }
+
+        for (int j = 0; j < game.getEntityList().get(0).inventory.getInventoryCapacity(); j++)
+        {
+            if (game.getEntityList().get(0).inventory.getInventoryBool(j))
+                check++;
+        }
+
+        if (check == 0)//player clicked an item
+        {
+            try
+            {
+                if (itemClickedNumber != -1)
+                {
+                    game.getEntityList().get(0).inventory.getInventoryItem(itemClickedNumber).useItem();
+                    if (game.getEntityList().get(0).inventory.getInventoryItem(itemClickedNumber).isStackable())
+                    {
+                        game.getEntityList().get(0).inventory.getInventoryItem(itemClickedNumber).setNumberInStack(game.getEntityList().get(0).inventory.getInventoryItem(itemClickedNumber).getNumberInStack() - 1);
+                        if (game.getEntityList().get(0).inventory.getInventoryItem(itemClickedNumber).getNumberInStack() <= 0)
+                        {
+                            game.getEntityList().get(0).inventory.setInventoryItem(itemClickedNumber, null);
+                        }
+                    } else
+                    {
+                        game.getEntityList().get(0).inventory.setInventoryItem(itemClickedNumber, null);
+                    }
+                    itemClickedNumber = -1;
+                }
+            }catch(Exception ex){}
+        }
+
+        if (check == 1)//Player dragged an item onto the ground
+        {
+            if (itemClickedNumber != -1)
+            {
+                game.getEntityList().get(0).inventory.setInventoryItem(itemClickedNumber, null);
+                itemClickedNumber = -1;
+            }
+            if (backpackClickedNumber != -1)
+            {
+                game.getEntityList().get(0).inventory.setBackpackItem(backpackClickedNumber, null);
+                backpackClickedNumber = -1;
+            }
+        }
+
+        if (check == 2)//player is swapping two items
+        {
+            int a = game.getEntityList().get(0).inventory.getInventoryCapacity();
+            int b = game.getEntityList().get(0).inventory.getBackpackCapacity();
+            int c = a + b;
+            boolean[] temp = new boolean[c];
+
+            for (int i = 0; i < a; i++)
+            {
+                temp[i] = game.getEntityList().get(0).inventory.getInventoryBool(i);
+            }
+            for (int i = a; i < c; i++)
+            {
+                temp[i] = game.getEntityList().get(0).inventory.getBackpackBool(i - a);
+            }
+
+            int x = 0;
+            int y = 0;
+            int count = 0;
+
+            for (int i = 0; i < c; i++)
+            {
+                if (temp[i] && count == 1)
+                {
+                    y = i;
+                    count++;
+                }
+                if (temp[i] && count == 0)
+                {
+                    x = i;
+                    count++;
+                }
+            }
+
+            if (y < a)//Inv to inv swap
+            {
+                swapInvToInv(x, y);
+            }
+            if (x >= a)//Backpack to backpack swap
+            {
+                swapBackToBack(x - a, y - a);
+            }
+            if (x < a && y >= a)//Inv to backpack swap
+            {
+                swapInvToBack(x, y - a);
+            }
+        }
+
+        game.getEntityList().get(0).inventory.resetAllBools();
 	}
 
 	@Override
@@ -279,7 +429,7 @@ public class MouseControl implements MouseListener, MouseMotionListener {
 		eX =Math.round(eX/5)*5;
 		eY=Math.round(eY/5)*5;
 
-		/*
+		/*new
 		 * Check if mouse hovering over an action
 		 */
 		for(int i =1; i < game.getEntityList().size();i++){	
@@ -306,4 +456,101 @@ public class MouseControl implements MouseListener, MouseMotionListener {
 		// TODO Auto-generated method stub
 	}
 
+	//new 
+	   private void swapInvToInv(int i, int j)
+	    {
+	        Item temp = game.getEntityList().get(0).inventory.getInventoryItem(i);
+//	        if(game.getEntityList().get(0).inventory.getInventoryItem(i).getName() == game.getEntityList().get(0).inventory.getInventoryItem(j).getName() && (game.getEntityList().get(0).inventory.getInventoryItem(i).isStackable()))
+//	        {
+//	            game.getEntityList().get(0).inventory.getInventoryItem(i).setNumberInStack(game.getEntityList().get(0).inventory.getInventoryItem(i).getNumberInStack() + game.getEntityList().get(0).inventory.getInventoryItem(j).getNumberInStack());
+//	            game.getEntityList().get(0).inventory.setInventoryItem(j, null);
+//	            return;
+//	        }
+	        game.getEntityList().get(0).inventory.setInventoryItem(i, game.getEntityList().get(0).inventory.getInventoryItem(j));
+	        game.getEntityList().get(0).inventory.setInventoryItem(j, temp);
+	    }
+
+	    private void swapBackToBack(int i, int j)
+	    {
+	        Item temp = game.getEntityList().get(0).inventory.getBackpackItem(i);
+	        game.getEntityList().get(0).inventory.setBackpackItem(i, game.getEntityList().get(0).inventory.getBackpackItem(j));
+	        game.getEntityList().get(0).inventory.setBackpackItem(j, temp);
+	    }
+
+	    private void swapInvToBack(int i, int j)
+	    {
+	        Item temp = game.getEntityList().get(0).inventory.getInventoryItem(i);
+	        game.getEntityList().get(0).inventory.setInventoryItem(i, game.getEntityList().get(0).inventory.getBackpackItem(j));
+	        game.getEntityList().get(0).inventory.setBackpackItem(j, temp);
+	    }
+
+    private boolean checkBackpack(int eX, int eY)
+    {
+        boolean b = false;
+        if (game.getEntityList().get(0).inventory.getBackpackOpen())
+        {
+            if (eX > ((Diablo.Game.windowX) - game.getEntityList().get(0).inventory.getCols() * 50) && eY > ((Diablo.Game.windowY / 2) - ((game.getEntityList().get(0).inventory.getRows() / 2) * 50)) && eY < ((Diablo.Game.windowY / 2) + ((game.getEntityList().get(0).inventory.getRows() / 2) * 50)))
+            {
+                for (int i = 0; i < game.getEntityList().get(0).inventory.getRows(); i++)
+                {
+                    for (int j = 0; j < game.getEntityList().get(0).inventory.getCols(); j++)
+                    {
+                        int col = ((Diablo.Game.windowX) - (game.getEntityList().get(0).inventory.getCols() * 50) + (50 * j));
+                        int row = ((Diablo.Game.windowY / 2) - ((game.getEntityList().get(0).inventory.getRows() / 2) * 50) + (50 * i));
+                        if (eX > col && eX < col + 50 && eY > row && eY < row + 50)
+                        {
+                            for (int y = 0; y <= game.getEntityList().get(0).inventory.getRows(); y++)
+                            {
+                                for (int x = 0; x <= game.getEntityList().get(0).inventory.getCols(); x++)
+                                {
+                                    if (i == (game.getEntityList().get(0).inventory.getRows() - y) && j == (game.getEntityList().get(0).inventory.getCols() - x))
+                                    {
+                                        backpackClickedNumber = i * game.getEntityList().get(0).inventory.getCols() + j;
+                                        game.getEntityList().get(0).inventory.setBackpackBool((i * game.getEntityList().get(0).inventory.getCols()) + j, !(game.getEntityList().get(0).inventory.getBackpackBool(i * game.getEntityList().get(0).inventory.getCols() + j)));
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                b = true;
+            }
+        }
+        return b;
+    }
+	 private boolean checkInventory(int eX, int eY)
+	    {
+	        boolean b = false;
+	        if (game.getEntityList().get(0).inventory.getInventoryOpen())
+	        {
+	            if (eX > ((Diablo.Game.windowX / 2) - ((game.getEntityList().get(0).inventory.getInventoryCols() / 2) * 50)) && eX < ((Diablo.Game.windowX / 2) + ((game.getEntityList().get(0).inventory.getInventoryCols() / 2) * 50)) && eY > ((Diablo.Game.windowY) - (game.getEntityList().get(0).inventory.getInventoryRows() * 50)))
+	            {
+	                for (int i = 0; i < game.getEntityList().get(0).inventory.getInventoryRows(); i++)
+	                {
+	                    for (int j = 0; j < game.getEntityList().get(0).inventory.getInventoryCols(); j++)
+	                    {
+	                        int col = ((Diablo.Game.windowX / 2) - ((game.getEntityList().get(0).inventory.getInventoryCols() * 50) / 2) + (50 * j));
+	                        int row = ((Diablo.Game.windowY) - (game.getEntityList().get(0).inventory.getInventoryRows() * 50) + (50 * i));
+
+	                        if (eX > col && eX < col + 50 && eY > row && eY < row + 50)
+	                        {
+	                            for (int y = 0; y <= game.getEntityList().get(0).inventory.getInventoryRows(); y++)
+	                            {
+	                                for (int x = 0; x <= game.getEntityList().get(0).inventory.getInventoryCols(); x++)
+	                                {
+	                                    if (i == (game.getEntityList().get(0).inventory.getInventoryRows() - y) && j == (game.getEntityList().get(0).inventory.getInventoryCols() - x))
+	                                    {
+	                                        itemClickedNumber = i * game.getEntityList().get(0).inventory.getInventoryCols() + j;
+	                                        game.getEntityList().get(0).inventory.setInventoryBool((i * game.getEntityList().get(0).inventory.getInventoryCols()) + j, !(game.getEntityList().get(0).inventory.getInventoryBool(i * game.getEntityList().get(0).inventory.getInventoryCols() + j)));
+	                                    }
+	                                }
+	                            }
+	                        }
+	                    }
+	                }
+	                b = true;
+	            }
+	        }
+	        return b;
+	    }
 }
