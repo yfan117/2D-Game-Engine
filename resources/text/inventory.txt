@@ -1,0 +1,4 @@
+(Must be an even value)backpackRows: 4
+backpackCols: 3
+inventoryRows: 1
+(Must be an even value)inventoryCols: 4
