@@ -18,16 +18,20 @@ public class Game {
 	
 	//this is only works for Fan
 	static final public String root = Paths.get(System.getProperty("user.dir")).getParent()+"";
-	public Dialogue dialogueObj= null; //no dialogue instances yet
+	public DialogueUI dialogueObj= null; //no dialogue instances yet
 	boolean saved=false;
 	boolean dialogue=false;
 	boolean continueDialogue =false;
 	boolean hovering = false;
+	boolean responsing = false;
 	private LoadGame loadFile; 
 	public LoadGame getLoadFile() {return loadFile;};
 
 	public void createDialogue(Entity entity) {
-		dialogueObj = new Dialogue(entity);
+		
+		dialogueObj = new DialogueUI(entity);
+		//dialogue=true;
+		//dialogueObj= new DialogueManager(entity);
 	}
 	public String getDialogue() {
 		return dialogueObj.getDialogue();
@@ -106,23 +110,45 @@ public class Game {
 		 }
 		 String repo= Game.root+"\\resources\\images\\";
 		 File saveFile= new File(root+ "/resources/text/savedGame.txt");
-		 String[] testDialogue= {"Hello, this eventually will be character dialogue. Filler Dialogue is currently here.  The character will instruct the player on a quest...filler filler2 filler3 filler4 filler5 filler6 filler7 filler8 filler9 filler10 filler11 filler12 done","Dialogue 2, dialogue array index 1"};
-		 String[] testDialogue2= {"Hello I am the Tavern Girl","Welcome back, Traveler"};
+		
+		 /*
+		  * Creating Dialogue 
+		  */
+	
+		 
+		 Dialogue d3= new Dialogue("Did you encounter Sean?");
+		 Dialogue d2= new Dialogue("I require you to please encounter Sean.  I will reward you for your efforts",d3);
+		 Objective encounterSeanDialogue= new DialogueObjective(new Dialogue("Please ecounter Sean",d3), this);
+		 Dialogue[] responses= {new Dialogue("yes",encounterSeanDialogue), new Dialogue("no")};
+		 Dialogue d1= new Dialogue("Hello Traveler, I am the Tavern girl.  It is nice to meet you.  You have a trusthworthy face, will you help me for a reward?  I require assistance with a mission, would you like to hear more?",responses);
+		 
+		 
+		 Item reward= new SeansItem();
+		 Dialogue EncounteredSeanDialogue=new Dialogue("Oh, the Tavern Girl sent you, here is proof you met me");
+		 Objective EncounteredSean= new DialogueObjective(EncounteredSeanDialogue,this );
+		 Objective EncounterSean= new QuestObjective(this, encounterSeanDialogue, EncounteredSean);
+		 Dialogue sean1= new Dialogue("Hello",EncounterSean);
+		
+		
+		
 		 int[] collisionBox= {50,100};
 		 if(saveFile.exists()) {
 			System.out.println("loading previous data");
 			int[] loadData=loadFile.loadGame(); //load the game file
-			list.add(new Entity("player", new int[]{loadData[0], loadData[1]}, loadData[2], 80, this, 100, 0));
-			list.add(new Entity("friendly", new int[]{300, 300}, 100, 80, this, 100, 0,ImageIO.read(new File(repo+"tavernGirlPortrait.png")),testDialogue2,collisionBox)); 
-			list.add(new Entity("friendly", new int[]{600, 300}, 100, 80, this, 100, 0,ImageIO.read(new File(repo+"playerPortrait.png")),testDialogue,collisionBox)); 
+			 list.add(new Entity("player", new int[]{0, 0}, 100, 80, this, 100, 0));
+				list.add(new Entity("friendly", new int[]{300, 300}, 100, 80, this, 100, 0,ImageIO.read(new File(repo+"tavernGirl.png")),new Dialogue("Hello, good day", new Dialogue("Hello again")),collisionBox)); 
+				list.add(new Entity("friendly", new int[]{600, 300}, 100, 80, this, 100, 0,ImageIO.read(new File(repo+"player.png")),new Dialogue("Greetings"),collisionBox)); 
+				list.add(new Entity("friendly", new int[]{1200, 300}, 100, 80, this, 100, 0,ImageIO.read(new File(repo+"player.png")),d1,collisionBox)); 
 			obstacle.add(new Entity(this, "tavern", 500, 500));
 		 }
 		 
 		 else {
 			 
 		 list.add(new Entity("player", new int[]{0, 0}, 100, 80, this, 100, 0));
-		 list.add(new Entity("enemy", new int[]{300, 300}, 100, 80, this, 100, 0)); 
-		 obstacle.add(new Entity(this, "tavern", 500, 500));
+		list.add(new Entity("friendly", new int[]{300, 300}, 100, 80, this, 100, 0,ImageIO.read(new File(repo+"tavernGirl.png")),new Dialogue("hello", new Dialogue("next")),collisionBox)); 
+		list.add(new Entity("friendly", new int[]{600, 300}, 100, 80, this, 100, 0,ImageIO.read(new File(repo+"player.png")),new Dialogue("Tester"),collisionBox)); 
+		list.add(new Entity("friendly", new int[]{1200, 300}, 100, 80, this, 100, 0,ImageIO.read(new File(repo+"player.png")),d1,collisionBox)); 
+		obstacle.add(new Entity(this, "tavern", 500, 500));
 		 //list.add(new Entity("enemy", new int[]{0, 0},100, 80));
 		 //list.add(new Entity("enemy", new int[]{-50, 0}, 100, 80));
 

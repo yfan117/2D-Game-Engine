@@ -22,7 +22,19 @@ public class KeyboardControl implements KeyListener {
 		
 		char input = e.getKeyChar();
 		
-		if(game.dialogue==true) {
+		if(game.responsing==true) {
+			if(input=='1') {
+				game.responsing=false;
+				game.dialogueObj.manager.chooseRespone(1);
+				System.out.println("Choose 1");
+			}
+			if(input=='2') {
+				game.responsing=false;
+				game.dialogueObj.manager.chooseRespone(2);
+				System.out.println("Choose 2");
+			}
+		}
+		if(game.dialogue==true && game.responsing==false) {
 		if(input=='n') { //continue dialogue
 				game.continueDialogue=true;
 			}

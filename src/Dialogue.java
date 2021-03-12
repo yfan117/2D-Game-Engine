@@ -1,167 +1,82 @@
 package Diablo;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
-import java.awt.Image;
-import java.io.File;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
-
 public class Dialogue {
 	/*
-	 * This class is used to draw dialogue UI and text for a given
-	 * Dialogue string. The string represents the entire 
-	 * dialogue, the class functions parse and print out
-	 * the text within a given output range
+	 * an object representing dialogue
+	 * used to construct different types of dialogue
+	 * and together combine to build dialogue logic
+	 * Types of dialogue:
+	 * dialogue
+	 * dialogue w/ transitions
+	 * dialogue w/ responses
+	 * dialogue w/ transition & objective
 	 */
-	private String dialogue=null;
-	private Game game;
-	private Entity entity;
-	private String repo= Game.root+"\\resources\\images\\";
-	private Image portrait;
-	private Graphics g;
-	
+	private String dialogue;
+	private Dialogue [] responses=null;
+	private Objective objective=null;
+	private Dialogue transition=null;
+	private Item reward;
+	Dialogue(String dialogue){
 	/*
-	 * constructor takes in an entity
-	 * to render an instance of dialogue
+	 * standard dialogue constructor
 	 */
-	public Dialogue(Entity entity){ 
-	
-		this.game=entity.game;
-		this.entity=entity;
-		this.portrait=entity.getNpcPortrait();
-		this.dialogue=entity.getDialogue();
+		this.dialogue=dialogue;
+	}
+	Dialogue(String dialogue, Dialogue [] responses){
+	/*
+	 * dialogue with response(s) constructor
+	 */
+		this.dialogue=dialogue;
+		this.responses=responses;
+	}
+	Dialogue(String dialogue, Dialogue transition){
+	/*
+	 * dialogue with transition constructor
+	 */
+		this.dialogue=dialogue;
+		this.transition=transition;
+	}
+	Dialogue(String dialogue, Objective objective){
+	/*
+	 * dialogue with objective constructor
+	 */
+		this.dialogue=dialogue;
+		this.objective=objective;
 		
 	}
 	
-	public void setDialogue(String string) {
-		dialogue=string;
+	/*
+	 * getters and setters
+	 */
+	public void addResponse(Dialogue responses) {
+		
+	}	
+	public void addResponses(Dialogue[] responses) {
+		this.responses=responses;
+	}	
+	public Dialogue[] getResponses() {
+		return responses;
+	}	
+	
+	public void setTransition(Dialogue transition) {
+		this.transition=transition;
+	}
+	public Dialogue getTransition() {
+		return transition;
 	}
 	
-	public String getDialogue(){
+	public void setObjective(Objective objective) {
+		this.objective=objective;
+	}
+	public Objective getObjective() {
+		return objective;
+	}
+	
+	public void setDialogue(Objective objective) {
+		this.objective=objective;
+	}
+	public String getDialogue() {
 		return dialogue;
 	}
 	
-	/*
-	 * Functions to draw dialogue
-	 */
-	public void render(Graphics g) {
-		
-		paintDialogueBox(dialogue,g);
-	}
-	
-	private void paintDialogueBox(String dialogue,Graphics g) {
-		/*
-		 * Function to format and paint a generic
-		 *  dialogue box and entity portrait
-		 */
-		int boxHeight=(int)game.windowY/4;
-		int boxWidth= (int)game.windowX/3;
-		int boxY=(int)game.windowY-(game.windowY/3);
-		int boxX=(int)game.windowX-(game.windowX/2)-(boxWidth/2);
-		int portraitHeight=game.windowY/2;
-		int portraitWidth=maintainRatio(portrait,portraitHeight);
-		int portraitY=game.windowY-((int)game.windowY/2);
-		int portraitX=(int) (game.windowX-portraitWidth-boxWidth-(game.windowX-boxWidth-(game.windowX-boxWidth)/2)+(boxWidth*.1));
-		int alpha = 127; // 50% transparent
-		Color myColor = new Color(0, 0, 0, alpha);//transparent black
-		
-		/*
-		 * draws a generic, transparent black
-		 * dialogue box with rounded edges
-		 */
-		g.setColor(Color.BLACK); 
-     	g.drawRoundRect(boxX,boxY, boxWidth, boxHeight,50,25);
-		g.setColor(myColor);
-	    g.fillRoundRect(boxX,boxY, boxWidth, boxHeight,50,25);
-	    g.setColor(Color.LIGHT_GRAY);
-	    g.drawImage(portrait,portraitX,portraitY,portraitWidth,portraitHeight,game.display.getRender());
-	 
-	    /*
-	     * call function to print text within the dialogue-box
-	     */
-	    g.setFont(new Font("TimesRoman",Font.PLAIN,20));
-	    printText(boxX,boxY,boxWidth,boxHeight, dialogue,g.getFont(),g); 
-	}
-	
-	private void printText(int textboxX,int textboxY, int textboxWidth,int textboxHeight,String dialogue,Font font,Graphics g)
-	{
-		/*
-		 * Use this function to draw text within a given "text box" range
-		 * PARAMETERS:textboxX and textBoxY:upper left-hand corner, String dialogue:output text. 
-		 * font determines the font and size of the drawn text
-		 */
-		FontMetrics m= g.getFontMetrics();
-		int lineWidth = textboxWidth-2*m.getHeight();
-		String s=dialogue;
-		int x= textboxX+(int)(textboxHeight*.1);
-		int y= textboxY+(int)(textboxWidth*.1); //initial text position
-		/*
-		 * Parse String into array of words, 
-		 * output words until the text-box margins
-		 */
-		String[] words = s.split(" ");
-		String currentLine="";
-		int i;
-		if(game.continueDialogue==true) {//exit if no remaining dialogue
-				if(s.trim().length()==0) {
-					game.dialogue=false;
-					game.continueDialogue=false;
-					return;
-				}
-			}
-		int max=textboxY+textboxHeight-2*(int)(textboxHeight*.1);//max length
-		for( i =0; i < words.length && y <= max; ){
-			if(m.stringWidth(currentLine+words[i])<=lineWidth) { //if room, add word
-				currentLine+=" "+ words[i];
-				g.drawString(currentLine,x,y);
-				i++;
-			}
-			else {
-				g.drawString(currentLine, x,y);
-				y+=m.getHeight();//new line coordinate
-				currentLine=words[i]; 
-				i++;
-			}
-		} 
-		
-		if(game.continueDialogue==true) {
-			/*
-			 * Continue dialogue event was triggered
-			 */
-			String string= "";
-			if (i < words.length) { //check for remaining dialogue
-				string=currentLine +" ";
-				while(i<words.length) {
-				 string += words[i]+ " ";
-				 i++;
-				}
-				game.continueDialogue=false;
-				setDialogue(string); //store remaining dialogue
-			 }
-			else {//no more dialogue remains, exit
-				game.dialogue=false;
-				game.continueDialogue=false;
-				System.out.println("end");
-			}
-				
-		}
-	
-}
-	public static int maintainRatio(Image image, int nHeight){
-		/*
-		 * This function takes in an image and a new proposed width
-		 * Returns a height value that maintains the original image aspect ratio
-		 */
-		int nWidth=0;
-		int height=image.getHeight(null);
-		int width=image.getWidth(null);
-		
-		nWidth=(nHeight*width)/height;
-		return nWidth;
-	}
-
 }

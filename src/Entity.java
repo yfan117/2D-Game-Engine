@@ -98,14 +98,15 @@ public class Entity{
 	 private int [] collisionBox;
 	 private int width;
 	 private int height;
-	
+	 private Dialogue d=null;
+	 private Item[] itemsList = new Item[4];
+	 private ArrayList<Objective> questlog= new ArrayList<Objective>();
 	  /*
 	  * Friendly NPC constructor
 	  */
 	 public Entity(String type, int[] location, int hp, int hitBox, Game game, int oil, int insanity, 
 		Image NpcPortrait,String[] dialogue, int[] collisionBox)throws IOException
 	 { 
-			
 		this.game = game;
 		this.oil = oil;
 		this.insanity = insanity;
@@ -139,29 +140,63 @@ public class Entity{
  		width= collisionBox[0];
  		height=collisionBox[1];
 	 }
-	 
+	 public Entity(String type, int[] location, int hp, int hitBox, Game game, int oil, int insanity, 
+				Image NpcPortrait,Dialogue dialogue, int[] collisionBox)throws IOException
+			 { 
+				this.game = game;
+				this.oil = oil;
+				this.insanity = insanity;
+				
+				 x = location[0];
+				 y = location[1];
+				 preX = x;
+				 preY = y;
+				 move = new Movement(this, game);
+		    	int respondX = x;
+		    	int respondY = y;
+		    	move.isVisible();
+		    	ai = new AI(this);
+			    target = this;
+		        this.hp = hp;
+		        this.hitBox = hitBox;
+		        moveSpeed = 5;
+		        
+		        //friendly NPC Variables
+				this.type=type;
+		 		this.npcPortrait=NpcPortrait;
+		 		this.d=dialogue;
+		 		currentDialogue=0;
+		 		this.collisionBox=collisionBox;
+		 		if(type.equals("friendly")) {
+		 			actionable=true;
+		 		}
+		 		if(type.equals("enemy")) {
+		 			actionable=true;
+		 		}
+		 		width= collisionBox[0];
+		 		height=collisionBox[1];
+			 }
 	 /*
-	  * new NPC functions
-	  */
+	 * new NPC functions
+	 */
  	public void doAction(){
  		if(type.equals("friendly")) {
  			if(game.dialogue==true) {
-				game.dialogue=false;
+				game.dialogue=false;//terminate dialogue
 			}
 			else {
-			game.dialogue=true;
-			game.createDialogue(this);
-
- 			//dialogue();
- 		}
+				game.createDialogue(this);//startup dialogue
+			}
  		}
  		if(type.equals("enemy")) {
  			//attack();
  		}	
  	}
+ 	
  	public boolean actionable() {
  		/*
  		 * checks if entity is actionable
+ 		 * for hovering mouse function
  		 */
  		if(actionable==true) 
  			return true;
@@ -169,6 +204,7 @@ public class Entity{
  			return false;
  	
  	}
+ 	
  	public boolean isEntity(int x, int y) {
  		//checks if x and y is within entity's collision box
 
@@ -181,7 +217,7 @@ public class Entity{
 	
 	//getters	
 	public Image getNpcPortrait() {return npcPortrait;}
-	public String getDialogue() {return dialogue[currentDialogue];}
+	public Dialogue getDialogue() {return d;}
 	public int[] getCollisionBox() {return collisionBox;}
 		 
 	 
@@ -303,11 +339,35 @@ public class Entity{
 		 }
 		 */
 	}
-	
+	public void setDialogue(Dialogue d) {
+		this.d=d;
+		
+	}
 	public void enableMovement()
 	{
 		move = new Movement(this, game);
 	}
 
 	public ArrayList<Entity> getEntityList(){return game.getEntityList();}
+	
+    public void addItem(int i, Item it)
+    {
+        this.itemsList [i] = it;
+    }
+
+    public Item getItem(int i)
+    {
+        return itemsList[i];
+    }
+
+    public void removeItem(int i)
+    {
+        this.itemsList[i] = null;
+    }
+    public void addObjective(Objective quest) {
+    	questlog.add(quest);
+    }
+    public ArrayList<Objective> getQuestlog(){
+    	return questlog;
+    }
 }
