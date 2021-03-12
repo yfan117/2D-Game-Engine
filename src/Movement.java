@@ -129,14 +129,14 @@ public class Movement{
 					//obsX = current.x + 0;
 					//obsY = current.y + 200;
 					current.moveAngle = 180 + current.moveAngle;
-					System.out.println("2");
+					//System.out.println("2");
 				}
 				else if((deltaX < 0) && (deltaY < 0))
 				{
 					//obsX = current.x + 0;
 					//obsY = current.y + 100;
 					current.moveAngle = 180 + current.moveAngle;
-					System.out.println("3");
+					//System.out.println("3");
 
 				}
 				else if((deltaX > 0) && (deltaY < 0))
@@ -144,17 +144,17 @@ public class Movement{
 					//obsX = current.x + 200;
 					//obsY = current.y + 100;
 					current.moveAngle = 360 + current.moveAngle;
-					System.out.println("4");
+					//System.out.println("4");
 
 				}
 				else
 				{
 					//obsX = current.x + 200;
 					//obsY = current.y + 200;
-					System.out.println("1");
+					//System.out.println("1");
 
 				}
-				System.out.println(current.moveAngle);
+				//System.out.println(current.moveAngle);
 				//obsX = current.x;
 				//obsY = current.y;
 				current.newCheckPoint = false;
