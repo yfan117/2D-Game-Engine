@@ -2,12 +2,21 @@ package Diablo;
 
 
 import java.awt.BasicStroke;
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
+import java.awt.image.FilteredImageSource;
+import java.awt.image.ImageFilter;
+import java.awt.image.ImageProducer;
+import java.awt.image.RGBImageFilter;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -16,7 +25,9 @@ import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 
 class Renderer extends JPanel{
 
@@ -33,25 +44,27 @@ class Renderer extends JPanel{
 
 	BufferedImage image ;
 
+
 	
 	ArrayList<int[]> test = new ArrayList<>();
 
 	int mapWidth = 1000;
 	int mapHeight = 1000;
+
 	
 	//int mapWidth = 200*50;
 	//int mapHeight = 200 * 50;
 
-	BufferedImage frameBuffer1 = new BufferedImage(Game.windowX, Game.windowY, BufferedImage.TYPE_INT_RGB);
-	
-	
-    int[] fbData1 = ((DataBufferInt)frameBuffer1.getRaster().getDataBuffer()).getData();
-    
-    
-    
-    Animation[] worldBuffer = new Animation[mapWidth * mapHeight];
-    
 
+	BufferedImage frameBuffer1 = new BufferedImage(Game.windowX, Game.windowY, BufferedImage.TYPE_INT_RGB);
+  int[] fbData1 = ((DataBufferInt)frameBuffer1.getRaster().getDataBuffer()).getData();   
+  Animation[] worldBuffer = new Animation[mapWidth * mapHeight];
+
+    
+  
+    //int[] characerBuffer = new int[3608 * 1056];
+    int[] characerBuffer;
+    int[] tavernBuffer;
  
 	int windowX;
 	int windowY;
@@ -63,14 +76,13 @@ class Renderer extends JPanel{
 	private ArrayList<Entity> projectile;
 	private Display display;
 	private Game game;
-
-	LayerThread layerThread;
+	private Graphics g;
 	
-	int[] mapTile;
-			
-	public Renderer(Game game, String repository, int windowX, int windowY, ArrayList<Entity> list, ArrayList<Entity> projectile, Display display) {
+
+
+	public Renderer(String repository, int windowX, int windowY, ArrayList<Entity> list, ArrayList<Entity> projectile, Display display) {
+
 		
-		this.game = game;
 		this.list = list;
 		this.projectile = projectile;
 
@@ -82,6 +94,7 @@ class Renderer extends JPanel{
 		
 		try {
 			System.out.println(repository);
+
 
 			 image = ImageIO.read(new File(repository +"brick.png"));
 			 mapTile = getImageData("brick");
@@ -97,178 +110,35 @@ class Renderer extends JPanel{
 			
 			this.display = display;
 			this.game = display.getGame();
-			
-			populateArray();
-			
-			layerThread = new LayerThread(this, game);
-			
-			new Thread(layerThread).start();
-			
-			initObsOrder();
-			layerOrder();
-			tempToFrame();
-		
-			//layerFlag = true;
-	
-	
-		
-	}
-	
-	
-	public void initObsOrder()
-	{
-		
-		Entity temp;
-	
-		int leastIndex;
-		
-		ArrayList<Entity> obs = game.getObstacles();
 
-		for(int a = 0; a < obs.size(); a++)
-		{
-			leastIndex = a;
-			for(int i = a; i < obs.size(); i++)
-			{
-				if(obs.get(leastIndex).layerY + obs.get(leastIndex).y > obs.get(i).layerY + obs.get(i).y)
-				{
-					temp = obs.get(i);
-					obs.set(i, obs.get(leastIndex));
-					obs.set(leastIndex, temp);
-					
-				}
-			}
-		}
-		/*
-		for(int a = 0; a < game.getObstacles().size(); a++)
-		{
-			System.out.println(game.getObstacles().get(a).layerY + game.getObstacles().get(a).y);
-		}
-		
-		try {
-			Thread.sleep(500000);
-		} catch (InterruptedException e) {
+			
+			
+			
+			
+		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		*/
+		
+		fbData = ((DataBufferInt)frameBuffer.getRaster().getDataBuffer()).getData();
+		worldBuffer = new int[mapWidth * mapHeight];
+		characerBuffer = new int[character.getWidth() * character.getHeight()];
+		tavernBuffer = new int[1145 * 1000];
+		    
+		populateArray();
+		//tempToFrame();
+
+		cameraX = list.get(0).x;
+		cameraY = list.get(0).y;
+		
+		this.display = display;
+		this.game = display.getGame();
 	}
+
 	static int cameraX;
 	static int cameraY;
-	
-	ArrayList<Entity> entityInFB = new ArrayList<>(); 
-	boolean layerDone = false;
-	boolean layerFlag = true;
 
 
-	public boolean isInFrame(Entity current)
-	{
-		
-		//if((current.layerY + current.y > cameraY + resolutionY)&&(current.layerY + current.y < cameraY + resolutionY))
-			
-			
-			
-		return false;
-	}
-	public void layerOrder()
-	{
-		
-				entityInFB = new ArrayList<>();
-				Entity current;
-
-				for(int i = 0; i< game.getObstacles().size(); i++)
-				{
-					current = game.getObstacles().get(i);
-					
-					
-					if(current.y > cameraY + resolutionY)
-					{
-						break;
-					}
-					
-					entityInFB.add(current);
-					
-					
-				}
-				
-				
-				for(int i = 0; i< game.getEntityList().size(); i++)
-				{
-					current = game.getEntityList().get(i);
-					
-					for(int a = 0; a< entityInFB.size(); a++)
-					{
-						//System.out.println(entityInFB.size());
-						/*
-						if(current.y > cameraY + resolutionY)
-						{
-							break;
-						}
-						*/
-						
-						if(a == 0)
-						{
-							if(current.layerY + current.y < entityInFB.get(a).layerY + entityInFB.get(a).y)
-							{
-								entityInFB.add(0, current);
-								break;
-							}
-
-							
-						}
-						
-						else if(a == entityInFB.size() - 1)
-						{
-							if(current.layerY + current.y >= entityInFB.get(a).layerY + entityInFB.get(a).y)
-							{
-								entityInFB.add(current);
-							}
-							else
-							{
-								entityInFB.add(entityInFB.size() - 1, current);
-							}
-							
-							break;
-						}
-						
-						else if((current.layerY + current.y >= entityInFB.get(a).layerY + entityInFB.get(a).y)
-								&& (current.layerY + current.y <= entityInFB.get(a + 1).layerY + entityInFB.get(a + 1).y))
-							{
-								System.out.println("here");
-								entityInFB.add(a + 1, current);
-								break;
-							}
-						
-						
-						
-					
-						
-						
-					}
-				
-				}
-				
-				
-				
-				/*
-			
-				for(int a = 0; a < entityInFB.size(); a++)
-				{
-					System.out.println(entityInFB.get(a).layerY + entityInFB.get(a).y);
-				}
-				
-				try {
-					Thread.sleep(500000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				 */
-			//System.out.println("stuck");
-			//	Entity current;
-				
-		}
-			
-		
 	static int cameraControlX;
 	static int cameraControlY;
 	public void tempToFrame()
@@ -291,6 +161,7 @@ class Renderer extends JPanel{
 
 		}
 		
+
 		if(cameraY < 0)
 		{
 			cameraY = 0;
@@ -299,6 +170,7 @@ class Renderer extends JPanel{
 		//System.out.println(cameraX +" " +cameraY);
 		int fbStartX = resolutionX/2 - cameraControlX;
 		int fbStartY = resolutionY/2 - cameraControlY;
+
 		
 		if(fbStartX < 0)
 		{
@@ -314,7 +186,7 @@ class Renderer extends JPanel{
 		
 		if((fbStartX != 0) || (fbStartY != 0)||(fbStartX <= resolutionX) || (fbStartY <= resolutionY))
 		{
-			resetFrame(fbData1);
+			resetFrame();
 		}
 
 		//get map data	
@@ -355,7 +227,9 @@ class Renderer extends JPanel{
 				
 				if(offsetY > 0)
 				{
+
 					offsetY = 0;
+
 				}
 				
 				
@@ -381,26 +255,40 @@ class Renderer extends JPanel{
 				
 				
 			}
-			//while(Game.windowX - fbStartX >1000);
+
 			tileY++;
-			//fbStartX = preFbStartX;
+
 		}
 		//while(Game.windowY - fbStartY >500);
 	
 		//get entity data
 		Entity current;
+		int perPicX = 200;
+		int perPicY = 200;
+		for(int i = 0; i< game.getEntityList().size(); i++) 
 		{
-		
-			//System.out.println("stuck");
-				
-				for(int i = 0; i< entityInFB.size(); i++) 
+			current = game.getEntityList().get(i);
+			
+			for(int y = 0; y < perPicY; y++)
+			{
+				for(int x = 0; x < perPicX; x++)
 				{
-					current = entityInFB.get(i);
 					
-					for(int y = 0; y < current.picY; y++)
+					int colorCode =  characerBuffer[perPicX * current.picCounter + x + ((y + perPicY * current.picRank) * character.getWidth())];
+					
+					if( colorCode != -16777216)
 					{
-						for(int x = 0; x < current.picX; x++)
+						if((resolutionX/2 + x +(current.x - perPicX/2 - cameraX)) >= resolutionX)
 						{
+
+							break;
+						}
+
+						if(resolutionY/2 + y+(current.y - perPicY/2 - cameraY) >= resolutionY)
+						{
+							break;
+						}
+
 							int colorCode = 0;
 							if(current.type != "")
 							{
@@ -459,24 +347,90 @@ class Renderer extends JPanel{
 								}
 							
 					
+
 						
-							
-							}
+						
+						if(((resolutionX/2 + x +(current.x - perPicX/2 - cameraX)) <= 0) 
+								|| 
+							(resolutionY/2 + y+(current.y - perPicY/2 - cameraY) <= 0))
+						{
+						
+						}
+						else
+						{
+							fbData[resolutionX/2 + x +(current.x - perPicX/2 - cameraX) + (resolutionY/2 + y+(current.y - perPicY/2 - cameraY)) * resolutionX] = colorCode;
+						}
+						
+					
+	
 					}
-					}
+			
+				
+					
 				}
+			}
 		}
 		
+		for(int i = 0; i< game.getObstacles().size(); i++) 
+		{
+			current = game.getObstacles().get(i);
+			//System.out.println(i);
+			int width = tavern.getWidth();
+			int height = tavern.getHeight();
+			
+			for(int y = 0; y < height; y++)
+			{
+				for(int x = 0; x < width; x++)
+				{
+				
+					int colorCode =  tavernBuffer[x + y * tavern.getWidth()];
+					//System.out.println(colorCode);
+					if(( colorCode != -15658735) && ( colorCode != -16777216))
+					{
+						
+						if((resolutionX/2 + x +(current.x - cameraX)) >= resolutionX)
+						{
+							break;
+						}
+
+						if(resolutionY/2 + y+(current.y - cameraY) >= resolutionY)
+						{
+							break;
+						}
+						
+						
+						if(((resolutionX/2 + x +(current.x  - cameraX)) <= 0) 
+								|| 
+							(resolutionY/2 + y+(current.y - cameraY) <= 0))
+						{
+						
+						}
+						else
+						{
+							fbData[resolutionX/2 + x +(current.x - cameraX) + (resolutionY/2 + y+(current.y - cameraY)) * resolutionX] = colorCode;
+						}
+						
+					
+	
+					}
+			
+				
+					
+				}
+			}
+		}
+		
+	
 	}
 
-	public void resetFrame(int[] tempBuffer)
+	public void resetFrame()
 	{
 		for(int y = 0; y < resolutionY; y++)
 		{
 			for(int x = 0; x < resolutionX; x++)
 			{
 		
-				tempBuffer[x + y * resolutionX] = 0;
+				fbData[x + y * resolutionX] = 0;
 				
 			}
 		}
@@ -485,7 +439,7 @@ class Renderer extends JPanel{
 	public void showObs()
 	{
 		
-		for(int i = 0; i < worldBuffer.length; i++)
+		for(int i = 500 + 500 *5000; i < worldBuffer.length; i++)
     	{
 			//int colorCode = game.obsMap[i];
 			
@@ -496,14 +450,10 @@ class Renderer extends JPanel{
 			}
 				
     	}
-    	
-		
-		
 	}
 
     public void populateArray()
     {
-    	System.out.println("here");
     	
     	int width = image.getWidth();
     	int height = image.getHeight();
@@ -512,36 +462,45 @@ class Renderer extends JPanel{
     
     	for(int y = 0; y < mapHeight; y++)
 		{
+
     		for(int x = 0; x < mapWidth; x++)
     		{
     			worldBuffer[x + y *mapWidth] = new Animation(mapTile);
         		worldBuffer[x + y *mapWidth].addStartPoint(1000*x, 500*y);
     		}
     		
+
 		}
-   
-    }
-    
-  	public static int[] getImageData(String imageName) throws IOException
-	{
-  		BufferedImage image = ImageIO.read(new File(Game.root +"/resources/images/"+ imageName +".png"));
-  		
-    	int width = image.getWidth();
-    	int height = image.getHeight();
-		int[] imageData = new int[width * height];
-		
-		for(int y = 0; y < height; y++)
+    	
+    	
+    	//System.out.println(character.getRGB(0,0));
+    	for(int y = 0; y < character.getHeight(); y++)
 		{
-			for(int x = 0; x < width; x++)
+			for(int x = 0; x < character.getWidth(); x++)
 			{
-				imageData[x + y * width] = image.getRGB(x, y);
+					characerBuffer[x + y * character.getWidth()] = character.getRGB(x,y);
+	
+				
 			}
 		}
+    	
+    	for(int y = 0; y < tavern.getHeight(); y++)
+		{
+			for(int x = 0; x < tavern.getWidth(); x++)
+			{
+				tavernBuffer[x + y * tavern.getWidth()] = tavern.getRGB(x,y);
+	
+				
+			}
+		}
+    	
+    
+    
 		
-		return imageData;
-	}
+    }
 
 	public void updateValue() {
+
 		//System.out.println("");
 
 		
@@ -557,6 +516,7 @@ class Renderer extends JPanel{
 		this.layerFlag = true;
 		
 		Entity current;
+
 		for(int i = 0; i< list.size(); i++) {
 			
 		//if((list.get(i).x != list.get(i).preX) || (list.get(i).y != list.get(i).preY)) 
@@ -593,66 +553,184 @@ class Renderer extends JPanel{
 
 		
 		}
-		//System.out.println("1");
-		showObs();
-		LayerThread.go = true;
-		tempToFrame();
-		layerOrder();
-		//System.out.println("2");
-		repaint();
-		//System.out.println("3");
-	}
 
-	boolean renderReady = true;
+		tempToFrame();
+		//showObs();
+		repaint();
+	}
+	
+	//static int zoom = 0;
+	
 	protected void paintComponent(Graphics g) {
 
 			super.paintComponent(g);
+			
+			
 			//KeyboardControl.zoomRate++;
-	
-			layerDone = false;
-		
-				g.drawImage(frameBuffer1,
+			this.g=g;
+			g.drawImage(frameBuffer,
 						0 - KeyboardControl.zoomRate,
 						0 - KeyboardControl.zoomRate,
 						Game.windowX + KeyboardControl.zoomRate*2,
 						Game.windowY + KeyboardControl.zoomRate*2,
 						null);
-	
-			//System.out.println("repainted");
-				renderReady = true;
-		}
-
-	
-}
-
-class LayerThread implements Runnable 
-{
-	Renderer renderer;
-	Game game;
-	static boolean go = true;
-
-	
-	
-	public LayerThread(Renderer renderer, Game game)
-	{
-		this.renderer = renderer;
-		this.game = game;
-	}
-
-	@Override
-	public void run() {
-		// TODO Auto-generated method stub
-		while(true)
-			{
 			
-			if(go == true)
-				{
-					
-					//renderer.layerOrder();
-				
-				}	
+			/*
+			 * Check if hovering
+			 */
+			if(game.hovering==true) 
+				this.setCursor(new Cursor(Cursor.HAND_CURSOR));
+			else
+				this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+			
+			if(game.dialogue==true) {
+				game.dialogueObj.render(g);
 			}
 		
+			/*
+			 * Player & Inventory UI
+			 */
+			g.setFont(new Font("TimesRoman", Font.BOLD, 16));
+			//KeyboardControl.zoomRate++;
+			
+			g.setColor(Color.RED);
+			g.fillRect(25, 10, list.get(0).hp * 2, 20);
+			g.setColor(Color.BLUE);
+			g.fillRect(25, 40, list.get(0).mana, 20);
+
+			try
+			{
+				BufferedImage image = ImageIO.read(new File(Game.root + "/resources/images/playerHead.png"));
+
+				int color = image.getRGB(1, 1);
+				Image img = makeColorTransparent(image, new Color(color));
+				BufferedImage transImg = imageToBufferedImage(img);
+
+				g.drawImage(transImg, 25, 75, 75, 75, null);
+			}catch(Exception ex){ex.printStackTrace();}
+
+			//Inventory slots
+			if(game.getEntityList().get(0).inventory.getInventoryOpen())
+			{
+				g.setColor(Color.darkGray);
+				g.fillRect(((Diablo.Game.windowX / 2) - (game.getEntityList().get(0).inventory.getInventoryCols() / 2) * 50), ((Diablo.Game.windowY) - (game.getEntityList().get(0).inventory.getInventoryRows() * 50)), game.getEntityList().get(0).inventory.getInventoryCols() * 50, game.getEntityList().get(0).inventory.getInventoryRows() * 50);
+				g.setColor(Color.LIGHT_GRAY);
+				for (int i = 0; i < game.getEntityList().get(0).inventory.getInventoryCols(); i++)
+				{
+					for (int j = 0; j < game.getEntityList().get(0).inventory.getInventoryRows(); j++)
+					{
+						g.drawRect(((((Diablo.Game.windowX / 2) - (game.getEntityList().get(0).inventory.getInventoryCols() / 2) * 50)) + (i * 50)), (((Diablo.Game.windowY) - (game.getEntityList().get(0).inventory.getInventoryRows() * 50)) + 1) + (j * 50), 48, 48);
+					}
+				}
+
+				//Inventory items
+				int counter = -1;
+				for (int i = 0; i < game.getEntityList().get(0).inventory.getInventoryRows(); i++)
+				{
+					for (int j = 0; j < game.getEntityList().get(0).inventory.getInventoryCols(); j++)
+					{
+						try
+						{
+							counter++;
+							BufferedImage img = game.getEntityList().get(0).inventory.getInventoryItemImage(counter);
+							g.drawImage(img, ((((Diablo.Game.windowX / 2) - (game.getEntityList().get(0).inventory.getInventoryCols() / 2) * 50) + 9) + (j * 50)), (((Diablo.Game.windowY) - (game.getEntityList().get(0).inventory.getInventoryRows() * 50)) + 9) + (i * 50), 32, 32, null);
+							if(game.getEntityList().get(0).inventory.getInventoryItem(counter).isStackable())
+							{
+								String s = String.valueOf(game.getEntityList().get(0).inventory.getInventoryItem(counter).getNumberInStack());
+								g.drawString(s, ((((Diablo.Game.windowX / 2) - (game.getEntityList().get(0).inventory.getInventoryCols() / 2) * 50) + 9) + (j * 50)), (((Diablo.Game.windowY) - (game.getEntityList().get(0).inventory.getInventoryRows() * 50)) + 9) + (i * 50) + 30);
+							}
+						}catch(Exception ex){}
+					}
+				}
+			}
+
+			//Backpack slots
+			if(game.getEntityList().get(0).inventory.getBackpackOpen())
+			{
+				g.setColor(Color.darkGray);
+				g.fillRect(((Diablo.Game.windowX) - game.getEntityList().get(0).inventory.getCols() * 50), ((Diablo.Game.windowY / 2) - ((game.getEntityList().get(0).inventory.getRows() / 2) * 50)), game.getEntityList().get(0).inventory.getCols() * 50, game.getEntityList().get(0).inventory.getRows() * 50);
+				g.setColor(Color.LIGHT_GRAY);
+				for (int i = 0; i < game.getEntityList().get(0).inventory.getCols(); i++)
+				{
+					for (int j = 0; j < game.getEntityList().get(0).inventory.getRows(); j++)
+					{
+						g.drawRect(((((Diablo.Game.windowX) - game.getEntityList().get(0).inventory.getCols() * 50)) + (i * 50)), (((Diablo.Game.windowY / 2) - ((game.getEntityList().get(0).inventory.getRows() / 2) * 50)) + 1) + (j * 50), 48, 48);
+					}
+				}
+
+				//Backpack items
+				int counter = -1;
+				for (int i = 0; i < game.getEntityList().get(0).inventory.getRows(); i++)
+				{
+					for (int j = 0; j < game.getEntityList().get(0).inventory.getCols(); j++)
+					{
+						try
+						{
+							counter++;
+							BufferedImage img = game.getEntityList().get(0).inventory.getBackpackItemImage(counter);
+							g.drawImage(img, ((((Diablo.Game.windowX) - game.getEntityList().get(0).inventory.getCols() * 50) + 9) + (j * 50)), (((Diablo.Game.windowY / 2) - ((game.getEntityList().get(0).inventory.getRows() / 2) * 50)) + 9) + (i * 50), 32, 32, null);
+							if(game.getEntityList().get(0).inventory.getBackpackItem(counter).isStackable())
+							{
+								String s = String.valueOf(game.getEntityList().get(0).inventory.getBackpackItem(counter).getNumberInStack());
+								g.drawString(s, ((((Diablo.Game.windowX) - game.getEntityList().get(0).inventory.getCols() * 50) + 9) + (j * 50)), (((Diablo.Game.windowY / 2) - ((game.getEntityList().get(0).inventory.getRows() / 2) * 50)) + 9) + (i * 50) + 30);
+							}
+						}catch(Exception ex){}
+					}
+				}
+			}
+
+			///////////////////////////ADD LATER
+			//Spell slots
+//			g.setColor(Color.DARK_GRAY);
+//			g.fillRect(((Diablo.Game.windowX/2)-74), (Diablo.Game.windowY - 87), 148, 37);
+//			g.setColor(Color.blue);
+//			for(int i = 0; i < 4; i++)
+//			{
+//				g.drawRect(((Diablo.Game.windowX/2)-74)+(i*37), Diablo.Game.windowY - 86, 35, 35);
+//			}
+//			g.setColor(Color.CYAN);
+//			for(int i = 0; i < 4; i++)
+//			{
+//				g.drawRect(((Diablo.Game.windowX/2)-73)+(i*37), Diablo.Game.windowY - 85, 33, 33);
+//			}
+//			g.setColor(Color.blue);
+//			for(int i = 0; i < 4; i++)
+//			{
+//				g.drawRect(((Diablo.Game.windowX/2)-72)+(i*37), Diablo.Game.windowY - 84, 31, 31);
+//			}
+	
+		}
+	//new function
+	private static BufferedImage imageToBufferedImage(Image image) {
+
+		BufferedImage bufferedImage = new BufferedImage(image.getWidth(null), image.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g2 = bufferedImage.createGraphics();
+		g2.drawImage(image, 0, 0, null);
+		g2.dispose();
+
+		return bufferedImage;
+
+	}
+
+	public static Image makeColorTransparent(BufferedImage im, final Color color) {
+		ImageFilter filter = new RGBImageFilter() {
+
+			// the color we are looking for... Alpha bits are set to opaque
+			public int markerRGB = color.getRGB() | 0xFF000000;
+
+			public final int filterRGB(int x, int y, int rgb) {
+				if ((rgb | 0xFF000000) == markerRGB) {
+					// Mark the alpha bits as zero - transparent
+					return 0x00FFFFFF & rgb;
+				} else {
+					// nothing to do
+					return rgb;
+				}
+			}
+		};
+
+		ImageProducer ip = new FilteredImageSource(im.getSource(), filter);
+		return Toolkit.getDefaultToolkit().createImage(ip);
 	}
 	
 }
