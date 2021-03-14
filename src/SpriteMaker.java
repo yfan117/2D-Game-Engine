@@ -12,23 +12,23 @@ public class SpriteMaker {
 	
 	public static void main(String[] args) throws IOException
 	{
-		int picX = 200;
-		int picY = 200;
-		int numDirection = 8;
-		int numPicPer = 19;
+		int picX = 300;
+		int picY = 300;
+		int numDirection = 16;
+		int numPicPer = 111;
 		
 		int width = picX * numPicPer;
 		int height = picY * numDirection;
 		//int[][] rgbMatrix = new int[picX * numPicPer][picY * numDirection];
 		int[] rgbMatrix = new int[width * height];
 		
-		String root = Paths.get(System.getProperty("user.dir")).getParent()+"/Portfolio/resources/images/sprite/Direction";
+		String root = Paths.get(System.getProperty("user.dir")).getParent()+"/Portfolio/resources/images/wizard/Direction";
 		//String root = "C:\\Users\\Fan\\eclipse-workspace/Portfolio/resources/images/sprite/Direction";
 		
 		String newRoot;
 		String imageDir;
 		
-		for(int i = 1; i <= 8 ; i++)
+		for(int i = 1; i <= numDirection ; i++)
 		{
 			newRoot = root + i +"/";
 			
@@ -38,9 +38,13 @@ public class SpriteMaker {
 				{
 					imageDir = newRoot + "000" +a +".png";
 				}
-				else
+				else if(a<100)
 				{
 					imageDir = newRoot + "00" +a +".png";
+				}
+				else
+				{
+					imageDir = newRoot + "0" +a +".png";
 				}
 				//C:\Users\Fan\eclipse-workspace/Portfolio/resources/images/
 				//System.out.println(imageDir);
@@ -82,7 +86,17 @@ public class SpriteMaker {
 			temp[i] = rgbMatrix[i];
 		}
 		
-		ImageIO.write(finalImage, "png", new File("C:\\Users\\Fan\\eclipse-workspace/Portfolio/resources/images/sprite.png"));
+/*
+		FileWriter outputFile = new FileWriter("sprite.txt");
+		for(int i = 0; i < width * height; i++)
+		{
+			//System.out.println(temp[i]);
+			
+			outputFile.write(temp[i] +" ");
+		}
+    */
+		ImageIO.write(finalImage, "png", new File("C:\\Users\\Fan\\eclipse-workspace/Portfolio/resources/images/wizard.png"));
+
 		
 		
 		

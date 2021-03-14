@@ -76,6 +76,9 @@ public class Movement {
 		
 	}
 
+	
+	int obsX;
+	int obsY;
 	public void update(Entity current)
 	{
 
@@ -100,8 +103,90 @@ public class Movement {
 				
 				
 			}
-		
-			
+			//System.out.println(current.x +" " +current.y);
+			if(current.newCheckPoint == true)
+			{
+				/*
+				System.out.println("currently on: "+current.x +" " +current.y);
+				System.out.println("going to: "+current.clickedX +" " +current.clickedY);
+				System.out.println((current.clickedY - current.y));
+				System.out.println((current.clickedX - current.x));
+				
+				double slope = (double)((current.clickedY - current.y)/(current.clickedX - current.x));
+				double slope2 = -115.0 / 315.0;
+				System.out.println(slope2);
+				 */
+				//System.out.println(Math.toDegrees(Math.atan((current.clickedY - current.y)/(current.clickedX - current.x))));
+				//System.out.println(Math.toDegrees(Math.atan2((current.y - current.clickedY)/(current.x - current.clickedX), nodeIndex)));
+				double deltaX = (double)(current.clickedX - current.x);
+				double deltaY = -(double)(current.clickedY - current.y);
+				current.slopeY = deltaY / deltaX;
+				current.moveAngle = Math.toDegrees(Math.atan2(current.slopeY, nodeIndex));
+				
+				
+				if((deltaX < 0) && (deltaY > 0))
+				{
+					//obsX = current.x + 0;
+					//obsY = current.y + 200;
+					current.moveAngle = 180 + current.moveAngle;
+					//System.out.println("2");
+				}
+				else if((deltaX < 0) && (deltaY < 0))
+				{
+					//obsX = current.x + 0;
+					//obsY = current.y + 100;
+					current.moveAngle = 180 + current.moveAngle;
+					//System.out.println("3");
+
+				}
+				else if((deltaX > 0) && (deltaY < 0))
+				{
+					//obsX = current.x + 200;
+					//obsY = current.y + 100;
+					current.moveAngle = 360 + current.moveAngle;
+					//System.out.println("4");
+
+				}
+				else
+				{
+					//obsX = current.x + 200;
+					//obsY = current.y + 200;
+					//System.out.println("1");
+
+				}
+				//System.out.println(current.moveAngle);
+				//obsX = current.x;
+				//obsY = current.y;
+				current.newCheckPoint = false;
+				//System.out.println(obsX +" " +obsY);
+				/*
+				int angleDiff = 15;
+				  if((current.moveAngle > 90 + angleDiff) && (current.moveAngle < 180 - angleDiff)) {
+				   current.picRank = 7;
+				  }
+				  else if((current.moveAngle > 0 + angleDiff) && (current.moveAngle < 90 - angleDiff)) {
+				   current.picRank = 1;
+				  }
+				  else if((current.moveAngle > 180 + angleDiff) && (current.moveAngle < 270 - angleDiff)) {
+				   current.picRank = 5;
+				  }
+				  else if((current.moveAngle > 270 + angleDiff) && (current.moveAngle < 360 - angleDiff)) {
+				   current.picRank = 3;
+				  }
+				  else if((current.moveAngle > 90 - angleDiff) && (current.moveAngle < 90 + angleDiff)) {
+				   current.picRank = 0;
+				  }
+				  else if((current.moveAngle > 270 - angleDiff) && (current.moveAngle < 270 + angleDiff)) {
+				   current.picRank = 4;
+				  }
+				  else if((current.moveAngle > 180 - angleDiff) && (current.moveAngle < 180 + angleDiff)) {
+				   current.picRank = 6;
+				  }
+				  else if((current.moveAngle < 0 + angleDiff) || (current.moveAngle > 360 - angleDiff)) {
+				   current.picRank = 2;
+				  }
+				  */
+			}
 			//current.clickedX = 100;
 			//current.clickedX = 100;
 
@@ -110,7 +195,7 @@ public class Movement {
 			current.slopeX = Math.abs(Math.round((double)(current.clickedX - current.x)/(current.clickedY - current.y)));
 			current.slopeY = Math.abs(Math.round((double)(current.clickedY - current.y)/(current.clickedX - current.x)));
 
-
+			
 			if(current.slopeX > 4) {
 				current.slopeX = 4;
 			}
@@ -228,17 +313,24 @@ public class Movement {
 			{
 
 			//	active = false;
-				if(current.type == "player")
+				//if(current.type == "player")
 				{
 					checkPoint.remove(1);
+					current.newCheckPoint = true;
+					//obsX = current.x;
+					//obsY = current.y;
 				}
 				
+				//Math.toDegrees(Math.atan(current.slopeY));
 		
 				//current.newClick = false;
 				current.maxSlope = 1;
 				
 				if(checkPoint.size() == 1)
 				{
+					current.newCheckPoint = false;
+					current.state = "idle";
+					current.picCounter = 0;
 					current.newClick = false;
 					current.hasPath = false;
 				}
@@ -272,14 +364,15 @@ public class Movement {
 
 		public void updateX(Entity current) {
 
-
+			   // current.collision = false;
 				if(current.clickedX < current.x){
 
-					isCollision(current.x-5, current.y, current);
+					//isCollision(obsX-5, obsY, current);
 
 					//System.out.println(collision);
 					if(current.collision == false)
 					{
+						//obsX -=5;
 						current.x -=5;
 						current.moveCounter++;
 
@@ -290,8 +383,8 @@ public class Movement {
 					else
 					{
 
-						current.clickedX = current.x;
-						current.clickedY = current.y;
+						current.clickedX = obsX;
+						current.clickedY = obsY;
 
 					}
 
@@ -301,10 +394,11 @@ public class Movement {
 				}
 				else if(current.x < current.clickedX) {
 
-					isCollision(current.x+1, current.y, current);
+					//isCollision(obsX+1, obsY, current);
 
 					if(current.collision == false)
 					{
+						//obsX +=5;
 						current.x +=5;
 						current.moveCounter++;
 
@@ -314,8 +408,8 @@ public class Movement {
 					else
 					{
 
-						current.clickedX = current.x;
-						current.clickedY = current.y;
+						current.clickedX = obsX;
+						current.clickedY = obsY;
 
 					}
 
@@ -328,10 +422,11 @@ public class Movement {
 
 				if(current.clickedY < current.y) {
 
-					isCollision(current.x, current.y-1, current);
+					//isCollision(obsX, obsY-1, current);
 
 					if(current.collision == false)
 					{
+						//obsY -=5;
 						current.y -=5;
 						current.moveCounter++;
 
@@ -340,18 +435,19 @@ public class Movement {
 					else
 					{
 
-						current.clickedX = current.x;
-						current.clickedY = current.y;
+						current.clickedX = obsX;
+						current.clickedY = obsY;
 
 					}
 
 				}
 				else if(current.clickedY > current.y) {
 
-					isCollision(current.x, current.y+1, current);
+					//isCollision(obsX, obsY+1, current);
 
 					if(current.collision == false)
 					{
+						//obsY +=5;
 						current.y +=5;
 						current.moveCounter++;
 
@@ -360,8 +456,8 @@ public class Movement {
 					else
 					{
 
-						current.clickedX = current.x;
-						current.clickedY = current.y;
+						current.clickedX = obsX;
+						current.clickedY = obsY;
 
 					}
 
@@ -581,7 +677,7 @@ public class Movement {
 				//System.out.println("here");
 				
 				
-				if((x <= 0 ) || ( y <= 0) || (game.obsMap[x + y * game.mapWidth] == 1))
+				if((x <= 0 ) || ( y <= 0) || (game.obsMap[x + y * game.mapWidth] == true))
 				{
 					System.out.println("no go");
 					isObs = true;
@@ -769,6 +865,14 @@ public class Movement {
 						
 					}
 					*/
+
+					
+					if(grid.size() == 0)
+					{
+						System.out.println("ERROR, unknown error bypassed");
+						break;
+					}
+
 					shortestX = grid.get(0).x;
 					shortestY = grid.get(0).y;
 					int smallestIndex = 0;

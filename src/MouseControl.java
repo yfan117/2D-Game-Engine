@@ -1,17 +1,25 @@
 package Diablo;
+import java.awt.MouseInfo;
+import java.awt.Point;
+import java.awt.PointerInfo;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.swing.SwingUtilities;
 
+
 import Diablo.items.Item;
+
 public class MouseControl implements MouseListener, MouseMotionListener {
 	private Game game;
 	private Movement movement;
 	Entity player;
+
 	//new
 	int itemClickedNumber = -1;
     int backpackClickedNumber = -1;
@@ -42,23 +50,27 @@ public class MouseControl implements MouseListener, MouseMotionListener {
 				int eX = e.getX();
 				int eY = e.getY();
 		
+
 				player.collision = false;
 				System.out.println("clicked " +eX + " " + eY);
 				
 					
 				if(eX < Game.centerX ) {
-					player.clickedX = Renderer.cameraX- (Game.centerX - eX);
+					player.clickedX = Renderer.cameraControlX- (Game.centerX - eX);
 				}
 				else if(eX > Game.centerX ) {
-					player.clickedX = Renderer.cameraX + (eX - Game.centerX);
+					player.clickedX = Renderer.cameraControlX + (eX - Game.centerX);
 				}
 
 				if(eY < Game.centerY ) {
-					player.clickedY = Renderer.cameraY- (Game.centerY - eY);
+					player.clickedY = Renderer.cameraControlY- (Game.centerY - eY);
 				}
 				else if(eY > Game.centerY ) {
-					player.clickedY = Renderer.cameraY  + (eY - Game.centerY);
+					player.clickedY = Renderer.cameraControlY  + (eY - Game.centerY);
 				}
+				
+				//System.out.println(player.x +" " +player.y);
+				//System.out.println(player.clickedX +" " +player.clickedY);
 				 
 				
 				//int offsetX = Renderer.resolutionX / Game.windowX;
@@ -139,34 +151,105 @@ public class MouseControl implements MouseListener, MouseMotionListener {
 				//end of new stuff
 				if(movement.isObstacles(player.clickedX, player.clickedY) == false)
 				{
-					player.newClick = true;
-
-					player.north = false;
-					player.south = false;
-					player.west = false;
-					player.east = false;
-
-
-					player.directionCheck = true;
+					pathFinding = true;
+					player.hasPath = true;
+					player.newClick = false;
+					player.newCheckPoint = false;
+			
 
 					player.target = player;
 
 					//System.out.println(Math.sqrt(Math.pow(player.clickedX - 105, 2)+Math.pow(player.clickedY - 95, 2)));
 					//System.out.println(Math.sqrt(Math.pow(player.clickedX - 95, 2)+Math.pow(player.clickedY - 95, 2)));
 
-
-
+					
 					player.move.nodeIndex = 1;
 					player.move.checkPoint = new ArrayList<Node>();
 					player.move.usedGrid   = new ArrayList<Node>();
 					player.move.checkPoint.add(new Node(player.x, player.y));
 					player.move.pathFind();
-					player.hasPath = true;
-				}
 
+					player.state = "run";
+					pathFinding = false;
+					player.newClick = true;
+					player.newCheckPoint = true;
+					
+					player.state = "run";
+					//player.picCounter = 0;
+					
+					/*
+					try {
+						game.sender.sending();
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					*/
+				}
+		
 
 			}
 		}
+
+	
+		
+	};
+	public MouseControl(Game game)
+	{
+		this.game = game;
+		player = game.getEntityList().get(0);
+		movement = new Movement(player, game);
+
+		
+		Timer timer = new Timer();
+		//timer.scheduleAtFixedRate(constandCheck, 0, 1);
+	}
+
+	boolean isSecond = false;
+
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+
+
+	boolean isPressed = false;
+	//int 
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+		
+		
+	
+
+		if(SwingUtilities.isLeftMouseButton(e)) 
+		{
+	
+			
+			
+			int eX = e.getX();
+			int eY = e.getY();
+			
+			if((eX > 0) && (eY >0))
+			{
+				isPressed = true;
+				player.collision = false;
+			}
+
+			
+			System.out.println("clicked " +eX + " " + eY);
+
+			
+	
+
+		}
+
+			
+		
 
 		if (SwingUtilities.isRightMouseButton(e))
 		{
@@ -275,11 +358,14 @@ public class MouseControl implements MouseListener, MouseMotionListener {
 			}
 		}
 		
+		
+		
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		// TODO Auto-generated method stub
+
 
         int eX = e.getX();
         int eY = e.getY();
@@ -389,6 +475,7 @@ public class MouseControl implements MouseListener, MouseMotionListener {
         }
 
         game.getEntityList().get(0).inventory.resetAllBools();
+
 	}
 
 	@Override
@@ -451,10 +538,7 @@ public class MouseControl implements MouseListener, MouseMotionListener {
 	}
 	
 
-	@Override
-	public void mouseDragged(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-	}
+
 
 	//new 
 	   private void swapInvToInv(int i, int j)
@@ -553,4 +637,123 @@ public class MouseControl implements MouseListener, MouseMotionListener {
 	        }
 	        return b;
 	    }
+
+	@Override
+	public void mouseDragged(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+		//if(pathFinding == false)
+		{
+			//player.clickedX = e.getX() + player.x;
+			//player.clickedY = e.getY() + player.y;
+			/*
+			PointerInfo a = MouseInfo.getPointerInfo();
+			Point point = new Point(a.getLocation());
+			SwingUtilities.convertPointFromScreen(point, e.getComponent());
+			*/
+			/*
+			Point p = MouseInfo.getPointerInfo().getLocation();
+			System.out.println(p.x);
+			System.out.println(p.y);
+			int eX = p.x;
+			int eY = p.y;
+			*/
+			int eX = e.getX();
+			int eY = e.getY();
+			
+
+			player.collision = false;
+			//System.out.println("clicked " +eX + " " + eY);
+
+			
+			if(eX < Game.centerX ) {
+				player.clickedX = Renderer.cameraControlX- (Game.centerX - eX);
+			}
+			else if(eX > Game.centerX ) {
+				player.clickedX = Renderer.cameraControlX + (eX - Game.centerX);
+			}
+
+			if(eY < Game.centerY ) {
+				player.clickedY = Renderer.cameraControlY- (Game.centerY - eY);
+			}
+			else if(eY > Game.centerY ) {
+				player.clickedY = Renderer.cameraControlY  + (eY - Game.centerY);
+			}
+			
+			//System.out.println(player.x +" " +player.y);
+			//System.out.println(player.clickedX +" " +player.clickedY);
+			 
+			
+			//int offsetX = Renderer.resolutionX / Game.windowX;
+			//int offsetY = Renderer.resolutionY / Game.windowY;
+			/*
+			int offsetX = Game.windowX / eX * Renderer.resolutionX;
+			int offsetY = Game.windowY / eY * Renderer.resolutionY;
+			
+			
+			if(eX < Game.centerX ) {
+				player.clickedX = Renderer.cameraX - (Game.centerX- eX) * offsetX;
+			}
+			else if(eX > Game.centerX ) {
+				player.clickedX = Renderer.cameraX + (offsetX - Renderer.resolutionX/2);
+			}
+
+			if(eY < Game.centerY ) {
+				player.clickedY = Renderer.cameraY - (Game.centerX - eY) * offsetX;
+			}
+			else if(eY > Game.centerY ) {
+				player.clickedY = Renderer.cameraY + (eY - Game.centerY) * offsetX;
+			}
+			*/
+			player.clickedX =Math.round(player.clickedX/5)*5;
+			player.clickedY =Math.round(player.clickedY/5)*5;
+			
+			if(movement.isObstacles(player.clickedX, player.clickedY) == false)
+			{
+				pathFinding = true;
+				player.hasPath = true;
+				player.newClick = false;
+				player.newCheckPoint = false;
+		
+
+				player.target = player;
+
+				//System.out.println(Math.sqrt(Math.pow(player.clickedX - 105, 2)+Math.pow(player.clickedY - 95, 2)));
+				//System.out.println(Math.sqrt(Math.pow(player.clickedX - 95, 2)+Math.pow(player.clickedY - 95, 2)));
+
+				
+				player.move.nodeIndex = 1;
+				player.move.checkPoint = new ArrayList<Node>();
+				player.move.usedGrid   = new ArrayList<Node>();
+				player.move.checkPoint.add(new Node(player.x, player.y));
+				player.move.pathFind();
+				player.state = "run";
+				pathFinding = false;
+				player.newClick = true;
+				player.newCheckPoint = true;
+				
+				player.state = "run";
+				//player.picCounter = 0;
+				
+				/*
+				try {
+					game.sender.sending();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				*/
+			}
+	
+
+		}
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
 }

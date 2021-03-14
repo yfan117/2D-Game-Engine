@@ -31,10 +31,12 @@ public class Display{
 		frame.setSize(game.windowX, game.windowY);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLocationRelativeTo(null);
+
 		
 		mouseControl=new MouseControl(this.game);
 		render.addMouseListener(mouseControl);
 		render.addMouseMotionListener(mouseControl);
+
 		frame.addKeyListener(new KeyboardControl(this.game));
 		/*
 		 * Code to create "visible layers", which displays
@@ -80,40 +82,7 @@ public class Display{
 	public static void getDirection(Entity genericChar) {
 
 			//Entity genericChar = list.get(i);
-		  int differenceX = Math.abs(genericChar.x-genericChar.clickedX);
-		  int differenceY = Math.abs(genericChar.y-genericChar.clickedY);
-
-		  int acceptableDifference = 75;
-
-		  if((differenceX < acceptableDifference) && (genericChar.y < genericChar.clickedY)) {
-		   genericChar.south = true;
-		  }
-		  else if((differenceX < acceptableDifference) && (genericChar.y > genericChar.clickedY)) {
-		   genericChar.north = true;
-		  }
-		  else if((differenceY < acceptableDifference) && (genericChar.x < genericChar.clickedX)) {
-		   genericChar.east = true;
-		  }
-		  else if((differenceY < acceptableDifference) && (genericChar.x > genericChar.clickedX)) {
-		   genericChar.west = true;
-		  }
-		
-		  else if((differenceX >= acceptableDifference) && (genericChar.y < genericChar.clickedY) && (genericChar.x < genericChar.clickedX)) {
-		   genericChar.south = true;
-		   genericChar.east = true;
-		  }
-		  else if((differenceX >= acceptableDifference) && (genericChar.y < genericChar.clickedY) && (genericChar.x > genericChar.clickedX)) {
-		   genericChar.south = true;
-		   genericChar.west = true;
-		  }
-		  else if((differenceX >=  acceptableDifference) && (genericChar.y > genericChar.clickedY)&& (genericChar.x < genericChar.clickedX)) {
-		   genericChar.north = true;
-		   genericChar.east = true;
-		  }
-		  else if((differenceX >=  acceptableDifference) && (genericChar.y > genericChar.clickedY)&& (genericChar.x > genericChar.clickedX)) {
-		   genericChar.north = true;
-		   genericChar.west = true;
-		  }
+		  
 		  /*
 		  /*
 		   * save this for testing purposes
@@ -122,41 +91,67 @@ public class Display{
 		  System.out.println("genericChar.south: "+genericChar.south);
 		  System.out.println("genericChar.west: "+genericChar.west);
 		  System.out.println("genericChar.east: "+genericChar.east);
-		  */
-		  if((genericChar.north == true) && (genericChar.west == true)) {
+		  
+		double angleDiff = 15;
+		  if((genericChar.moveAngle > 90 + angleDiff) && (genericChar.moveAngle < 180 - angleDiff)) {
 		   genericChar.picRank = 7;
 		  }
-		  else if((genericChar.north == true) && (genericChar.east == true)) {
+		  else if((genericChar.moveAngle > 0 + angleDiff) && (genericChar.moveAngle < 90 - angleDiff)) {
 		   genericChar.picRank = 1;
 		  }
-		  else if((genericChar.south == true) && (genericChar.west == true)) {
+		  else if((genericChar.moveAngle > 180 + angleDiff) && (genericChar.moveAngle < 270 - angleDiff)) {
 		   genericChar.picRank = 5;
 		  }
-		  else if((genericChar.south == true) && (genericChar.east == true)) {
+		  else if((genericChar.moveAngle > 270 + angleDiff) && (genericChar.moveAngle < 360 - angleDiff)) {
 		   genericChar.picRank = 3;
 		  }
-		  else if(genericChar.north == true) {
+		  else if((genericChar.moveAngle > 90 - angleDiff) && (genericChar.moveAngle < 90 + angleDiff)) {
 		   genericChar.picRank = 0;
 		  }
-		  else if(genericChar.south == true) {
+		  else if((genericChar.moveAngle > 270 - angleDiff) && (genericChar.moveAngle < 270 + angleDiff)) {
 		   genericChar.picRank = 4;
 		  }
-		  else if(genericChar.west == true) {
+		  else if((genericChar.moveAngle > 180 - angleDiff) && (genericChar.moveAngle < 180 + angleDiff)) {
 		   genericChar.picRank = 6;
 		  }
-		  else if(genericChar.east == true) {
+		  else if((genericChar.moveAngle < 0 + angleDiff) || (genericChar.moveAngle > 360 - angleDiff)) {
 		   genericChar.picRank = 2;
 		  }
-		  genericChar.directionCheck = false;
+		  //genericChar.directionCheck = false;
+		   * */
+	
+		/*
+		System.out.println("angle is: " +genericChar.moveAngle);
+		System.out.println(genericChar.moveAngle / 22.5);
+		System.out.println(genericChar.picRank);
+		System.out.println();
+		*/
+		genericChar.picRank = (int) Math.round(genericChar.moveAngle / 22.5);
+		
+		if(genericChar.picRank == 16)
+		{
+			genericChar.picRank = 15;
+		}
 	}
 
-
-	public void update() {
-
-		for(int i = 0; i< game.getEntityList().size(); i++) {
-			//if(list.get(i).directionCheck == true)
-			if(game.getEntityList().get(i).newClick == true) {
-				getDirection(game.getEntityList().get(i));
+	
+		public void update() {
+	
+			for(int i = 0; i< game.getEntityList().size(); i++) {
+				//if(list.get(i).directionCheck == true)
+				if(game.getEntityList().get(i).newClick == true) 
+				{
+					getDirection(game.getEntityList().get(i));
+				}
+			}
+			
+			if(render.renderReady == true)
+			{
+				render.updateValue();
+			}
+			else
+			{
+				//System.out.println("not ready");
 			}
 		}
 		render.updateValue();
