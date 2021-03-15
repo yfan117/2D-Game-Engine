@@ -17,26 +17,24 @@ public class Display{
 	private PauseScreen pause;
 	private CardLayout cards= new CardLayout();
 	private Renderer render;
-	public Renderer getRender(){return render;};
 	private Game game;
 	private int currentPanel;
-	private MouseControl mouseControl;
 
 	public Display(Game game){
 
 		this.game = game;
 
-		render = new Renderer(game.root + "\\resources\\images\\" , game.windowX, game.windowY, game.getEntityList(), game.getProjectileList(), this);
+		render = new Renderer(game, game.root + "/resources/images/" , game.windowX, game.windowY, game.getEntityList(), game.getProjectileList(), this);
 		frame = new JFrame();
 		frame.setSize(game.windowX, game.windowY);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLocationRelativeTo(null);
-
-		
-		mouseControl=new MouseControl(this.game);
+	
+		MouseControl mouseControl = new MouseControl(this.game);
 		render.addMouseListener(mouseControl);
+		
 		render.addMouseMotionListener(mouseControl);
-
+		
 		frame.addKeyListener(new KeyboardControl(this.game));
 		/*
 		 * Code to create "visible layers", which displays
@@ -57,7 +55,7 @@ public class Display{
 
 	public Game getGame(){return game;}
 
-	public void switchJPanels(int i ) { //switch game state
+	public void switchJPanels(int i ) {
 		switch(i) {
 			case 0://menu state
 				cards.show(visiblePanel, "menu");
@@ -84,7 +82,7 @@ public class Display{
 			//Entity genericChar = list.get(i);
 		  
 		  /*
-		  /*
+		   *
 		   * save this for testing purposes
 		  System.out.println();
 		  System.out.println("genericChar.north: "+genericChar.north);
@@ -153,9 +151,18 @@ public class Display{
 			{
 				//System.out.println("not ready");
 			}
-		}
-		render.updateValue();
+			
 		
-	}
+			
+		}
+		
+		public Renderer getRendererObject()
+		{
+			return render;
+		}
 	
 	}
+
+
+
+	

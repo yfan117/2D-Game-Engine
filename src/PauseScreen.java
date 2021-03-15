@@ -44,15 +44,9 @@ public class PauseScreen extends JPanel{
 		button2.setForeground(Color.WHITE);
 		button2.addActionListener(e -> {display.switchJPanels(0);} );//menu
 		button.addActionListener(e -> {display.switchJPanels(1); } );//continue
-		JButton save = new JButton("save");
-		save.setBackground(Color.BLACK);
-		save.setForeground(Color.WHITE);
-		save.addActionListener(e -> {display.getGame().getLoadFile().saveGame(display.getGame());; System.out.println("Saved");} );//menu
-		
 		//button panel
 		buttons.add(button);
 		buttons.add(button2);
-		buttons.add(save);
 		buttons.setBackground(Color.BLACK);
 		
 		//Screen Title
@@ -70,9 +64,6 @@ public class PauseScreen extends JPanel{
 		gbc.gridx=1;
 		gbc.gridy=1;
 		panel.add(buttons,gbc);
-		gbc.gridx=0;
-		gbc.gridx=2;
-		panel.add(save,gbc);
 
 		//final panel settings
 		panel.setBackground(Color.BLACK);
