@@ -31,7 +31,6 @@ class DialogueObjective extends Objective{
 		game.dialogueObj.NPC=true;
 		game.dialogueObj.setDialogue(d);
 		game.getEntityList().get(0).addObjective(this);
-		
 	}
 	@Override
 	public Dialogue getTransition() {

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="d2c51394-261e-408e-a19f-14df4625bf3a" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/out/production/RPG/Diablo/AI.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/RPG/Diablo/AI.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/RPG/Diablo/Display.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/RPG/Diablo/Display.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/RPG/Diablo/Entity.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/RPG/Diablo/Entity.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/RPG/Diablo/Game$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/RPG/Diablo/Game$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/RPG/Diablo/Game$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/RPG/Diablo/Game$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/RPG/Diablo/Game.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/RPG/Diablo/Game.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/RPG/Diablo/KeyboardControl.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/RPG/Diablo/KeyboardControl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/RPG/Diablo/MainMenu.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/RPG/Diablo/MainMenu.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/RPG/Diablo/Map.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/RPG/Diablo/Map.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/RPG/Diablo/MouseControl.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/RPG/Diablo/MouseControl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/RPG/Diablo/Movement.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/RPG/Diablo/Movement.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/RPG/Diablo/MusicPlayer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/RPG/Diablo/MusicPlayer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/RPG/Diablo/Node.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/RPG/Diablo/Node.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/RPG/Diablo/PauseScreen.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/RPG/Diablo/PauseScreen.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/images/STAT431 hw2 26-Jan-2021 20-53-33.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/images/player.PNG" beforeDir="false" afterPath="$PROJECT_DIR$/resources/images/player.PNG" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/music/PerditionsLight.WAV" beforeDir="false" afterPath="$PROJECT_DIR$/resources/music/PerditionsLight.WAV" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/AI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/AI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Animation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Animation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Dialogue.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Dialogue.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/DialogueManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/DialogueManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/DialogueUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/DialogueUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Display.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Display.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Game.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Item.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Item.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/KeyboardControl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/KeyboardControl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/LoadGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/LoadGame.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MainMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MainMenu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Map.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Map.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MouseControl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MouseControl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Movement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Movement.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MusicPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MusicPlayer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/NPC.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/NPC.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Node.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Node.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Objective.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Objective.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/PauseScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/PauseScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Receiver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Receiver.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Renderer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Renderer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/SpriteMaker.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/SpriteMaker.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1pqcfW4NY7PPh5u9jbJmN7xNZhU" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+  </component>
+  <component name="RunManager">
+    <configuration name="Game" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Diablo.Game" />
+      <module name="RPG" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="Diablo.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.Game" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="d2c51394-261e-408e-a19f-14df4625bf3a" name="Default Changelist" comment="" />
+      <created>1615914166048</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1615914166048</updated>
+    </task>
+    <servers />
+  </component>
+</project>

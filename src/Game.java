@@ -1,4 +1,5 @@
 package Diablo;
+
 import Diablo.Items.Item;
 
 import javax.imageio.ImageIO;
@@ -16,7 +17,7 @@ import java.util.TimerTask;
 
 public class Game
 {
-    static final public String root = Paths.get(System.getProperty("user.dir")).getParent() + "/Portfolio";
+    static final public String root = Paths.get(System.getProperty("user.dir")).getParent() + "/RPG";
 
     public DialogueUI dialogueObj = null; //no dialogue instances yet
     boolean saved = false;
@@ -26,7 +27,7 @@ public class Game
     boolean responsing = false;
     private LoadGame loadFile;
 
-    public LoadGame getLoadFile() {return loadFile;}
+    public LoadGame getLoadFile() { return loadFile; }
 
     public void createDialogue(Entity entity) { dialogueObj = new DialogueUI(entity); }
 
@@ -48,7 +49,7 @@ public class Game
 
     private ArrayList<Entity> list = new ArrayList<Entity>();
 
-    public ArrayList<Entity> getEntityList() {return list;}
+    public ArrayList<Entity> getEntityList() { return list; }
 
     private ArrayList<Entity> projectileList = new ArrayList<Entity>();
 
@@ -86,7 +87,7 @@ public class Game
 
     public Game() throws IOException
     {
-    	try
+        try
         {
             map = new Map("map1", this);
         } catch (IOException e1)
@@ -120,18 +121,17 @@ public class Game
         {
             System.out.println("loading previous data");
             int[] loadData = loadFile.loadGame(); //load the game file
-           list.add(new Entity("player", "wizard", new int[]{10, 10}, 100, 80, this, 100, 50));
-           //list.add(new Entity("friendly", "lucy", new int[]{300, 300}, 100, 100, 80, this, 100, 0, ImageIO.read(new File(repo + "tavernGirl.png")), new Dialogue("Hello, good day", new Dialogue("Hello again")), collisionBox));
-           // list.add(new Entity("friendly", "lucy", new int[]{600, 300}, 100, 100, 80, this, 100, 0, ImageIO.read(new File(repo + "player.png")), new Dialogue("Greetings"), collisionBox));
-           // list.add(new Entity("friendly", "lucy", new int[]{1200, 300}, 100, 100, 80, this, 100, 0, ImageIO.read(new File(repo + "player.png")), d1, collisionBox));
+            list.add(new Entity("player", "wizard", new int[]{10, 10}, 100, 80, this, 100, 50));
+            //list.add(new Entity("friendly", "lucy", new int[]{300, 300}, 100, 100, 80, this, 100, 0, ImageIO.read(new File(repo + "tavernGirl.png")), new Dialogue("Hello, good day", new Dialogue("Hello again")), collisionBox));
+            // list.add(new Entity("friendly", "lucy", new int[]{600, 300}, 100, 100, 80, this, 100, 0, ImageIO.read(new File(repo + "player.png")), new Dialogue("Greetings"), collisionBox));
+            // list.add(new Entity("friendly", "lucy", new int[]{1200, 300}, 100, 100, 80, this, 100, 0, ImageIO.read(new File(repo + "player.png")), d1, collisionBox));
             obstacle.add(new Entity(this, "tavern", 500, 500));
-        } 
-        else
+        } else
         {
             list.add(new Entity("player", "wizard", new int[]{10, 10}, 100, 80, this, 100, 100));
-           //list.add(new Entity("friendly", "lucy", new int[]{300, 300}, 100, 100, 80, this, 100, 0, ImageIO.read(new File(repo + "tavernGirl.png")), new Dialogue("hello", new Dialogue("next")), collisionBox));
-           //list.add(new Entity("friendly", "lucy", new int[]{600, 300}, 100, 100, 80, this, 100, 0, ImageIO.read(new File(repo + "player.png")), new Dialogue("Tester"), collisionBox));
-           //list.add(new Entity("friendly", "lucy", new int[]{1200, 300}, 100, 100, 80, this, 100, 0, ImageIO.read(new File(repo + "player.png")), d1, collisionBox));
+            //list.add(new Entity("friendly", "lucy", new int[]{300, 300}, 100, 100, 80, this, 100, 0, ImageIO.read(new File(repo + "tavernGirl.png")), new Dialogue("hello", new Dialogue("next")), collisionBox));
+            //list.add(new Entity("friendly", "lucy", new int[]{600, 300}, 100, 100, 80, this, 100, 0, ImageIO.read(new File(repo + "player.png")), new Dialogue("Tester"), collisionBox));
+            //list.add(new Entity("friendly", "lucy", new int[]{1200, 300}, 100, 100, 80, this, 100, 0, ImageIO.read(new File(repo + "player.png")), d1, collisionBox));
             obstacle.add(new Entity(this, "house", 500, 500));
         }
 
@@ -189,15 +189,6 @@ public class Game
 
         sender = new Sender(this, 10000);
         sendTimer.scheduleAtFixedRate(send, 0, 1);
-		 
-		 /*
-		 while(true)
-		 {
-			
-			 display.update();
-		 }
-		 */
-
     }
 
 
@@ -244,7 +235,6 @@ public class Game
             //System.out.println("repainting");
             display.update();
             //display.getRendererObject().repaintt();
-
         }
     };
 
@@ -283,29 +273,16 @@ public class Game
 
         for (int i = 1; i < list.size(); i++)
         {
-
-            //System.out.println("ai");
             list.get(i).ai.update();
-
-
         }
-        //System.out.println(projectile.size());
 
         for (int i = 0; i < projectileList.size(); i++)
         {
-
             projectileList.get(i).move.update(projectileList.get(i));
-
-            //System.out.println(projectile.get(i).collision);
         }
-
-        //display.update();
-
-        //list.get(0).takeDamage(list.get(0), 1);
 
         for (int i = 0; i < projectileList.size(); i++)
         {
-
             if ((projectileList.get(i).visible == false) || (projectileList.get(i).active == false))
             {
                 projectileList.remove(i);
@@ -321,17 +298,11 @@ public class Game
             }
         }
 
-        //System.out.println(projectile.size());
-
         if (list.get(0).hp <= 0)
         {
             //break;
         }
-
-
     }
-
-
 }
 
 class Sending implements Runnable
@@ -361,7 +332,6 @@ class Sending implements Runnable
                 e.printStackTrace();
             }
         }
-
     }
 }
 
@@ -391,7 +361,6 @@ class Receiving implements Runnable
                 e.printStackTrace();
             }
         }
-
     }
 }
 
@@ -415,18 +384,12 @@ class DisplayThread implements Runnable
         // TODO Auto-generated method stub
         while (true)
         {
-
-            //timer.scheduleAtFixedRate(frameUpdate, 0, waitTime);
-
             if (Game.gameTime >= preTime + waitTime)
             {
                 preTime = Game.gameTime;
-                //System.out.println("repainting");
                 game.display.update();
             }
-            //System.out.println();
         }
-
     }
 	
 	/*
@@ -443,5 +406,4 @@ class DisplayThread implements Runnable
 		}
 	  };
 	  */
-
 }

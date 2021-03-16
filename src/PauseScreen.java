@@ -25,9 +25,6 @@ public class PauseScreen extends JPanel{
 	private MusicPlayer musicPlayer;
 
 	public PauseScreen(Display display){
-		//need to create new music player, maybe having one list of musicplayers in the game class for all others to access is better
-	
-		 
 		this.display=display;
 		this.panel= new JPanel();
 		this.setLayout(new BorderLayout());

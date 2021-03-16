@@ -59,9 +59,7 @@ public class Node {
 				temp = temp.nextNode();
 			}
 		}
-		
 		return temp;
-		
 	}
 	
 	public void replaceXY(int x, int y)
@@ -69,5 +67,4 @@ public class Node {
 		this.x = x;
 		this.y = y;
 	}
-	
 }

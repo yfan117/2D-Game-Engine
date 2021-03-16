@@ -1,7 +1,6 @@
 package Diablo;
 
 public class Animation {
-	
 	int[] imageData;
 	int spritWidth;
 	int picWidth;
@@ -10,7 +9,6 @@ public class Animation {
 	
 	int startX;
 	int startY;
-	//int cycleRate;
 	
 	public Animation(int[] imageData, int picWidth, int picHeight, int spritWidth, int numOfFrame)
 	{
@@ -24,7 +22,6 @@ public class Animation {
 	public Animation(int[] imageData)
 	{
 		this.imageData = imageData;
-
 	}
 	
 	public void addStartPoint(int startX, int startY)
