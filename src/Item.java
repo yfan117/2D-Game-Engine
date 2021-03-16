@@ -10,9 +10,5 @@ public abstract class Item
     public BufferedImage getImage(){return image;}
 }
 class SeansItem extends Item{
-	
-	SeansItem(){
-		
-	}
-	
+	SeansItem(){ }
 }
