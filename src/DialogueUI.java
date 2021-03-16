@@ -93,7 +93,7 @@ public class DialogueUI {
 //		g.setColor(myColor);
 //	    g.fillRoundRect(boxX,boxY, boxWidth, boxHeight,50,25);
 //	    g.setColor(Color.LIGHT_GRAY);
-		g.drawImage(dialoguebox,boxX-150,boxY-55,boxWidth+150,boxHeight+55,game.display.getRender());
+		g.drawImage(dialoguebox,boxX-150,boxY-55,boxWidth+150,boxHeight+55,game.display.getRendererObject());
 	}
 	
 	private void paintDialogueBox(Image image) {
@@ -102,7 +102,7 @@ public class DialogueUI {
 	 *  dialogue box and entity portrait
 	 */
 		g.setFont(new Font("TimesRoman",Font.PLAIN,20));
-		g.drawImage(image,boxX-150,boxY-55,boxWidth+150,boxHeight+55,game.display.getRender());
+		g.drawImage(image,boxX-150,boxY-55,boxWidth+150,boxHeight+55,game.display.getRendererObject());
 	
 	}
 	
@@ -126,7 +126,7 @@ public class DialogueUI {
 		 */
 		if(NPC==true) {
 			//draws portrait on the right
-			g.drawImage(portrait,boxX-120,boxY-20,portraitWidth,portraitHeight,game.display.getRender());
+			g.drawImage(portrait,boxX-120,boxY-20,portraitWidth,portraitHeight,game.display.getRendererObject());
 		}
 		if(NPC==false) {
 			//draw image on the left

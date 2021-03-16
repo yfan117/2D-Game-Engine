@@ -79,51 +79,7 @@ public class Display{
 
 	public static void getDirection(Entity genericChar) {
 
-			//Entity genericChar = list.get(i);
-		  
-		  /*
-		   *
-		   * save this for testing purposes
-		  System.out.println();
-		  System.out.println("genericChar.north: "+genericChar.north);
-		  System.out.println("genericChar.south: "+genericChar.south);
-		  System.out.println("genericChar.west: "+genericChar.west);
-		  System.out.println("genericChar.east: "+genericChar.east);
-		  
-		double angleDiff = 15;
-		  if((genericChar.moveAngle > 90 + angleDiff) && (genericChar.moveAngle < 180 - angleDiff)) {
-		   genericChar.picRank = 7;
-		  }
-		  else if((genericChar.moveAngle > 0 + angleDiff) && (genericChar.moveAngle < 90 - angleDiff)) {
-		   genericChar.picRank = 1;
-		  }
-		  else if((genericChar.moveAngle > 180 + angleDiff) && (genericChar.moveAngle < 270 - angleDiff)) {
-		   genericChar.picRank = 5;
-		  }
-		  else if((genericChar.moveAngle > 270 + angleDiff) && (genericChar.moveAngle < 360 - angleDiff)) {
-		   genericChar.picRank = 3;
-		  }
-		  else if((genericChar.moveAngle > 90 - angleDiff) && (genericChar.moveAngle < 90 + angleDiff)) {
-		   genericChar.picRank = 0;
-		  }
-		  else if((genericChar.moveAngle > 270 - angleDiff) && (genericChar.moveAngle < 270 + angleDiff)) {
-		   genericChar.picRank = 4;
-		  }
-		  else if((genericChar.moveAngle > 180 - angleDiff) && (genericChar.moveAngle < 180 + angleDiff)) {
-		   genericChar.picRank = 6;
-		  }
-		  else if((genericChar.moveAngle < 0 + angleDiff) || (genericChar.moveAngle > 360 - angleDiff)) {
-		   genericChar.picRank = 2;
-		  }
-		  //genericChar.directionCheck = false;
-		   * */
-	
-		/*
-		System.out.println("angle is: " +genericChar.moveAngle);
-		System.out.println(genericChar.moveAngle / 22.5);
-		System.out.println(genericChar.picRank);
-		System.out.println();
-		*/
+		
 		genericChar.picRank = (int) Math.round(genericChar.moveAngle / 22.5);
 		
 		if(genericChar.picRank == 16)

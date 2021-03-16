@@ -1,7 +1,6 @@
 
 package Diablo;
 import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferInt;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -13,6 +12,10 @@ import javax.swing.ImageIcon;
 
 public class Map{
 	Game game;
+	String mapName;
+	public MusicPlayer musicPlayer;
+	BufferedReader br;
+	String currLine;
 
 	public Map(Game game){this.game = game;}
 
@@ -21,8 +24,28 @@ public class Map{
 
 
 	public Map(String mapName, Game game) throws IOException  {
+		this.mapName = mapName;
+
+		try
+		{
+			br = new BufferedReader(new FileReader(Game.root + "/resources/text/music.txt"));
+			currLine = br.readLine();
+
+			while(currLine != null)
+			{
+				if(currLine.startsWith("/"))
+				{
+					if(currLine.substring(1).equals(mapName))
+					{
+						currLine = br.readLine();
+						musicPlayer = new MusicPlayer(Game.root + "/resources/music/" + mapName + ".WAV");
+					}
+				}
+				currLine = br.readLine();
+			}
+		}catch(Exception ex){ex.printStackTrace();}
 		
-		BufferedReader bufferedReader = new BufferedReader(new FileReader(Game.root + "/resources/text/" + mapName +".txt"));
+	BufferedReader bufferedReader = new BufferedReader(new FileReader(Game.root + "/resources/text/" + mapName +".txt"));
 		
 		File map = new File(Game.root + "/resources/text/" + mapName +".txt");
 		Scanner scan = new Scanner(map);
@@ -78,14 +101,18 @@ public class Map{
 				
 				
 			}
-			
-			
-		}
-	
-		
-		
 
 
+	}
 
+	public int[] getLocation() {
+
+		return respawnLcation;
+	}
+
+	public void playMapMusic()
+	{
+		musicPlayer.play();
+	}
 }
 

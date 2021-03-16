@@ -4,7 +4,7 @@ import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.FileReader;
 
-import Diablo.items.Item;
+import Diablo.Items.Item;
 
 public class Inventory
 {
