@@ -39,10 +39,10 @@ public class MainMenu extends JPanel
         startButton.setContentAreaFilled(false);
         startButton.setFocusPainted(false);
         startButton.setBorderPainted(false);
-        startButton.addActionListener(e -> { musicPlayer.stopSong(); display.switchJPanels(1);});
+        startButton.addActionListener(e -> {display.switchJPanels(1); musicPlayer.stop();});
         add(startButton, BorderLayout.SOUTH);
 
-        musicPlayer.start();
+        musicPlayer.play();
     }
 
     @Override

@@ -44,6 +44,7 @@ public class DialogueManager {
 		return true;
 	}
 	
+	
 	private boolean checkResponses() {
 		if( d.getResponses()==null)
 			return false;
@@ -53,6 +54,7 @@ public class DialogueManager {
 		ui.stageResponses(d);
 		return true;
 	}
+	
 	
 	private boolean checkTransition() {
 		if(d.getTransition()==null) {
@@ -76,5 +78,7 @@ public class DialogueManager {
 			return;
 		}
 		ui.game.dialogue=false;
+		
 	}
+	
 }

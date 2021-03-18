@@ -11,7 +11,9 @@ public class KeyboardControl implements KeyListener {
 	@Override
 	public void keyTyped(KeyEvent e) {
 		// TODO Auto-generated method stub
+		
 	}
+
 
 	@Override
 	public void keyPressed(KeyEvent e) {
@@ -23,6 +25,7 @@ public class KeyboardControl implements KeyListener {
 		if(e.getKeyCode() == KeyEvent.VK_ESCAPE) 
 		{
 			System.out.println("here");
+			
 		}
 
 		if(game.responsing==true) {
@@ -59,31 +62,41 @@ public class KeyboardControl implements KeyListener {
 
 			if (input == 'a')
 			{
+
 				game.getEntityList().get(0).moveLeft = true;
+				//Renderer.cameraX-=10;
 			}
 
 			if (input == 'w')
 			{
+
 				game.getEntityList().get(0).moveUp = true;
+				//Renderer.cameraY-=10;
 			}
 
 			if (input == 's')
 			{
+
 				game.getEntityList().get(0).moveDown = true;
+				//Renderer.cameraY+=10;
 			}
 
 			if (input == 'd')
 			{
+
 				game.getEntityList().get(0).moveRight = true;
+				//Renderer.cameraX+=10;
 			}
 
 			if (input == 'z')
 			{
+
 				zoomRate += 100;
 			}
 
 			if (input == 'x')
 			{
+
 				zoomRate -= 100;
 			}
 
@@ -95,14 +108,6 @@ public class KeyboardControl implements KeyListener {
 					game.getEntityList().get(0).inventory.setBackpackOpen(true);
 			}
 
-			if(input == 'l')
-			{
-				if(game.map.getMusicPlaying())
-					game.map.pauseMapMusic();
-				else
-					game.map.resumeMapMusic();
-			}
-
 			game.getEntityList().get(0).newClick = true;
 
 			game.getEntityList().get(0).north = false;
@@ -110,9 +115,11 @@ public class KeyboardControl implements KeyListener {
 			game.getEntityList().get(0).west = false;
 			game.getEntityList().get(0).east = false;
 
+
 			game.getEntityList().get(0).directionCheck = true;
 
 			game.getEntityList().get(0).target = game.getEntityList().get(0);
+
 		}
 	}
 
@@ -122,24 +129,35 @@ public class KeyboardControl implements KeyListener {
 		// TODO Auto-generated method stub
 	char input = e.getKeyChar();
 			
+			
 			if(input == 'a') 
 			{
+				
 				game.getEntityList().get(0).moveLeft = false;
+
 			}
 			
 			if(input == 'w') 
 			{
+				
 				game.getEntityList().get(0).moveUp = false;
+
 			}
 			
 			if(input == 's') 
 			{
+	
 				game.getEntityList().get(0).moveDown = false;
+
 			}
 			
 			if(input == 'd') 
 			{
+				
 				game.getEntityList().get(0).moveRight = false;
+
 			}
+			
+	
 	}
 }

@@ -44,12 +44,15 @@ public class Dialogue {
 	 */
 		this.dialogue=dialogue;
 		this.objective=objective;
+		
 	}
 	
 	/*
 	 * getters and setters
 	 */
-	public void addResponse(Dialogue responses) {}
+	public void addResponse(Dialogue responses) {
+		
+	}	
 	public void addResponses(Dialogue[] responses) {
 		this.responses=responses;
 	}	
