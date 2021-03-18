@@ -155,7 +155,6 @@ public class Entity
             return true;
         else
             return false;
-
     }
 
     public boolean isEntity(int x, int y)
@@ -212,7 +211,7 @@ public class Entity
 
         this.type = type;
         characterName = name;
-        if (type == "player")
+        if (type.equals("player"))
         {
             try{
                 runningStone = new MusicPlayer(Game.root + "/resources/music/runningStone.WAV");
