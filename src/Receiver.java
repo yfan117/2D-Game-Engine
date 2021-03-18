@@ -42,6 +42,7 @@ public class Receiver {
    
    public void receiving() throws IOException
    {
+	   
 	   mySocket.receive(datagram);
 	   String message = new String(buffer);
 
@@ -55,5 +56,6 @@ public class Receiver {
        //System.out.println(Integer.parseInt(message));
        message = message.trim();
        game.getEntityList().get(1).clickedY = Integer.parseInt(message);
+
    }
 } // end class

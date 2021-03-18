@@ -103,9 +103,11 @@ public class DialogueUI {
 	 */
 		g.setFont(new Font("TimesRoman",Font.PLAIN,20));
 		g.drawImage(image,boxX-150,boxY-55,boxWidth+150,boxHeight+55,game.display.getRendererObject());
+	
 	}
 	
 	private void paintNPCDialogue() { //will be changed to paintDialogue
+		
 		paintEntityPortrait(boxWidth);
 		g.setColor(new Color(101,67,33));
 		if(NPC==true) {
@@ -114,6 +116,8 @@ public class DialogueUI {
 		if(NPC==false) {
 			
 		}
+		
+	   
 	}
 	
 	private void paintEntityPortrait(int boxWidth) {
@@ -244,4 +248,7 @@ public class DialogueUI {
 		nWidth=(nHeight*width)/height;
 		return nWidth;
 	}
+	
+
+	
 }

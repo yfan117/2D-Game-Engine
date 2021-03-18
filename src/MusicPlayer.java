@@ -9,7 +9,7 @@ import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
-public class MusicPlayer extends Thread
+public class MusicPlayer
 {
     private AudioInputStream audioInputStream;
     private Long currentTime;
@@ -19,34 +19,19 @@ public class MusicPlayer extends Thread
     public MusicPlayer(String filePath) throws UnsupportedAudioFileException, IOException, LineUnavailableException
     {
         this.filePath = filePath;
-    }
-
-    public void run()
-    {
-        try
-        {
-            audioInputStream = AudioSystem.getAudioInputStream(new File(filePath).getAbsoluteFile());
-            clip = AudioSystem.getClip();
-            clip.open(audioInputStream);
-            clip.loop(Clip.LOOP_CONTINUOUSLY);
-            clip.start();
-            if(filePath.equals(Game.root + "/resources/music/runningStone.WAV") || filePath.equals(Game.root + "/resources/music/runningDirt.WAV"))
-                pause();
-            Thread.sleep(100);
-            while(clip.isRunning())
-            {
-                Thread.sleep(100);
-            }
-        }catch(Exception ex){ex.printStackTrace();}
+        audioInputStream = AudioSystem.getAudioInputStream(new File(filePath).getAbsoluteFile());
+        clip = AudioSystem.getClip();
+        clip.open(audioInputStream);
+        clip.loop(Clip.LOOP_CONTINUOUSLY);
+        clip.stop();
     }
 
     public void play()
     {
         clip.start();
-        clip.loop(Clip.LOOP_CONTINUOUSLY);
     }
 
-    public void stopSong()
+    public void stop()
     {
         currentTime = 0L;
         clip.stop();
@@ -59,17 +44,10 @@ public class MusicPlayer extends Thread
         clip.stop();
     }
 
-    public void pauseAndReset()
-    {
-        currentTime = 0L;
-        clip.stop();
-    }
-
-    public void resumeSong()
+    public void resume()
     {
         clip.setMicrosecondPosition(currentTime);
         clip.start();
-        clip.loop(Clip.LOOP_CONTINUOUSLY);
     }
 
     public boolean isRunning()

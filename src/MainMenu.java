@@ -83,7 +83,8 @@ public class MainMenu extends JPanel
 
         add(bottomPanel, BorderLayout.SOUTH);
 
-        musicPlayer.start();
+
+        musicPlayer.play();
     }
 
     @Override

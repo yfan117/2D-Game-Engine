@@ -1,6 +1,7 @@
 package Diablo;
 
 
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
@@ -224,170 +225,194 @@ public class Entity
         }
         else
         {
-            respondX = x;
-            respondY = y;
-            ai = new AI(this, game);
+        		
+        	respondX = x;
+        	respondY = y;
+        	ai = new AI(this, game);
         }
-
+        
         target = this;
-
-        inventory = new Inventory();
-
-        //friendly NPC Variables
-        if (type.equals("friendly"))
-        {
-            actionable = true;
-        }
-        if (type.equals("enemy"))
-        {
-            actionable = true;
-        }
-
-        width = 0;
-        height = 0;
-
+        
+    	inventory = new Inventory();
+    	
+		//friendly NPC Variables
+		if(type.equals("friendly")) {
+			actionable=true;
+		}
+		if(type.equals("enemy")) {
+			actionable=true;
+		}
+		
+		width= 0;
+		height=0;
+		
         this.hp = hp;
         this.hitBox = hitBox;
+        
+         FileReader reader = new FileReader(Game.root + "/resources/text/" + name + ".txt");
+		 BufferedReader bufferedReader = new BufferedReader(reader);
 
-        FileReader reader = new FileReader(Game.root + "/resources/text/" + name + ".txt");
-        BufferedReader bufferedReader = new BufferedReader(reader);
+		 layerY = Integer.parseInt(bufferedReader.readLine());
+	
+	     idle = new Animation(Renderer.getImageData(name),
+				        	  Integer.parseInt(bufferedReader.readLine()),
+				        	  Integer.parseInt(bufferedReader.readLine()),
+				        	  Integer.parseInt(bufferedReader.readLine()),
+				        	  Integer.parseInt(bufferedReader.readLine()));
+		 
+		// System.out.printf("%d %d %d \n", layerY, picX, picY);
 
-        layerY = Integer.parseInt(bufferedReader.readLine());
+		 moveSpeed = 5;
+		 
+		 state = "idle";
+		 
+		
+	}
 
-        idle = new Animation(Renderer.getImageData(name),
-                Integer.parseInt(bufferedReader.readLine()),
-                Integer.parseInt(bufferedReader.readLine()),
-                Integer.parseInt(bufferedReader.readLine()),
-                Integer.parseInt(bufferedReader.readLine()));
+	public Entity(Game game, String name, int x, int y) throws IOException {
+		this.game = game;
+		this.x = x;
+		this.y = y;
 
-        moveSpeed = 5;
+	}
 
-        state = "idle";
-    }
+	public Entity(Game game, String name, int destinationX, int destinationY, int hitBox) throws IOException {
 
-    public Entity(Game game, String name, int x, int y) throws IOException
-    {
-        this.game = game;
-        this.x = x;
-        this.y = y;
-    }
-
-    public Entity(String name, int destinationX, int destinationY, int hitBox) throws IOException
-    {
-        this.x = game.getEntityList().get(0).x;
+		this.x = game.getEntityList().get(0).x;
         this.y = game.getEntityList().get(0).y;
 
         preX = x;
         preY = y;
-
+        
         move = new Movement(this, game);
 
-        clickedX = destinationX;
-        clickedY = destinationY;
+		clickedX = destinationX ;
+		clickedY = destinationY ;
 
-        newClick = true;
+		newClick = true;
 
-        if (name == "arrow")
+        if(name == "arrow")
         {
-            type = "projectile";
-            visible = true;
+        	type = "projectile";
+        	visible = true;
+        	enableMovement();
+		
         }
-        if (name == "melee")
+        if(name == "melee")
         {
-            type = "melee";
-            visible = true;
+        	type = "melee";
+        	visible = true;
+        
+		
         }
-
+        
         this.hitBox = hitBox;
         FileReader reader = new FileReader(Game.root + "/resources/text/" + name + ".txt");
 
-        BufferedReader bufferedReader = new BufferedReader(reader);
+		 BufferedReader bufferedReader = new BufferedReader(reader);
 
-        moveSpeed = Integer.parseInt(bufferedReader.readLine());
+		 moveSpeed = Integer.parseInt(bufferedReader.readLine());
 
-        damage = Integer.parseInt(bufferedReader.readLine());
+		 damage = Integer.parseInt(bufferedReader.readLine());
 
-    }
+	}
+	
 
-
-    public Entity(Game game, int[] imageData, int x, int y, int layerY, int picX, int picY) throws IOException
-    {
-        this.game = game;
-        this.x = x;
+	public Entity(Game game, int[] imageData, int x, int y, int layerY, int picX, int picY) throws IOException {
+		this.game = game;
+		this.x = x;
         this.y = y;
         this.layerY = layerY;
         this.imageData = imageData;
         this.picX = picX;
         this.picY = picY;
         spriteWidth = picX;
-    }
+        
+        
+ 
+	}
+	
+	public void enableMovement() throws NumberFormatException, IOException
+	{
+		 
 
-    public void enableMovement() throws NumberFormatException, IOException
-    {
-        FileReader reader = new FileReader(Game.root + "/resources/text/" + characterName + "@run.txt");
-        BufferedReader bufferedReader = new BufferedReader(reader);
+		 if(type != "range")
+		 {
+			 run = new Animation(Renderer.getImageData("arrow2"), 
+		        	 64,
+		        	 64,
+		        	 64,
+		        	 0);	
+		 }
+		 else
+		 {
+			 FileReader reader = new FileReader(Game.root + "/resources/text/" + characterName + "@run.txt");
+			 BufferedReader bufferedReader = new BufferedReader(reader);
+		     run = new Animation(Renderer.getImageData(characterName + "@run"), 
+		        	 Integer.parseInt(bufferedReader.readLine()),
+		        	 Integer.parseInt(bufferedReader.readLine()),
+		        	 Integer.parseInt(bufferedReader.readLine()),
+		        	 Integer.parseInt(bufferedReader.readLine()));	 
+		 }
 
-        run = new Animation(Renderer.getImageData(characterName + "@run"),
-                Integer.parseInt(bufferedReader.readLine()),
-                Integer.parseInt(bufferedReader.readLine()),
-                Integer.parseInt(bufferedReader.readLine()),
-                Integer.parseInt(bufferedReader.readLine()));
-        move = new Movement(this, game);
-    }
+		move = new Movement(this, game);
+	}
+	
+	public ArrayList<Entity> getEntityList()
+	{
+		return game.getEntityList();
+	}
 
-    public ArrayList<Entity> getEntityList()
-    {
-        return game.getEntityList();
-    }
+	public void setDialogue(Dialogue d) {
+		this.d=d;
 
-    public void setDialogue(Dialogue d) { this.d = d; }
+	}
 
-    public void addItem(int i, Diablo.Items.Item it)
-    {
-        this.itemsList[i] = it;
-    }
+	public void addItem(int i, Diablo.Items.Item it)
+	{
+		this.itemsList [i] = it;
+	}
 
-    public Diablo.Items.Item getItem(int i)
-    {
-        return itemsList[i];
-    }
+	public Diablo.Items.Item getItem(int i)
+	{
+		return itemsList[i];
+	}
 
-    public void removeItem(int i)
-    {
-        this.itemsList[i] = null;
-    }
+	public void removeItem(int i)
+	{
+		this.itemsList[i] = null;
+	}
+	public void addObjective(Objective quest) {
+		questlog.add(quest);
+	}
+	public ArrayList<Objective> getQuestlog(){
+		return questlog;
+	}
 
-    public void addObjective(Objective quest)
-    {
-        questlog.add(quest);
-    }
+	public void setHP(int i)
+	{
+		this.hp = i;
+	}
 
-    public ArrayList<Objective> getQuestlog() { return questlog; }
+	public int getHP()
+	{
+		return this.hp;
+	}
 
-    public void setHP(int i)
-    {
-        this.hp = i;
-    }
+	public void setMana(int i)
+	{
+		this.mana = i;
+	}
 
-    public int getHP()
-    {
-        return this.hp;
-    }
+	public int getMana()
+	{
+		return this.mana;
+	}
 
-    public void setMana(int i)
-    {
-        this.mana = i;
-    }
-
-    public int getMana()
-    {
-        return this.mana;
-    }
-
-    public void setMovespeed(double i)
-    {
-        moveSpeed = (int) Math.round(5 * i);
-        if (moveSpeed <= 0)
-            moveSpeed = 1;
-    }
+	public void setMovespeed(double i)
+	{
+		moveSpeed = (int) Math.round(5 * i);
+		if (moveSpeed <= 0)
+			moveSpeed = 1;
+	}
 }

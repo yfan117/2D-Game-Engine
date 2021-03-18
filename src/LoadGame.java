@@ -40,6 +40,7 @@ public class LoadGame {
 		return saveData;
 	}
 	
+	
 	public void saveGame(Game game) {
 		x=game.getEntityList().get(0).x;
 		y=game.getEntityList().get(0).y;
@@ -48,6 +49,7 @@ public class LoadGame {
 		saveFile.delete();
 		}
 		outputToFile();
+		
 	}
 	
 	 private void outputToFile()
@@ -69,4 +71,10 @@ public class LoadGame {
 	           fw.close();
 	        }catch(Exception ex){ex.printStackTrace();}
 	    }
+	
+	
+	
+	
+	
+
 }
