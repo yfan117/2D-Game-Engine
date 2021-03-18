@@ -13,196 +13,216 @@ import java.util.ArrayList;
 
 import Diablo.Items.Item;
 
-public class Entity{
+public class Entity
+{
+    int x = 0;
+    int y = 0;
 
-	 int x = 0;
-	 int y = 0;
+    int clickedX;//destination
+    int clickedY;//destination
+    boolean newClick = false;
+    boolean directionCheck = false;
 
-	 int clickedX ;//destination
-	 int clickedY ;//destination
-	 boolean newClick = false;
-	 boolean directionCheck = false;
+    int moveSpeed = 0;
+    int moveCounter = 0;
 
-	 int moveSpeed = 0;
-	 int moveCounter = 0;
+    boolean north;
+    boolean south;
+    boolean west;
+    boolean east;
 
-	 boolean north;
-	 boolean south;
-	 boolean west;
-	 boolean east;
+    double slopeX;
+    double slopeY;
+    double maxSlope = 1;
 
-	 double slopeX;
-	 double slopeY;
-	 double maxSlope = 1;
+    int preX;
+    int preY;
 
-	 int preX;
-	 int preY;
+    int picCounter = 0;
+    int timeCounter = 0;
 
-	 int picCounter = 0;
-	 int timeCounter = 0;
+    int picRank = 6;
 
-	 int picRank = 6;
+    int range;
 
-	 int range;
+    String type = "";
 
-	 String type = "";
+    boolean visible = false;
+    boolean collision = false;
+    boolean active = true;
 
-	 boolean visible = false;
-	 boolean collision = false;
-	 boolean active = true;
-	 
-	 boolean isMelee = false;
-	 
-	 boolean tookDamage = false;
-	 
-	 boolean hasDoneDmage = false;
-	 
-	 boolean hasPath = false;
-	 
-	 boolean newCheckPoint = true;
-	 
-	 double moveAngle;
+    boolean isMelee = false;
 
-	 int hp;
-	 
-	 int damage;
-	 
-	 int hitBox;
+    boolean tookDamage = false;
 
-	 Entity target;
-	 
-	 Movement move;
-	 
-	 AI ai;
+    boolean hasDoneDmage = false;
 
-	 Game game;
+    boolean hasPath = false;
 
-	 int oil;
-	 int insanity;
-	 
-	 int respondX = 0;
-	 int respondY = 0;
-	/* 
-	static boolean moveLeft = false;
-	static boolean moveRight = false;
-	static boolean moveUp = false;
-	static boolean moveDown = false;
-	*/
-	 boolean moveLeft = false;
-	 boolean moveRight = false;
-	 boolean moveUp = false;
-	 boolean moveDown = false;
-	 
-	 boolean keyMove = false;
+    boolean newCheckPoint = true;
 
-	private boolean actionable=false;
+    double moveAngle;
 
-	public Inventory inventory;
-	int mana;
-	 
-	 String state;
-	 
-	int layerY;
-	int[] imageData;
-	int picX;
-	int picY;
-	int spriteWidth;
-	int numOfFrame;
-	//int frameTiming;
-	
-	Animation idle;
-	Animation run;
-	
-	String characterName;
+    int hp;
 
-	/*
-	 * Friendly NPC variables
-	 */
-	private Image npcPortrait;
-	private String[] dialogue;
-	private int currentDialogue;
-	private int [] collisionBox;
-	private int width;
-	private int height;
-	private Dialogue d=null;
-	private Diablo.Items.Item[] itemsList = new Diablo.Items.Item[4];
-	private ArrayList<Objective> questlog= new ArrayList<Objective>();
-	/*
-	 * Friendly NPC constructor
-	 */
-	
+    int damage;
 
-	public void doAction(){
-		if(type.equals("friendly")) {
-			if(game.dialogue==true) {
-				game.dialogue=false;//terminate dialogue
-			}
-			else {
-				game.createDialogue(this);//startup dialogue
-			}
-		}
-		if(type.equals("enemy")) {
-			//attack();
-		}
-	}
+    int hitBox;
 
-	public boolean actionable() {
-		/*
-		 * checks if entity is actionable
-		 * for hovering mouse function
-		 */
-		if(actionable==true)
-			return true;
-		else
-			return false;
+    Entity target;
 
-	}
+    Movement move;
 
-	public boolean isEntity(int x, int y) {
-		//checks if x and y is within entity's collision box
+    AI ai;
 
-		if(x<this.x+width/2 && x >this.x-width/2 && y <this.y+height/2 && y>this.y-height/2)
-		{
-			return true;
-		}
-		return false;
-	}
+    Game game;
 
-	//getters
-	public Image getNpcPortrait() {return npcPortrait;}
-	public Dialogue getDialogue() {return d;}
-	public int[] getCollisionBox() {return collisionBox;}
-	
-	public void updateAnimationData(Animation current)
-	{
-		imageData = current.imageData;
-		picX = current.picWidth;
-		picY = current.picHeight;
-		spriteWidth = current.spritWidth;
-		numOfFrame = current.numOfFrame;
-	}
-	public void addDialogue(Image NpcPortrait,Dialogue dialogue, int[] collisionBox)
-	{
-		this.npcPortrait=NpcPortrait;
-		this.d=dialogue;
-		currentDialogue=0;
-		this.collisionBox=collisionBox;
-	}
-	public Entity(String type, String name, int[] location, int hp, int hitBox, Game game, int oil, int mana) throws IOException {
-		this.game = game;
+    int oil;
+    int insanity;
 
-		this.inventory = new Diablo.Inventory();
+    int respondX = 0;
+    int respondY = 0;
 
-		 x = location[0];
-         y = location[1];
+    boolean moveLeft = false;
+    boolean moveRight = false;
+    boolean moveUp = false;
+    boolean moveDown = false;
 
-         this.type = type;
-         characterName = name;
-        if(type == "player")
-         {
-        	visible = true;
-        	enableMovement();
-         }
+    boolean keyMove = false;
+
+    private boolean actionable = false;
+
+    public Inventory inventory;
+    int mana;
+
+    String state;
+
+    int layerY;
+    int[] imageData;
+    int picX;
+    int picY;
+    int spriteWidth;
+    int numOfFrame;
+
+    Animation idle;
+    Animation run;
+
+    String characterName;
+
+    MusicPlayer runningStone;
+    MusicPlayer runningDirt;
+
+    /*
+     * Friendly NPC variables
+     */
+    private Image npcPortrait;
+    private String[] dialogue;
+    private int currentDialogue;
+    private int[] collisionBox;
+    private int width;
+    private int height;
+    private Dialogue d = null;
+    private Diablo.Items.Item[] itemsList = new Diablo.Items.Item[4];
+    private ArrayList<Objective> questlog = new ArrayList<Objective>();
+    /*
+     * Friendly NPC constructor
+     */
+
+    public void doAction()
+    {
+        if (type.equals("friendly"))
+        {
+            if (game.dialogue == true)
+            {
+                game.dialogue = false;//terminate dialogue
+            } else
+            {
+                game.createDialogue(this);//startup dialogue
+            }
+        }
+        if (type.equals("enemy"))
+        {
+            //attack();
+        }
+    }
+
+    public boolean actionable()
+    {
+        /*
+         * checks if entity is actionable
+         * for hovering mouse function
+         */
+        if (actionable == true)
+            return true;
+        else
+            return false;
+    }
+
+    public boolean isEntity(int x, int y)
+    {
+        //checks if x and y is within entity's collision box
+        if (x < this.x + width / 2 && x > this.x - width / 2 && y < this.y + height / 2 && y > this.y - height / 2)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    //getters
+    public Image getNpcPortrait()
+    {
+        return npcPortrait;
+    }
+
+    public Dialogue getDialogue()
+    {
+        return d;
+    }
+
+    public int[] getCollisionBox()
+    {
+        return collisionBox;
+    }
+
+    public void updateAnimationData(Animation current)
+    {
+        imageData = current.imageData;
+        picX = current.picWidth;
+        picY = current.picHeight;
+        spriteWidth = current.spritWidth;
+        numOfFrame = current.numOfFrame;
+    }
+
+    public void addDialogue(Image NpcPortrait, Dialogue dialogue, int[] collisionBox)
+    {
+        this.npcPortrait = NpcPortrait;
+        this.d = dialogue;
+        currentDialogue = 0;
+        this.collisionBox = collisionBox;
+    }
+
+    public Entity(String type, String name, int[] location, int hp, int hitBox, Game game, int oil, int mana) throws IOException
+    {
+        this.game = game;
+
+        this.inventory = new Diablo.Inventory();
+
+        x = location[0];
+        y = location[1];
+
+        this.type = type;
+        characterName = name;
+        if (type.equals("player"))
+        {
+            try{
+                runningStone = new MusicPlayer(Game.root + "/resources/music/runningStone.WAV");
+                runningDirt = new MusicPlayer(Game.root + "/resources/music/runningDirt.WAV");
+                runningStone.start();
+                runningDirt.start();
+            }catch(Exception ex){ex.printStackTrace();}
+            visible = true;
+            enableMovement();
+        }
         else
         {
         		
