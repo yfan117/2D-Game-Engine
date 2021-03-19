@@ -26,7 +26,7 @@ public class Display{
 
 		render = new Renderer(game, game.root + "/resources/images/" , game.windowX, game.windowY, game.getEntityList(), game.getProjectileList(), this);
 		frame = new JFrame();
-		frame.setSize(game.windowX, game.windowY);
+		frame.setSize(game.windowX + 16, game.windowY + 39);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLocationRelativeTo(null);
 	
@@ -64,6 +64,7 @@ public class Display{
 				break;
 			case 1: //game state
 				cards.show(visiblePanel, "game");
+				game.map.playMapMusic();
 				currentPanel = 1;
 				break;
 			case 2: //pause state

@@ -19,6 +19,7 @@ public class MouseControl implements MouseListener, MouseMotionListener {
 	Entity player;
 	int itemClickedNumber = -1;
 	int backpackClickedNumber = -1;
+	boolean clickedInv = false;
 
 	public MouseControl(Game game)
 	{
@@ -47,10 +48,22 @@ public class MouseControl implements MouseListener, MouseMotionListener {
 
 		if(SwingUtilities.isLeftMouseButton(e))
 		{
-
 			int eX = e.getX();
 			int eY = e.getY();
 
+			//Player clicked inside the inventory while it is open
+			if (checkInventory(eX, eY))
+			{
+				clickedInv = true;
+				return;
+			}
+
+			//Player clicked inside backpack while it is open
+			if (checkBackpack(eX, eY))
+			{
+				clickedInv = true;
+				return;
+			}
 
 			player.collision = false;
 			//System.out.println("clicked " +eX + " " + eY);
@@ -155,16 +168,6 @@ public class MouseControl implements MouseListener, MouseMotionListener {
 //					}
 //					return;
 //				}
-
-			//Player clicked inside the inventory while it is open
-			if (checkInventory(eX, eY))
-				return;
-
-			//Player clicked inside backpack while it is open
-			if (checkBackpack(eX, eY))
-				return;
-
-
 		}
 
 
@@ -370,6 +373,7 @@ public class MouseControl implements MouseListener, MouseMotionListener {
 		}
 
 		game.getEntityList().get(0).inventory.resetAllBools();
+		clickedInv = false;
 	}
 
 	@Override
@@ -439,53 +443,56 @@ public class MouseControl implements MouseListener, MouseMotionListener {
 			int eX = e.getX();
 			int eY = e.getY();
 
-
-			player.collision = false;
-			//System.out.println("clicked " +eX + " " + eY);
-
-
-			if(eX < Game.centerX ) {
-				player.clickedX = Renderer.cameraControlX- (Game.centerX - eX);
-			}
-			else if(eX > Game.centerX ) {
-				player.clickedX = Renderer.cameraControlX + (eX - Game.centerX);
-			}
-
-			if(eY < Game.centerY ) {
-				player.clickedY = Renderer.cameraControlY- (Game.centerY - eY);
-			}
-			else if(eY > Game.centerY ) {
-				player.clickedY = Renderer.cameraControlY  + (eY - Game.centerY);
-			}
-
-			
-			player.clickedX =Math.round(player.clickedX/5)*5;
-			player.clickedY =Math.round(player.clickedY/5)*5;
-
-			if(movement.isObstacles(player.clickedX, player.clickedY) == false)
+			if(!clickedInv)
 			{
-				player.hasPath = true;
-				player.newClick = false;
-				player.newCheckPoint = false;
+				player.collision = false;
+				//System.out.println("clicked " +eX + " " + eY);
 
 
-				player.target = player;
+				if (eX < Game.centerX)
+				{
+					player.clickedX = Renderer.cameraControlX - (Game.centerX - eX);
+				} else if (eX > Game.centerX)
+				{
+					player.clickedX = Renderer.cameraControlX + (eX - Game.centerX);
+				}
 
-				//System.out.println(Math.sqrt(Math.pow(player.clickedX - 105, 2)+Math.pow(player.clickedY - 95, 2)));
-				//System.out.println(Math.sqrt(Math.pow(player.clickedX - 95, 2)+Math.pow(player.clickedY - 95, 2)));
+				if (eY < Game.centerY)
+				{
+					player.clickedY = Renderer.cameraControlY - (Game.centerY - eY);
+				} else if (eY > Game.centerY)
+				{
+					player.clickedY = Renderer.cameraControlY + (eY - Game.centerY);
+				}
 
 
-				player.move.nodeIndex = 1;
-				player.move.checkPoint = new ArrayList<Node>();
-				player.move.usedGrid   = new ArrayList<Node>();
-				player.move.checkPoint.add(new Node(player.x, player.y));
-				player.move.pathFind();
-				player.state = "run";
-				player.newClick = true;
-				player.newCheckPoint = true;
+				player.clickedX = Math.round(player.clickedX / 5) * 5;
+				player.clickedY = Math.round(player.clickedY / 5) * 5;
 
-				player.state = "run";
-				//player.picCounter = 0;
+				if (movement.isObstacles(player.clickedX, player.clickedY) == false)
+				{
+					player.hasPath = true;
+					player.newClick = false;
+					player.newCheckPoint = false;
+
+
+					player.target = player;
+
+					//System.out.println(Math.sqrt(Math.pow(player.clickedX - 105, 2)+Math.pow(player.clickedY - 95, 2)));
+					//System.out.println(Math.sqrt(Math.pow(player.clickedX - 95, 2)+Math.pow(player.clickedY - 95, 2)));
+
+
+					player.move.nodeIndex = 1;
+					player.move.checkPoint = new ArrayList<Node>();
+					player.move.usedGrid = new ArrayList<Node>();
+					player.move.checkPoint.add(new Node(player.x, player.y));
+					player.move.pathFind();
+					player.state = "run";
+					player.newClick = true;
+					player.newCheckPoint = true;
+
+					player.state = "run";
+					//player.picCounter = 0;
 
 				/*
 				try {
@@ -495,8 +502,8 @@ public class MouseControl implements MouseListener, MouseMotionListener {
 					e1.printStackTrace();
 				}
 				*/
+				}
 			}
-
 
 		
 	}

@@ -16,7 +16,7 @@ import java.util.TimerTask;
 
 public class Game
 {
-    static final public String root = Paths.get(System.getProperty("user.dir")).getParent() + "/Portfolio";
+    static final public String root = Paths.get(System.getProperty("user.dir")).getParent() + "/RPG";
 
     public DialogueUI dialogueObj = null; //no dialogue instances yet
     boolean saved = false;

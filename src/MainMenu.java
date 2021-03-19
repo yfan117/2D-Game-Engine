@@ -22,10 +22,6 @@ public class MainMenu extends JPanel
 
     public MainMenu(Display d, Game game)
     {
-        try {
-            musicPlayer = new MusicPlayer(Game.root + "/resources/music/PerditionsLight.wav");
-        }catch(Exception e){e.printStackTrace();}
-
         layout = new BorderLayout();
         this.setLayout(layout);
 
@@ -83,8 +79,7 @@ public class MainMenu extends JPanel
 
         add(bottomPanel, BorderLayout.SOUTH);
 
-
-        musicPlayer.play();
+        startMusic();
     }
 
     @Override
@@ -99,6 +94,6 @@ public class MainMenu extends JPanel
             musicPlayer = new MusicPlayer(Game.root + "/resources/music/PerditionsLight.wav");
         }catch(Exception e){e.printStackTrace();}
 
-        musicPlayer.play();
+        musicPlayer.start();
     }
 }
