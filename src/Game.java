@@ -16,7 +16,7 @@ import java.util.TimerTask;
 
 public class Game
 {
-    static final public String root = Paths.get(System.getProperty("user.dir")).getParent() + "/RPG";
+    static final public String root = Paths.get(System.getProperty("user.dir")).getParent() + "/Portfolio";
 
     public DialogueUI dialogueObj = null; //no dialogue instances yet
     boolean saved = false;
@@ -125,6 +125,7 @@ public class Game
             System.out.println("loading previous data");
             int[] loadData = loadFile.loadGame(); //load the game file
            list.add(new Entity("player", "wizard", new int[]{10, 10}, 100, 80, this, 100, 50));
+           
            //list.add(new Entity("friendly", "lucy", new int[]{300, 300}, 100, 100, 80, this, 100, 0, ImageIO.read(new File(repo + "tavernGirl.png")), new Dialogue("Hello, good day", new Dialogue("Hello again")), collisionBox));
            // list.add(new Entity("friendly", "lucy", new int[]{600, 300}, 100, 100, 80, this, 100, 0, ImageIO.read(new File(repo + "player.png")), new Dialogue("Greetings"), collisionBox));
            // list.add(new Entity("friendly", "lucy", new int[]{1200, 300}, 100, 100, 80, this, 100, 0, ImageIO.read(new File(repo + "player.png")), d1, collisionBox));
@@ -133,6 +134,7 @@ public class Game
         else
         {
             list.add(new Entity("player", "wizard", new int[]{10, 10}, 100, 80, this, 100, 100));
+            //list.add(new Entity("enemy", "wizard", new int[]{50, 50}, 100, 80, this, 100, 50));
            //list.add(new Entity("friendly", "lucy", new int[]{300, 300}, 100, 100, 80, this, 100, 0, ImageIO.read(new File(repo + "tavernGirl.png")), new Dialogue("hello", new Dialogue("next")), collisionBox));
            //list.add(new Entity("friendly", "lucy", new int[]{600, 300}, 100, 100, 80, this, 100, 0, ImageIO.read(new File(repo + "player.png")), new Dialogue("Tester"), collisionBox));
            //list.add(new Entity("friendly", "lucy", new int[]{1200, 300}, 100, 100, 80, this, 100, 0, ImageIO.read(new File(repo + "player.png")), d1, collisionBox));
@@ -294,7 +296,7 @@ public class Game
 
 
         }
-        //System.out.println(projectile.size());
+        //System.out.println(projectileList.size());
 
         for (int i = 0; i < projectileList.size(); i++)
         {
