@@ -25,7 +25,6 @@ public class MouseControl implements MouseListener, MouseMotionListener {
 		this.game = game;
 		player = game.getEntityList().get(0);
 		movement = new Movement(player, game);
-
 	}
 
 	@Override
@@ -247,7 +246,6 @@ public class MouseControl implements MouseListener, MouseMotionListener {
 
 				try {
 					temp = new Entity(game, "melee", 0, 0, 0);
-					//System.out.println(temp.isCollision(destinationX, destinationY, temp));
 					player.target = game.getEntityList().get(temp.move.isCollision(destinationX, destinationY, temp));
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block

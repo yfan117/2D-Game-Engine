@@ -25,6 +25,10 @@ public class Game
     boolean hovering = false;
     boolean responsing = false;
     private LoadGame loadFile;
+    private String loadName;
+
+    public void setLoadName(String s){loadName = s;}
+    public String getLoadName(){return loadName;}
 
     public LoadGame getLoadFile() {return loadFile;}
 
@@ -120,26 +124,12 @@ public class Game
         Dialogue sean1 = new Dialogue("Hello", EncounterSean);
 
         int[] collisionBox = {50, 100};
-        if (saveFile.exists())
-        {
-            System.out.println("loading previous data");
-            int[] loadData = loadFile.loadGame(); //load the game file
-           list.add(new Entity("player", "wizard", new int[]{10, 10}, 100, 80, this, 100, 50));
-           
-           //list.add(new Entity("friendly", "lucy", new int[]{300, 300}, 100, 100, 80, this, 100, 0, ImageIO.read(new File(repo + "tavernGirl.png")), new Dialogue("Hello, good day", new Dialogue("Hello again")), collisionBox));
-           // list.add(new Entity("friendly", "lucy", new int[]{600, 300}, 100, 100, 80, this, 100, 0, ImageIO.read(new File(repo + "player.png")), new Dialogue("Greetings"), collisionBox));
-           // list.add(new Entity("friendly", "lucy", new int[]{1200, 300}, 100, 100, 80, this, 100, 0, ImageIO.read(new File(repo + "player.png")), d1, collisionBox));
-            obstacle.add(new Entity(this, "tavern", 500, 500));
-        } 
-        else
-        {
-            list.add(new Entity("player", "wizard", new int[]{10, 10}, 100, 80, this, 100, 100));
-            //list.add(new Entity("enemy", "wizard", new int[]{50, 50}, 100, 80, this, 100, 50));
-           //list.add(new Entity("friendly", "lucy", new int[]{300, 300}, 100, 100, 80, this, 100, 0, ImageIO.read(new File(repo + "tavernGirl.png")), new Dialogue("hello", new Dialogue("next")), collisionBox));
-           //list.add(new Entity("friendly", "lucy", new int[]{600, 300}, 100, 100, 80, this, 100, 0, ImageIO.read(new File(repo + "player.png")), new Dialogue("Tester"), collisionBox));
-           //list.add(new Entity("friendly", "lucy", new int[]{1200, 300}, 100, 100, 80, this, 100, 0, ImageIO.read(new File(repo + "player.png")), d1, collisionBox));
-            obstacle.add(new Entity(this, "house", 500, 500));
-        }
+
+        list.add(new Entity("player", "wizard", new int[]{10, 10}, 100, 80, this, 100, 50));
+//        list.add(new Entity("friendly", "lucy", new int[]{300, 300}, 100, 100, 80, this, 100, 0, ImageIO.read(new File(repo + "tavernGirl.png")), new Dialogue("Hello, good day", new Dialogue("Hello again")), collisionBox));
+//        list.add(new Entity("friendly", "lucy", new int[]{600, 300}, 100, 100, 80, this, 100, 0, ImageIO.read(new File(repo + "player.png")), new Dialogue("Greetings"), collisionBox));
+//        list.add(new Entity("friendly", "lucy", new int[]{1200, 300}, 100, 100, 80, this, 100, 0, ImageIO.read(new File(repo + "player.png")), d1, collisionBox));
+        obstacle.add(new Entity(this, "tavern", 500, 500));
 
         display = new Display(this);
 
@@ -170,25 +160,6 @@ public class Game
         renderTimer.scheduleAtFixedRate(frameUpdate, 0, 1000 / 30);
         timeTimer.scheduleAtFixedRate(timeCounter, 0, 10);
         mouse = new MouseControl(this);
-
-        //new stuff
-        //temporary for testing
-        list.get(0).inventory.setInventoryItem(0, new Diablo.Items.ManaPotion(this, 10));
-        list.get(0).inventory.setInventoryItem(1, new Diablo.Items.ManaPotion(this, 1));
-        list.get(0).inventory.setInventoryItem(2, new Diablo.Items.ManaPotion(this, 1));
-        list.get(0).inventory.setInventoryItem(3, new Diablo.Items.SpeedPotion(this));
-        list.get(0).inventory.setBackpackItem(0, new Diablo.Items.ManaPotion(this, 1));
-        list.get(0).inventory.setBackpackItem(1, new Diablo.Items.ManaPotion(this, 1));
-        list.get(0).inventory.setBackpackItem(2, new Diablo.Items.ManaPotion(this, 1));
-        list.get(0).inventory.setBackpackItem(3, new Diablo.Items.ManaPotion(this, 1));
-        list.get(0).inventory.setBackpackItem(4, new Diablo.Items.ManaPotion(this, 1));
-        list.get(0).inventory.setBackpackItem(5, new Diablo.Items.ManaPotion(this, 1));
-        list.get(0).inventory.setBackpackItem(6, new Diablo.Items.ManaPotion(this, 1));
-        list.get(0).inventory.setBackpackItem(7, new Diablo.Items.ManaPotion(this, 1));
-        list.get(0).inventory.setBackpackItem(8, new Diablo.Items.ManaPotion(this, 1));
-        list.get(0).inventory.setBackpackItem(9, new Diablo.Items.ManaPotion(this, 1));
-        list.get(0).inventory.setBackpackItem(10, new Diablo.Items.ManaPotion(this, 1));
-        list.get(0).inventory.setBackpackItem(11, new Diablo.Items.ManaPotion(this, 1));
 
         receiver = new Receiver(this, 20000);
         receiveTimer.scheduleAtFixedRate(receive, 0, 1);
@@ -338,7 +309,35 @@ public class Game
 
     }
 
+    public void populateEntityList()
+    {
+        try
+        {
+            int[] loadData = loadFile.loadGame(loadName); //load the game file
+            list.get(0).x = loadData[0];
+            list.get(0).y = loadData[1];
+            list.get(0).hp = loadData[2];
 
+            //new stuff
+            //temporary for testing
+            list.get(0).inventory.setInventoryItem(0, new Diablo.Items.ManaPotion(this, 10));
+            list.get(0).inventory.setInventoryItem(1, new Diablo.Items.ManaPotion(this, 1));
+            list.get(0).inventory.setInventoryItem(2, new Diablo.Items.ManaPotion(this, 1));
+            list.get(0).inventory.setInventoryItem(3, new Diablo.Items.SpeedPotion(this));
+            list.get(0).inventory.setBackpackItem(0, new Diablo.Items.ManaPotion(this, 1));
+            list.get(0).inventory.setBackpackItem(1, new Diablo.Items.ManaPotion(this, 1));
+            list.get(0).inventory.setBackpackItem(2, new Diablo.Items.ManaPotion(this, 1));
+            list.get(0).inventory.setBackpackItem(3, new Diablo.Items.ManaPotion(this, 1));
+            list.get(0).inventory.setBackpackItem(4, new Diablo.Items.ManaPotion(this, 1));
+            list.get(0).inventory.setBackpackItem(5, new Diablo.Items.ManaPotion(this, 1));
+            list.get(0).inventory.setBackpackItem(6, new Diablo.Items.ManaPotion(this, 1));
+            list.get(0).inventory.setBackpackItem(7, new Diablo.Items.ManaPotion(this, 1));
+            list.get(0).inventory.setBackpackItem(8, new Diablo.Items.ManaPotion(this, 1));
+            list.get(0).inventory.setBackpackItem(9, new Diablo.Items.ManaPotion(this, 1));
+            list.get(0).inventory.setBackpackItem(10, new Diablo.Items.ManaPotion(this, 1));
+            list.get(0).inventory.setBackpackItem(11, new Diablo.Items.ManaPotion(this, 1));
+        }catch(Exception ex){ex.printStackTrace();}
+    }
 }
 
 class Sending implements Runnable
@@ -450,5 +449,4 @@ class DisplayThread implements Runnable
 		}
 	  };
 	  */
-
 }
