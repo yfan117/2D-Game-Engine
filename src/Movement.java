@@ -86,12 +86,12 @@ public class Movement{
 		
 		
 		//isVisible();
-	
-		isCollision(current.clickedX, current.clickedY, current);
+		this.game = current.game;
+		//isCollision(current.clickedX, current.clickedY, current);
 		
 		
 
-		if((current.newClick == true)&&(checkPoint.size()>1))
+		if(((current.newClick == true)&&(checkPoint.size()>1))||(current.type == "projectile"))
 		{
 			//System.out.println("here");
 			//if((current.type != "projectile")&&(current.type != "player"))
@@ -313,7 +313,7 @@ public class Movement{
 			{
 
 			//	active = false;
-				//if(current.type == "player")
+				if(current.type != "projectile")
 				{
 					checkPoint.remove(1);
 					current.newCheckPoint = true;
@@ -339,7 +339,7 @@ public class Movement{
 		
 			
 				//if((current.type == "player")&&(target != this))
-				if(this.current.target != this.current)
+				if((this.current.target != this.current) && (current.type != "projectile"))
 				{
 					//System.out.println("here");
 					if(current.target.hp >0)
@@ -467,9 +467,9 @@ public class Movement{
 
 
 			public void isVisible() {
-				if(((current.x >= Renderer.cameraControlX ) && (current.x <= Renderer.cameraControlX + Game.windowX))
+				if(((current.x >= Renderer.cameraX ) && (current.x <= Renderer.cameraX + Game.windowX))
 		        		&&
-		        		((current.y >= Renderer.cameraControlY) && (current.y <= Renderer.cameraControlY + Game.windowY)))
+		        		((current.y >= Renderer.cameraY) && (current.y <= Renderer.cameraY + Game.windowY)))
 		        	{
 
 					current.visible = true;
@@ -484,6 +484,7 @@ public class Movement{
 				int result = 0;
 				if(current.type !="player")
 				{
+					System.out.println(game.getEntityList().size());
 					for(int i = 1; i < game.getEntityList().size(); i++)
 					{
 						if((this.current.visible == true)&&(game.getEntityList().get(i).visible == true))

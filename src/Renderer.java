@@ -463,6 +463,97 @@ class Renderer extends JPanel{
 				for(int i = 0; i < game.getProjectileList().size(); i++) 
 				{
 					current = game.getProjectileList().get(i);
+					
+					/*
+					current.move.isVisible();
+					if(current.visible == true)
+					{
+						//System.out.println("p here");
+						int picStartX = 0;	
+						if(current.x - cameraX < Game.windowX)
+						{
+							picStartX = 0;
+						}
+						
+						int picEndX = (current.x + current.picX) - (cameraX + Game.windowX);
+						if(picEndX < 0)
+						{
+							picEndX = 0;
+						}
+						picEndX = current.picX - picEndX;
+						
+						int picStartY = 0;	
+						if(current.y - cameraY < Game.windowY)
+						{
+							picStartY = 0;
+						}
+						
+						int picEndY = (current.y + current.picY) - (cameraY + Game.windowY);
+						if(picEndY < 0)
+						{
+							picEndY = 0;
+						}
+						picEndY = current.picY - picEndY;
+						
+						current.picCounter = 0;
+						current.picRank = 0;
+						
+						for(int y = picStartY; y < picEndY; y++)
+						{
+							for(int x = picStartX; x < picEndX; x++)
+							{
+								int colorCode =  current.imageData[current.picX * current.picCounter + x + ((current.picY * current.picRank + y) * current.spriteWidth)];
+								fbData1[resolutionX/2 + x - current.picX + (current.x - cameraControlX) + (resolutionY/2 + y +(current.y - cameraControlY - current.picY)) * resolutionX] = colorCode;
+							}
+						}
+					}
+					*/
+					current.updateAnimationData(current.run);
+					for(int y = 0; y < current.picY; y++)
+					{
+						for(int x = 0; x < current.picX; x++)
+						{
+							int colorCode = 0;
+						
+								colorCode =  current.imageData[x + y * current.spriteWidth];
+
+								//System.out.println("here");
+							
+							if( colorCode != 0)
+							{
+								if((resolutionX/2 + x +(current.x - cameraControlX)) >= resolutionX)
+								{
+									//System.out.println("here1");
+									break;
+								}
+
+								if(resolutionY/2 + y+(current.y - cameraControlY) >= resolutionY)
+								{
+									//System.out.println("here2");
+									break;
+								}
+								
+								
+								if(((resolutionX/2 + x +(current.x  - cameraControlX)) <= 0) 
+										|| 
+									(resolutionY/2 + y+(current.y - cameraControlY) <= 0))
+								{
+									//System.out.println("here3");
+								}
+								else
+								{
+										
+										fbData1[resolutionX/2 + x +(current.x - cameraControlX) + (resolutionY/2 + y+(current.y - cameraControlY)) * resolutionX] = colorCode;
+									
+								}
+							
+					
+						
+							
+							}
+						}
+					
+					}
 				}
 				
 		

@@ -19,7 +19,6 @@ public class MouseControl implements MouseListener, MouseMotionListener {
 	Entity player;
 	int itemClickedNumber = -1;
 	int backpackClickedNumber = -1;
-	boolean clickedInv = false;
 
 	public MouseControl(Game game)
 	{
@@ -47,22 +46,10 @@ public class MouseControl implements MouseListener, MouseMotionListener {
 
 		if(SwingUtilities.isLeftMouseButton(e))
 		{
+
 			int eX = e.getX();
 			int eY = e.getY();
 
-			//Player clicked inside the inventory while it is open
-			if (checkInventory(eX, eY))
-			{
-				clickedInv = true;
-				return;
-			}
-
-			//Player clicked inside backpack while it is open
-			if (checkBackpack(eX, eY))
-			{
-				clickedInv = true;
-				return;
-			}
 
 			player.collision = false;
 			//System.out.println("clicked " +eX + " " + eY);
@@ -167,6 +154,16 @@ public class MouseControl implements MouseListener, MouseMotionListener {
 //					}
 //					return;
 //				}
+
+			//Player clicked inside the inventory while it is open
+			if (checkInventory(eX, eY))
+				return;
+
+			//Player clicked inside backpack while it is open
+			if (checkBackpack(eX, eY))
+				return;
+
+
 		}
 
 
@@ -178,8 +175,8 @@ public class MouseControl implements MouseListener, MouseMotionListener {
 			int eX = e.getX();
 			int eY = e.getY();
 
-			int destinationX;
-			int destinationY;
+			int destinationX = 0;
+			int destinationY = 0;
 
 			int orginX = player.x;
 			int orginY = player.y;
@@ -190,21 +187,24 @@ public class MouseControl implements MouseListener, MouseMotionListener {
 			{
 
 				if(eX < Game.centerX ) {
-					eX = Renderer.cameraX- (Game.centerX - eX);
+					destinationX = Renderer.cameraControlX- (Game.centerX - eX);
 				}
 				else if(eX > Game.centerX ) {
-					eX = Renderer.cameraX + (eX - Game.centerX);
+					destinationX = Renderer.cameraControlX + (eX - Game.centerX);
 				}
 
 				if(eY < Game.centerY ) {
-					eY = Renderer.cameraY- (Game.centerY - eY);
+					destinationY = Renderer.cameraControlY- (Game.centerY - eY);
 				}
 				else if(eY > Game.centerY ) {
-					eY = Renderer.cameraY  + (eY - Game.centerY);
+					destinationY = Renderer.cameraControlY  + (eY - Game.centerY);
 				}
-				destinationX = Math.round(eX/5)*5;
-				destinationY = Math.round(eY/5)*5;
 
+				
+				destinationX =Math.round(destinationX/5)*5;
+				destinationY =Math.round(destinationY/5)*5;
+				
+				System.out.println(destinationX +" " +destinationX);
 
 			try {
 					game.getProjectileList().add(new Entity(game, "arrow", destinationX, destinationY, 10));
@@ -225,21 +225,24 @@ public class MouseControl implements MouseListener, MouseMotionListener {
 			else
 			{
 				Entity temp;
+
 				if(eX < Game.centerX ) {
-					eX = Renderer.cameraX- (Game.centerX - eX);
+					destinationX = Renderer.cameraControlX- (Game.centerX - eX);
 				}
 				else if(eX > Game.centerX ) {
-					eX = Renderer.cameraX + (eX - Game.centerX);
+					destinationX = Renderer.cameraControlX + (eX - Game.centerX);
 				}
 
 				if(eY < Game.centerY ) {
-					eY = Renderer.cameraY- (Game.centerY - eY);
+					destinationY = Renderer.cameraControlY- (Game.centerY - eY);
 				}
 				else if(eY > Game.centerY ) {
-					eY = Renderer.cameraY  + (eY - Game.centerY);
+					destinationY = Renderer.cameraControlY  + (eY - Game.centerY);
 				}
-				destinationX = Math.round(eX/5)*5;
-				destinationY = Math.round(eY/5)*5;
+
+				
+				destinationX =Math.round(destinationX/5)*5;
+				destinationY =Math.round(destinationY/5)*5;
 
 				try {
 					temp = new Entity(game, "melee", 0, 0, 0);
@@ -371,7 +374,6 @@ public class MouseControl implements MouseListener, MouseMotionListener {
 		}
 
 		game.getEntityList().get(0).inventory.resetAllBools();
-		clickedInv = false;
 	}
 
 	@Override
@@ -397,17 +399,17 @@ public class MouseControl implements MouseListener, MouseMotionListener {
 		int eX=e.getX();
 		int eY=e.getY();
 		if(eX < Game.centerX ) {
-			eX = Renderer.cameraX- (Game.centerX - eX);
+			eX = Renderer.cameraControlX- (Game.centerX - eX);
 		}
 		else if(eX > Game.centerX ) {
-			eX = Renderer.cameraX + (eX - Game.centerX);
+			eX = Renderer.cameraControlX + (eX - Game.centerX);
 		}
 
 		if(eY < Game.centerY ) {
-			eY = Renderer.cameraY- (Game.centerY - eY);
+			eY = Renderer.cameraControlY- (Game.centerY - eY);
 		}
 		else if(eY > Game.centerY ) {
-			eY = Renderer.cameraY  + (eY - Game.centerY);
+			eY = Renderer.cameraControlY  + (eY - Game.centerY);
 		}
 		eX =Math.round(eX/5)*5;
 		eY=Math.round(eY/5)*5;
@@ -441,56 +443,55 @@ public class MouseControl implements MouseListener, MouseMotionListener {
 			int eX = e.getX();
 			int eY = e.getY();
 
-			if(!clickedInv)
+
+			if (SwingUtilities.isLeftMouseButton(e))
 			{
-				player.collision = false;
-				//System.out.println("clicked " +eX + " " + eY);
+			player.collision = false;
+			//System.out.println("clicked " +eX + " " + eY);
 
 
-				if (eX < Game.centerX)
-				{
-					player.clickedX = Renderer.cameraControlX - (Game.centerX - eX);
-				} else if (eX > Game.centerX)
-				{
-					player.clickedX = Renderer.cameraControlX + (eX - Game.centerX);
-				}
+			if(eX < Game.centerX ) {
+				player.clickedX = Renderer.cameraControlX- (Game.centerX - eX);
+			}
+			else if(eX > Game.centerX ) {
+				player.clickedX = Renderer.cameraControlX + (eX - Game.centerX);
+			}
 
-				if (eY < Game.centerY)
-				{
-					player.clickedY = Renderer.cameraControlY - (Game.centerY - eY);
-				} else if (eY > Game.centerY)
-				{
-					player.clickedY = Renderer.cameraControlY + (eY - Game.centerY);
-				}
+			if(eY < Game.centerY ) {
+				player.clickedY = Renderer.cameraControlY- (Game.centerY - eY);
+			}
+			else if(eY > Game.centerY ) {
+				player.clickedY = Renderer.cameraControlY  + (eY - Game.centerY);
+			}
 
+			
+			player.clickedX =Math.round(player.clickedX/5)*5;
+			player.clickedY =Math.round(player.clickedY/5)*5;
 
-				player.clickedX = Math.round(player.clickedX / 5) * 5;
-				player.clickedY = Math.round(player.clickedY / 5) * 5;
-
-				if (movement.isObstacles(player.clickedX, player.clickedY) == false)
-				{
-					player.hasPath = true;
-					player.newClick = false;
-					player.newCheckPoint = false;
+			if(movement.isObstacles(player.clickedX, player.clickedY) == false)
+			{
+				player.hasPath = true;
+				player.newClick = false;
+				player.newCheckPoint = false;
 
 
-					player.target = player;
+				player.target = player;
 
-					//System.out.println(Math.sqrt(Math.pow(player.clickedX - 105, 2)+Math.pow(player.clickedY - 95, 2)));
-					//System.out.println(Math.sqrt(Math.pow(player.clickedX - 95, 2)+Math.pow(player.clickedY - 95, 2)));
+				//System.out.println(Math.sqrt(Math.pow(player.clickedX - 105, 2)+Math.pow(player.clickedY - 95, 2)));
+				//System.out.println(Math.sqrt(Math.pow(player.clickedX - 95, 2)+Math.pow(player.clickedY - 95, 2)));
 
 
-					player.move.nodeIndex = 1;
-					player.move.checkPoint = new ArrayList<Node>();
-					player.move.usedGrid = new ArrayList<Node>();
-					player.move.checkPoint.add(new Node(player.x, player.y));
-					player.move.pathFind();
-					player.state = "run";
-					player.newClick = true;
-					player.newCheckPoint = true;
+				player.move.nodeIndex = 1;
+				player.move.checkPoint = new ArrayList<Node>();
+				player.move.usedGrid   = new ArrayList<Node>();
+				player.move.checkPoint.add(new Node(player.x, player.y));
+				player.move.pathFind();
+				player.state = "run";
+				player.newClick = true;
+				player.newCheckPoint = true;
 
-					player.state = "run";
-					//player.picCounter = 0;
+				player.state = "run";
+				//player.picCounter = 0;
 
 				/*
 				try {
@@ -500,7 +501,7 @@ public class MouseControl implements MouseListener, MouseMotionListener {
 					e1.printStackTrace();
 				}
 				*/
-				}
+			}
 			}
 
 		

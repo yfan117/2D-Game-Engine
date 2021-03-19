@@ -16,7 +16,7 @@ import java.util.TimerTask;
 
 public class Game
 {
-    static final public String root = Paths.get(System.getProperty("user.dir")).getParent() + "/RPG";
+    static final public String root = Paths.get(System.getProperty("user.dir")).getParent() + "/Portfolio";
 
     public DialogueUI dialogueObj = null; //no dialogue instances yet
     boolean saved = false;
@@ -267,7 +267,7 @@ public class Game
 
 
         }
-        //System.out.println(projectile.size());
+        //System.out.println(projectileList.size());
 
         for (int i = 0; i < projectileList.size(); i++)
         {
