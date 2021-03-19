@@ -112,7 +112,7 @@ public class Map{
 
 	public void playMapMusic()
 	{
-		musicPlayer.play();
+		musicPlayer.start();
 	}
 }
 
