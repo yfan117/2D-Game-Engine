@@ -1,6 +1,8 @@
 package Diablo;
 
 import java.awt.*;
+import java.io.File;
+import java.util.List;
 import javax.swing.*;
 
 public class MainMenu extends JPanel
@@ -19,11 +21,19 @@ public class MainMenu extends JPanel
     private Display display;
     private MusicPlayer musicPlayer;
     private Game game;
+    private String newGameString;
+    private String loadName;
+    private LoadGame loadGame;
+    private File lastLoaded;
 
     public MainMenu(Display d, Game game)
     {
+        lastLoaded = new File(game.root + "/resources/text/lastLoaded.txt");
+
         layout = new BorderLayout();
         this.setLayout(layout);
+
+        loadGame = game.getLoadFile();
 
         bottomPanel = new JPanel();
         bottomPanel.setBackground(Color.WHITE);
@@ -67,9 +77,60 @@ public class MainMenu extends JPanel
         settingsButton.setFocusPainted(false);
         settingsButton.setBorderPainted(false);
 
-        continueButton.addActionListener(e -> { musicPlayer.stopSong(); display.switchJPanels(1);});
-        newGameButton.addActionListener(e -> {System.out.println("New Game");});
-        loadGameButton.addActionListener(e -> {System.out.println("Load Game");});
+        continueButton.addActionListener(e -> {
+            if(lastLoaded.exists())
+            {
+                game.setLoadName(loadGame.lastLoaded());
+                game.populateEntityList();
+
+                musicPlayer.stopSong();
+                display.switchJPanels(1);
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(this, "No save files exist");
+            }
+        });
+        newGameButton.addActionListener(e -> {
+            newGameString = JOptionPane.showInputDialog(this, "Enter save name");
+
+            if(newGameString != null)
+            {
+                loadGame.saveLastLoaded(newGameString);
+                loadGame.append(newGameString);
+                loadGame.saveNewGame(newGameString);
+
+                loadName = newGameString;
+                game.setLoadName(loadName);
+                game.populateEntityList();
+
+                musicPlayer.stopSong();
+                display.switchJPanels(1);
+            }
+        });
+        loadGameButton.addActionListener(e -> {
+            List<String> savesList = loadGame.getSavesList();
+            String[] savesArray = new String[savesList.size()];
+            savesArray = savesList.toArray(savesArray);
+
+            try
+            {
+                loadName = (String) JOptionPane.showInputDialog(this, "", "All saves", JOptionPane.QUESTION_MESSAGE, null, savesArray, savesArray[0]);
+
+                if (loadName != null)
+                {
+                    loadGame.saveLastLoaded(loadName);
+                    game.setLoadName(loadName);
+                    game.populateEntityList();
+
+                    musicPlayer.stopSong();
+                    display.switchJPanels(1);
+                }
+            }catch(Exception ex)
+            {
+                JOptionPane.showMessageDialog(this, "No save files exist");
+            }
+        });
         settingsButton.addActionListener(e -> {System.out.println("Settings");});
 
         bottomPanel.add(continueButton);
@@ -96,4 +157,8 @@ public class MainMenu extends JPanel
 
         musicPlayer.start();
     }
+
+    public void pauseMusic(){musicPlayer.pause();}
+    public void playMusic(){musicPlayer.play();}
+    public boolean isMusicPlaying(){return musicPlayer.isRunning();}
 }
