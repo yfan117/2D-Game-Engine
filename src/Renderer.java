@@ -739,17 +739,6 @@ class Renderer extends JPanel{
 		g.setColor(Color.BLUE);
 		g.fillRect(25, 40, list.get(0).mana, 20);
 
-		try
-		{
-			BufferedImage image = ImageIO.read(new File(Game.root + "/resources/images/playerHead.png"));
-
-			int color = image.getRGB(1, 1);
-			Image img = makeColorTransparent(image, new Color(color));
-			BufferedImage transImg = imageToBufferedImage(img);
-
-			g.drawImage(transImg, 25, 75, 75, 75, null);
-		}catch(Exception ex){ex.printStackTrace();}
-
 		//Inventory slots
 		if(game.getEntityList().get(0).inventory.getInventoryOpen())
 		{

@@ -9,7 +9,7 @@ import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
-public class MusicPlayer
+public class MusicPlayer extends Thread
 {
     private AudioInputStream audioInputStream;
     private Long currentTime;
@@ -19,19 +19,35 @@ public class MusicPlayer
     public MusicPlayer(String filePath) throws UnsupportedAudioFileException, IOException, LineUnavailableException
     {
         this.filePath = filePath;
-        audioInputStream = AudioSystem.getAudioInputStream(new File(filePath).getAbsoluteFile());
-        clip = AudioSystem.getClip();
-        clip.open(audioInputStream);
-        clip.loop(Clip.LOOP_CONTINUOUSLY);
-        clip.stop();
+    }
+
+    public void run()
+    {
+        try
+        {
+            System.out.println("Trying: " + filePath);
+            audioInputStream = AudioSystem.getAudioInputStream(new File(filePath).getAbsoluteFile());
+            clip = AudioSystem.getClip();
+            clip.open(audioInputStream);
+            clip.loop(Clip.LOOP_CONTINUOUSLY);
+            clip.start();
+            if(filePath.equals(Game.root + "/resources/music/runningStone.WAV") || filePath.equals(Game.root + "/resources/music/runningDirt.WAV"))
+                pause();
+            Thread.sleep(100);
+            while(clip.isRunning())
+            {
+                Thread.sleep(100);
+            }
+        }catch(Exception ex){ex.printStackTrace();}
     }
 
     public void play()
     {
         clip.start();
+        clip.loop(Clip.LOOP_CONTINUOUSLY);
     }
 
-    public void stop()
+    public void stopSong()
     {
         currentTime = 0L;
         clip.stop();
@@ -44,10 +60,17 @@ public class MusicPlayer
         clip.stop();
     }
 
-    public void resume()
+    public void pauseAndReset()
+    {
+        currentTime = 0L;
+        clip.stop();
+    }
+
+    public void resumeSong()
     {
         clip.setMicrosecondPosition(currentTime);
         clip.start();
+        clip.loop(Clip.LOOP_CONTINUOUSLY);
     }
 
     public boolean isRunning()
