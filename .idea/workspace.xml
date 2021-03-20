@@ -3,26 +3,11 @@
   <component name="ChangeListManager">
     <list default="true" id="d2c51394-261e-408e-a19f-14df4625bf3a" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/RPG/Diablo/Display.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/RPG/Diablo/Display.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/RPG/Diablo/DisplayThread.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/RPG/Diablo/DisplayThread.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/RPG/Diablo/Game$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/RPG/Diablo/Game$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/RPG/Diablo/Game$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/RPG/Diablo/Game$2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/RPG/Diablo/Game$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/RPG/Diablo/Game$3.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/RPG/Diablo/Game$4.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/RPG/Diablo/Game$4.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/RPG/Diablo/Game$5.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/RPG/Diablo/Game$5.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/RPG/Diablo/Game.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/RPG/Diablo/Game.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/RPG/Diablo/MouseControl.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/RPG/Diablo/MouseControl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/RPG/Diablo/Receiving.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/RPG/Diablo/Receiving.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/RPG/Diablo/Sending.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/RPG/Diablo/Sending.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/text/savedGame.txt" beforeDir="false" afterPath="$PROJECT_DIR$/resources/text/savedGame.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Display.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Display.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Game.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/LoadGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/LoadGame.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/MainMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MainMenu.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Map.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Map.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/MusicPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MusicPlayer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/PauseScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/PauseScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Renderer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Renderer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MouseControl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MouseControl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
