@@ -25,6 +25,7 @@ public class MouseControl implements MouseListener, MouseMotionListener {
 		this.game = game;
 		player = game.getEntityList().get(0);
 		movement = new Movement(player, game);
+
 	}
 
 	@Override
@@ -207,7 +208,7 @@ public class MouseControl implements MouseListener, MouseMotionListener {
 				System.out.println(destinationX +" " +destinationX);
 
 			try {
-					game.getProjectileList().add(new Entity(game, "arrow", destinationX, destinationY, 10));
+					game.getProjectileList().add(new Entity(game, "arrow", destinationX, destinationY, 80));
 				/*
 					projectile.get(projectile.size()-1).move.nodeIndex = 1;
 					projectile.get(projectile.size()-1).move.checkPoint = new ArrayList<Node>();
@@ -246,6 +247,7 @@ public class MouseControl implements MouseListener, MouseMotionListener {
 
 				try {
 					temp = new Entity(game, "melee", 0, 0, 0);
+					//System.out.println(temp.isCollision(destinationX, destinationY, temp));
 					player.target = game.getEntityList().get(temp.move.isCollision(destinationX, destinationY, temp));
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
@@ -471,9 +473,6 @@ public class MouseControl implements MouseListener, MouseMotionListener {
 			if(movement.isObstacles(player.clickedX, player.clickedY) == false)
 			{
 				player.hasPath = true;
-				player.newClick = false;
-				player.newCheckPoint = false;
-
 
 				player.target = player;
 
@@ -490,7 +489,7 @@ public class MouseControl implements MouseListener, MouseMotionListener {
 				player.newClick = true;
 				player.newCheckPoint = true;
 
-				player.state = "run";
+				
 				//player.picCounter = 0;
 
 				/*

@@ -45,7 +45,7 @@ public class Display{
 		mainmenu= new MainMenu(this, game);
 		visiblePanel.add(mainmenu,"menu");
 		visiblePanel.add(render,"game");
-		pause=new PauseScreen(game, this);
+		pause=new PauseScreen(this);
 		visiblePanel.add(pause,"pause");
 		frame.add(visiblePanel);
 		cards.show(visiblePanel, "menu");
@@ -60,19 +60,10 @@ public class Display{
 			case 0://menu state
 				cards.show(visiblePanel, "menu");
 				mainmenu.startMusic();
-				if(game.map.isMapMusicPlaying())
-					game.map.pauseMapMusic();
 				currentPanel = 0;
 				break;
 			case 1: //game state
 				cards.show(visiblePanel, "game");
-				try
-				{
-					if (!game.map.isMapMusicPlaying())
-						game.map.startMapMusic();
-				}catch(Exception ex){game.map.startMapMusic();}
-				if(mainmenu.isMusicPlaying())
-					mainmenu.pauseMusic();
 				currentPanel = 1;
 				break;
 			case 2: //pause state
@@ -86,34 +77,42 @@ public class Display{
 		}
 	}
 
-	public static void getDirection(Entity genericChar) {
+	public static void getDirection(Entity current) {
 
 		
-		genericChar.picRank = (int) Math.round(genericChar.moveAngle / 22.5);
+		current.picRank = (int) Math.round(current.moveAngle / 22.5);
 		
-		if(genericChar.picRank == 16)
+		if(current.picRank == 16)
 		{
-			genericChar.picRank = 15;
+			current.picRank = 15;
 		}
+	
 	}
 
 	
 		public void update() {
 	
-			for(int i = 0; i< game.getEntityList().size(); i++) {
+			for(int i = 0; i< game.getEntityList().size(); i++) 
+			{
 				//if(list.get(i).directionCheck == true)
-				if(game.getEntityList().get(i).newClick == true) 
+				//if(game.getEntityList().get(i).newClick == true) 
 				{
+					//System.out.println(i);
 					getDirection(game.getEntityList().get(i));
 				}
 			}
+		
 				render.updateValue();
+		
+		
+			
 		}
 		
 		public Renderer getRendererObject()
 		{
 			return render;
 		}
+	
 	}
 
 

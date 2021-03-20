@@ -110,16 +110,9 @@ public class Map{
 		return respawnLcation;
 	}
 
-	public void startMapMusic()
+	public void playMapMusic()
 	{
-		try
-		{
-			musicPlayer = new MusicPlayer(Game.root + "/resources/music/" + mapName + ".WAV");
-		}catch(Exception ex){ex.printStackTrace();}
-		musicPlayer.start();
+		musicPlayer.play();
 	}
-	public void playMapMusic(){musicPlayer.play();}
-	public void pauseMapMusic(){musicPlayer.pause();}
-	public boolean isMapMusicPlaying(){return musicPlayer.isRunning();}
 }
 

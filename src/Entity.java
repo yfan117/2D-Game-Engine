@@ -293,7 +293,7 @@ public class Entity{
 
 		 moveSpeed = Integer.parseInt(bufferedReader.readLine());
 
-		 damage = Integer.parseInt(bufferedReader.readLine());
+		 damage = 100;
 
 	}
 	

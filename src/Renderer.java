@@ -180,7 +180,8 @@ class Renderer extends JPanel{
 				for(int i = 0; i< game.getEntityList().size(); i++)
 				{
 					current = game.getEntityList().get(i);
-					
+					if(current.visible == true)
+					{
 					for(int a = 0; a< entityInFB.size(); a++)
 					{
 						//System.out.println(entityInFB.size());
@@ -219,7 +220,7 @@ class Renderer extends JPanel{
 						else if((current.layerY + current.y >= entityInFB.get(a).layerY + entityInFB.get(a).y)
 								&& (current.layerY + current.y <= entityInFB.get(a + 1).layerY + entityInFB.get(a + 1).y))
 							{
-								System.out.println("here");
+								//System.out.println("here");
 								entityInFB.add(a + 1, current);
 								break;
 							}
@@ -232,7 +233,7 @@ class Renderer extends JPanel{
 					}
 				
 				}
-				
+				}
 				
 		
 		}
@@ -441,9 +442,16 @@ class Renderer extends JPanel{
 								else
 								{
 									//System.out.println("3");
-									if(current.type != "") 
+									if(current.type != "player") 
+									{
+										//System.out.println(current.type);
+										//System.out.println(current.type);
+										fbData1[resolutionX/2 + x + (current.x - cameraControlX) + (resolutionY/2 + y +(current.y - cameraControlY )) * resolutionX] = colorCode;
+									}
+									else if(current.type == "player")
 									{
 										fbData1[resolutionX/2 + x - current.picX/2 + (current.x - cameraControlX) + (resolutionY/2 + y +(current.y - cameraControlY - current.picY/2)) * resolutionX] = colorCode;
+
 									}
 									else
 									{

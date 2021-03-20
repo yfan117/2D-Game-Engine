@@ -23,11 +23,10 @@ public class PauseScreen extends JPanel{
 	private JPanel panel;
 	private Display display;
 	private MusicPlayer musicPlayer;
-	private LoadGame loadGame;
 
-	public PauseScreen(Game game, Display display){
+	public PauseScreen(Display display){
 		//need to create new music player, maybe having one list of musicplayers in the game class for all others to access is better
-		loadGame = game.getLoadFile();
+	
 		 
 		this.display=display;
 		this.panel= new JPanel();
@@ -43,19 +42,11 @@ public class PauseScreen extends JPanel{
 		JButton button2= new JButton("Main Menu");
 		button2.setBackground(Color.BLACK);
 		button2.setForeground(Color.WHITE);
-		JButton saveButton= new JButton("Save game");
-		saveButton.setBackground(Color.BLACK);
-		saveButton.setForeground(Color.WHITE);
-		button.addActionListener(e -> {display.switchJPanels(1); } );//continue
 		button2.addActionListener(e -> {display.switchJPanels(0);} );//menu
-		saveButton.addActionListener(e -> {
-			System.out.println("Save game");
-			loadGame.saveGame(game.getLoadName());
-		});
+		button.addActionListener(e -> {display.switchJPanels(1); } );//continue
 		//button panel
 		buttons.add(button);
 		buttons.add(button2);
-		buttons.add(saveButton);
 		buttons.setBackground(Color.BLACK);
 		
 		//Screen Title

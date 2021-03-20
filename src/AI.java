@@ -57,20 +57,13 @@ public class AI {
 				if(npc.move.isObstacles(npc.clickedX , npc.clickedY) == false)
 				//if((x <= 0 ) || ( y <= 0) || (game.obsMap[x + y * game.mapWidth] == 1))
 				{
-					npc.north = false;
-					npc.south = false;
-					npc.west = false;
-					npc.east = false;
-					npc.directionCheck = true;
+					
 	
 					//npc.clickedX = npc.list.get(0).x - (int)(Math.random()*100);
 					//npc.clickedY = npc.list.get(0).y - (int)(Math.random()*100);
 					//clickedX = list.get(0).x;
 					//clickedY = list.get(0).y;
 	
-	
-	
-					npc.newClick = true;
 					
 					//npc.target = npc.list.get(0);
 					
@@ -88,6 +81,9 @@ public class AI {
 					npc.move.checkPoint.add(new Node(npc.x, npc.y));
 					npc.move.pathFind();
 					npc.hasPath = true;
+					npc.state = "run";
+					npc.newClick = true;
+					npc.newCheckPoint = true;
 				}
 				moveEndTime = Game.gameTime + 30;
 				

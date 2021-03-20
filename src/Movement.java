@@ -86,8 +86,8 @@ public class Movement{
 		
 		
 		//isVisible();
-		this.game = current.game;
-		//isCollision(current.clickedX, current.clickedY, current);
+	
+		isCollision(current.clickedX, current.clickedY, current);
 		
 		
 
@@ -106,23 +106,10 @@ public class Movement{
 			//System.out.println(current.x +" " +current.y);
 			if(current.newCheckPoint == true)
 			{
-				/*
-				System.out.println("currently on: "+current.x +" " +current.y);
-				System.out.println("going to: "+current.clickedX +" " +current.clickedY);
-				System.out.println((current.clickedY - current.y));
-				System.out.println((current.clickedX - current.x));
-				
-				double slope = (double)((current.clickedY - current.y)/(current.clickedX - current.x));
-				double slope2 = -115.0 / 315.0;
-				System.out.println(slope2);
-				 */
-				//System.out.println(Math.toDegrees(Math.atan((current.clickedY - current.y)/(current.clickedX - current.x))));
-				//System.out.println(Math.toDegrees(Math.atan2((current.y - current.clickedY)/(current.x - current.clickedX), nodeIndex)));
 				double deltaX = (double)(current.clickedX - current.x);
 				double deltaY = -(double)(current.clickedY - current.y);
 				current.slopeY = deltaY / deltaX;
 				current.moveAngle = Math.toDegrees(Math.atan2(current.slopeY, nodeIndex));
-				
 				
 				if((deltaX < 0) && (deltaY > 0))
 				{
@@ -154,38 +141,12 @@ public class Movement{
 					//System.out.println("1");
 
 				}
+			
 				//System.out.println(current.moveAngle);
 				//obsX = current.x;
 				//obsY = current.y;
 				current.newCheckPoint = false;
-				//System.out.println(obsX +" " +obsY);
-				/*
-				int angleDiff = 15;
-				  if((current.moveAngle > 90 + angleDiff) && (current.moveAngle < 180 - angleDiff)) {
-				   current.picRank = 7;
-				  }
-				  else if((current.moveAngle > 0 + angleDiff) && (current.moveAngle < 90 - angleDiff)) {
-				   current.picRank = 1;
-				  }
-				  else if((current.moveAngle > 180 + angleDiff) && (current.moveAngle < 270 - angleDiff)) {
-				   current.picRank = 5;
-				  }
-				  else if((current.moveAngle > 270 + angleDiff) && (current.moveAngle < 360 - angleDiff)) {
-				   current.picRank = 3;
-				  }
-				  else if((current.moveAngle > 90 - angleDiff) && (current.moveAngle < 90 + angleDiff)) {
-				   current.picRank = 0;
-				  }
-				  else if((current.moveAngle > 270 - angleDiff) && (current.moveAngle < 270 + angleDiff)) {
-				   current.picRank = 4;
-				  }
-				  else if((current.moveAngle > 180 - angleDiff) && (current.moveAngle < 180 + angleDiff)) {
-				   current.picRank = 6;
-				  }
-				  else if((current.moveAngle < 0 + angleDiff) || (current.moveAngle > 360 - angleDiff)) {
-				   current.picRank = 2;
-				  }
-				  */
+		
 			}
 			//current.clickedX = 100;
 			//current.clickedX = 100;
@@ -317,6 +278,13 @@ public class Movement{
 				{
 					checkPoint.remove(1);
 					current.newCheckPoint = true;
+					//obsX = current.x;
+					//obsY = current.y;
+				}
+				
+				if(current.type == "projectile")
+				{
+					current.active = false;
 					//obsX = current.x;
 					//obsY = current.y;
 				}
@@ -484,26 +452,28 @@ public class Movement{
 				int result = 0;
 				if(current.type !="player")
 				{
-					System.out.println(game.getEntityList().size());
-					for(int i = 1; i < game.getEntityList().size(); i++)
+					//System.out.println(current.Game.list.size());
+					for(int i = 1; i < Game.list.size(); i++)
 					{
-						if((this.current.visible == true)&&(game.getEntityList().get(i).visible == true))
+						//if((this.current.visible == true)&&(Game.list.get(i).visible == true))
 						{
-							if((game.getEntityList().get(i) != current)||(current.type == "projectile"))
+							if((Game.list.get(i) != current)||(current.type == "projectile"))
 							{
-								//System.out.println("here");
-								if(((x + current.hitBox > game.getEntityList().get(i).x) &&(x < game.getEntityList().get(i).x + game.getEntityList().get(i).hitBox))
+								
+								if(((x + current.hitBox > Game.list.get(i).x) &&(x < Game.list.get(i).x + Game.list.get(i).hitBox))
 						        		&&
-						        		((y + current.hitBox > game.getEntityList().get(i).y) &&(y < game.getEntityList().get(i).y + game.getEntityList().get(i).hitBox)))
+						        		((y + current.hitBox > Game.list.get(i).y) &&(y < Game.list.get(i).y + Game.list.get(i).hitBox)))
 						        {
-
+										//System.out.println("here");
 
 										if(current.type == "projectile")
 										{
+											System.out.println("hit");
 											current.collision = true;
+											current.active = false;
 
 											//this.collider = list.get(i);
-											takeDamage(game.getEntityList().get(i), current.damage);
+											takeDamage(Game.list.get(i), current.damage);
 											//System.out.println(current.type);
 											//System.out.println(placeInList);
 											//result = true;
@@ -558,10 +528,15 @@ public class Movement{
 				return result;
 					}
 
-			public void takeDamage(Entity target, int damage) {
-				target.hp = target.hp - damage;
-				target.tookDamage = true;
+			public void takeDamage(Entity current, int damage) {
+				current.hp = current.hp - damage;
+				current.tookDamage = true;
 				current.hasDoneDmage = true;
+				
+				if(current.hp <=0)
+				{
+					current.active = false;
+				}
 				//System.out.println("set" + damage);
 			}
 			
