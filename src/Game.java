@@ -70,12 +70,13 @@ public class Game
 
     public ArrayList<Node> getObstacleLocation() { return obstacleLocation; }
 
-    static int tileWidth = 15;
-    static int tileHeight = 10;
+    static int numTileX = 15;
+    static int numTileY = 10;
     
-    static int mapWidth = 1000*tileWidth;
+    static int mapWidth = 1000*numTileX;
     
-    boolean[] obsMap = new boolean[1000 * tileWidth * 500 * tileHeight];
+    //boolean[] obsMap = new boolean[1000 * numTileX * 500 * numTileY];
+    boolean[] obsMap = new boolean[500 * 50 * 250 * 40];
 
     static Timer dataTimer = new Timer();
     static Timer renderTimer = new Timer();

@@ -639,7 +639,7 @@ public class Movement{
 		
 				try
 				{
-					if((x <= 0 ) || ( y <= 0) || (game.obsMap[x + y * Game.mapWidth] == true) || (x >= 1000 * Game.tileWidth) || (y >= 500 * Game.tileHeight))
+					if((x <= 0 ) || ( y <= 0) || (game.obsMap[x + y * Game.mapWidth] == true) || (x >= 1000 * Game.numTileX) || (y >= 500 * Game.numTileY))
 					{
 						System.out.println("obs detected");
 						isObs = true;

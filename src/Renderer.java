@@ -31,8 +31,8 @@ class Renderer extends JPanel{
 	
 	ArrayList<int[]> test = new ArrayList<>();
 
-	int mapWidth = Game.tileWidth;
-	int mapHeight = Game.tileHeight;
+	int mapWidth = Game.numTileX;
+	int mapHeight = Game.numTileY;
 	
 	//int mapWidth = 200*50;
 	//int mapHeight = 200 * 50;
@@ -63,6 +63,8 @@ class Renderer extends JPanel{
 	private Graphics g;
 
 	LayerThread layerThread;
+	
+	ArrayList<int[]> images = new ArrayList();
 	
 	int[] mapTile;
 			
@@ -605,6 +607,7 @@ class Renderer extends JPanel{
     
     	//Animation tile = new Animation(mapTile);
     
+    	//load each image into ArrayList as int[],  Each element in worldBuffer contain one Animation obj, which has reference to it's int[].
     	for(int y = 0; y < mapHeight; y++)
 		{
     		for(int x = 0; x < mapWidth; x++)
