@@ -273,7 +273,6 @@ public class Entity
 		this.game = game;
 		this.x = x;
 		this.y = y;
-
 	}
 
 	public Entity(Game game, String name, int destinationX, int destinationY, int hitBox) throws IOException {

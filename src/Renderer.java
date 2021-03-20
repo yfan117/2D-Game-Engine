@@ -403,8 +403,8 @@ class Renderer extends JPanel{
 								}
 								catch(ArrayIndexOutOfBoundsException e)
 								{
-									System.out.println(current.state +"!!!!!!!!!! UNEXPLAINED ERROR !!!!!!!!!!");
-									System.out.println(current.picX * current.picCounter + x + ((current.picY * current.picRank + y) * current.spriteWidth));
+									//System.out.println(current.state +"!!!!!!!!!! UNEXPLAINED ERROR !!!!!!!!!!");
+									//System.out.println(current.picX * current.picCounter + x + ((current.picY * current.picRank + y) * current.spriteWidth));
 									break;
 								}
 								
@@ -636,17 +636,6 @@ class Renderer extends JPanel{
 		g.fillRect(25, 10, list.get(0).hp * 2, 20);
 		g.setColor(Color.BLUE);
 		g.fillRect(25, 40, list.get(0).mana, 20);
-
-		try
-		{
-			BufferedImage image = ImageIO.read(new File(Game.root + "/resources/images/playerHead.png"));
-
-			int color = image.getRGB(1, 1);
-			Image img = makeColorTransparent(image, new Color(color));
-			BufferedImage transImg = imageToBufferedImage(img);
-
-			g.drawImage(transImg, 25, 75, 75, 75, null);
-		}catch(Exception ex){ex.printStackTrace();}
 
 		//Inventory slots
 		if(game.getEntityList().get(0).inventory.getInventoryOpen())
