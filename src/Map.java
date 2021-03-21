@@ -45,7 +45,6 @@ public class Map{
 			}
 		}catch(Exception ex){ex.printStackTrace();}
 		
-		
 	BufferedReader bufferedReader = new BufferedReader(new FileReader(Game.root + "/resources/text/" + mapName +".txt"));
 		
 		File map = new File(Game.root + "/resources/text/" + mapName +".txt");
@@ -102,9 +101,6 @@ public class Map{
 				
 				
 			}
-		
-					//y coordinate used to determine print order
-		
 
 
 	}
@@ -114,9 +110,16 @@ public class Map{
 		return respawnLcation;
 	}
 
-	public void playMapMusic()
+	public void startMapMusic()
 	{
-		musicPlayer.play();
+		try
+		{
+			musicPlayer = new MusicPlayer(Game.root + "/resources/music/" + mapName + ".WAV");
+		}catch(Exception ex){ex.printStackTrace();}
+		musicPlayer.start();
 	}
+	public void playMapMusic(){musicPlayer.play();}
+	public void pauseMapMusic(){musicPlayer.pause();}
+	public boolean isMapMusicPlaying(){return musicPlayer.isRunning();}
 }
 

@@ -106,7 +106,7 @@ class Renderer extends JPanel{
 			
 			initObsOrder();
 			layerOrder();
-			tempToFrame();
+			//tempToFrame();
 		
 			//layerFlag = true;
 	
@@ -182,7 +182,7 @@ class Renderer extends JPanel{
 				for(int i = 0; i< game.getEntityList().size(); i++)
 				{
 					current = game.getEntityList().get(i);
-					//if(current.visible == true)
+					if(current.visible == true)
 					{
 					for(int a = 0; a< entityInFB.size(); a++)
 					{
@@ -389,9 +389,9 @@ class Renderer extends JPanel{
 			
 					current = entityInFB.get(i);
 					
-					for(int y = 0; y < current.picY; y++)
+					for(int y = 0; y < current.animationInUse.picHeight; y++)
 					{
-						for(int x = 0; x < current.picX; x++)
+						for(int x = 0; x < current.animationInUse.picWidth; x++)
 						{
 							int colorCode = 0;
 							if(current.type != "")
@@ -402,12 +402,12 @@ class Renderer extends JPanel{
 								//colorCode =  current.imageData[current.picX * current.picCounter + x + ((current.picY * current.picRank + y) * current.spriteWidth)];
 
 								try {
-									colorCode =  current.imageData[current.picX * current.picCounter + x + ((current.picY * current.picRank + y) * current.spriteWidth)];
+									colorCode =  current.animationInUse.imageData[current.animationInUse.picWidth * current.picCounter + x + ((current.animationInUse.picHeight * current.picRank + y) * current.animationInUse.spriteWidth)];
 								}
 								catch(ArrayIndexOutOfBoundsException e)
 								{
 									System.out.println(current.state +"!!!!!!!!!! UNEXPLAINED ERROR !!!!!!!!!!");
-									System.out.println(current.picX * current.picCounter + x + ((current.picY * current.picRank + y) * current.spriteWidth));
+									System.out.println(current.animationInUse.picWidth * current.picCounter + x + ((current.animationInUse.picHeight * current.picRank + y) * current.animationInUse.spriteWidth));
 									break;
 								}
 								
@@ -416,7 +416,7 @@ class Renderer extends JPanel{
 							}
 							else
 							{
-								colorCode =  current.imageData[x + y * current.spriteWidth];
+								colorCode =  current.animationInUse.imageData[x + y * current.animationInUse.spriteWidth];
 
 							}
 							
@@ -452,7 +452,7 @@ class Renderer extends JPanel{
 									}
 									else if(current.type == "player")
 									{
-										fbData1[resolutionX/2 + x - current.picX/2 + (current.x - cameraControlX) + (resolutionY/2 + y +(current.y - cameraControlY - current.picY/2)) * resolutionX] = colorCode;
+										fbData1[resolutionX/2 + x - current.animationInUse.picWidth/2 + (current.x - cameraControlX) + (resolutionY/2 + y +(current.y - cameraControlY - current.animationInUse.picHeight/2)) * resolutionX] = colorCode;
 
 									}
 									else
@@ -519,13 +519,13 @@ class Renderer extends JPanel{
 					}
 					*/
 					current.updateAnimationData(current.run);
-					for(int y = 0; y < current.picY; y++)
+					for(int y = 0; y < current.animationInUse.picHeight; y++)
 					{
-						for(int x = 0; x < current.picX; x++)
+						for(int x = 0; x < current.animationInUse.picWidth; x++)
 						{
 							int colorCode = 0;
 						
-								colorCode =  current.imageData[x + y * current.spriteWidth];
+								colorCode =  current.animationInUse.imageData[x + y * current.animationInUse.spriteWidth];
 
 								//System.out.println("here");
 							
@@ -642,18 +642,7 @@ class Renderer extends JPanel{
 	public void updateValue() {
 		//System.out.println(" ");
 
-		
-		/*
-		try {
-			Thread.sleep(10);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		*/
 
-
-		
 		Entity current;
 		for(int i = 0; i< list.size(); i++) {
 			
@@ -662,9 +651,13 @@ class Renderer extends JPanel{
 			if(current.state == "run") 
 			{
 			
-				current.updateAnimationData(current.run);
+				if(current.animationInUse != current.run)
+				{
+					current.updateAnimationData(current.run);
+					System.out.println("state changed");
+				}
 			
-				if(list.get(i).picCounter < list.get(i).numOfFrame) 
+				if(list.get(i).picCounter < list.get(i).animationInUse.numOfFrame) 
 				{
 					list.get(i).picCounter++;
 				}
@@ -677,9 +670,14 @@ class Renderer extends JPanel{
 			}
 			else if(current.state == "idle")
 			{
-				current.updateAnimationData(current.idle);
+				if(current.animationInUse != current.idle)
+				{
+					current.updateAnimationData(current.idle);
+					System.out.println("state changed");
+				}
+					
 				
-				if(list.get(i).picCounter < list.get(i).numOfFrame) 
+				if(list.get(i).picCounter < list.get(i).animationInUse.numOfFrame) 
 				{
 					list.get(i).picCounter++;
 				}
@@ -738,17 +736,6 @@ class Renderer extends JPanel{
 		g.fillRect(25, 10, list.get(0).hp * 2, 20);
 		g.setColor(Color.BLUE);
 		g.fillRect(25, 40, list.get(0).mana, 20);
-
-		try
-		{
-			BufferedImage image = ImageIO.read(new File(Game.root + "/resources/images/playerHead.png"));
-
-			int color = image.getRGB(1, 1);
-			Image img = makeColorTransparent(image, new Color(color));
-			BufferedImage transImg = imageToBufferedImage(img);
-
-			g.drawImage(transImg, 25, 75, 75, 75, null);
-		}catch(Exception ex){ex.printStackTrace();}
 
 		//Inventory slots
 		if(game.getEntityList().get(0).inventory.getInventoryOpen())

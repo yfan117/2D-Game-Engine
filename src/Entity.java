@@ -103,11 +103,13 @@ public class Entity{
 	 String state;
 	 
 	int layerY;
+	/*
 	int[] imageData;
 	int picX;
 	int picY;
 	int spriteWidth;
 	int numOfFrame;
+	*/
 	//int frameTiming;
 	
 	Animation idle;
@@ -173,13 +175,17 @@ public class Entity{
 	public Dialogue getDialogue() {return d;}
 	public int[] getCollisionBox() {return collisionBox;}
 	
+	Animation animationInUse;
 	public void updateAnimationData(Animation current)
 	{
+		/*
 		imageData = current.imageData;
 		picX = current.picWidth;
 		picY = current.picHeight;
-		spriteWidth = current.spritWidth;
+		spriteWidth = current.spriteWidth;
 		numOfFrame = current.numOfFrame;
+		*/
+		animationInUse = current;
 	}
 	public void addDialogue(Image NpcPortrait,Dialogue dialogue, int[] collisionBox)
 	{
@@ -198,6 +204,10 @@ public class Entity{
 
          this.type = type;
          characterName = name;
+         
+         this.idle = makeNewAnimation(name+"@idle");
+        // makeNewAnimation(name);
+         
         if(type.contentEquals("player"))
          {
         	visible = true;
@@ -228,14 +238,14 @@ public class Entity{
 		
         this.hp = hp;
         this.hitBox = hitBox;
-        
+        /*
          FileReader reader = new FileReader(Game.root + "/resources/text/" + name + ".txt");
 		 BufferedReader bufferedReader = new BufferedReader(reader);
 
 		 layerY = Integer.parseInt(bufferedReader.readLine());
-	
+	    */
 		 
-	     this.idle = makeNewAnimation(name);
+	     //this.idle = makeNewAnimation(name);
 		// System.out.printf("%d %d %d \n", layerY, picX, picY);
 
 		 moveSpeed = 5;
@@ -250,7 +260,7 @@ public class Entity{
 		FileReader reader = new FileReader(Game.root + "/resources/text/" + name + ".txt");
 		 BufferedReader bufferedReader = new BufferedReader(reader);
 		 
-		 //boolean isExist = false;
+	
 		 for(int i = 0; i < Game.models.size(); i++)
 		 {
 			//System.out.println(Game.models.get(i).name);
@@ -262,17 +272,19 @@ public class Entity{
 			}
 		 }
 		 
-		 //if(isExist == false)
-		 {
-			 Game.models.add(new Animation(name,
-					 	      Renderer.getImageData(name),
-				        	  Integer.parseInt(bufferedReader.readLine()),
-				        	  Integer.parseInt(bufferedReader.readLine()),
-				        	  Integer.parseInt(bufferedReader.readLine()),
-				        	  Integer.parseInt(bufferedReader.readLine())));
-			 
-			 System.out.println("new animation added for -- " + name);
-		 }
+		if(name.contains("@idle") == true)
+		{
+			this.layerY = Integer.parseInt(bufferedReader.readLine());
+		}
+		Game.models.add(new Animation(name,
+					 	Renderer.getImageData(name),
+				        Integer.parseInt(bufferedReader.readLine()),
+				        Integer.parseInt(bufferedReader.readLine()),
+				        Integer.parseInt(bufferedReader.readLine()),
+				        Integer.parseInt(bufferedReader.readLine())));
+				 
+	     System.out.println("new animation added for -- " + name);
+	
 	     
 		 return Game.models.get(Game.models.size() -1);
 	}
@@ -331,11 +343,14 @@ public class Entity{
 		this.x = x;
         this.y = y;
         this.layerY = layerY;
-        this.imageData = imageData;
-        this.picX = picX;
-        this.picY = picY;
-        spriteWidth = picX;
+
         
+        animationInUse = new Animation("house",
+        		 imageData, 
+        		 picX,
+        		 picY,
+        		 picX,
+	        	 1);
         
  
 	}
