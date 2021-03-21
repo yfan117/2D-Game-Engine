@@ -8,12 +8,15 @@ public class Animation {
 	int picHeight;
 	int numOfFrame;
 	
+	String name;
+	
 	int startX;
 	int startY;
 	//int cycleRate;
 	
-	public Animation(int[] imageData, int picWidth, int picHeight, int spritWidth, int numOfFrame)
+	public Animation(String name, int[] imageData, int picWidth, int picHeight, int spritWidth, int numOfFrame)
 	{
+		this.name = name;
 		this.imageData = imageData;
 		this.picWidth = picWidth;
 		this.picHeight = picHeight;
