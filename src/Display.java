@@ -1,111 +1,120 @@
-import java.awt.Graphics;
-import java.awt.Image;
+package Diablo;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-public class Display extends Game {
- 
- static int picRank = 6;
- 
- private Player player;
- 
- static public Draw draw;
+public class Display{
 
- public Display(Player _player) {
-   
-  player = _player;
-  draw = new Draw(windowX, windowY, player);
-  
-  JFrame frame = new JFrame();
-  frame.setSize(windowX, windowY);
-  frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-  frame.setLocationRelativeTo(null);
-  frame.setResizable(false);
-  
-  frame.getContentPane().add(draw);
-  
-  Control control = new Control();
-  draw.addMouseListener(control);
-  
- 
-  frame.setVisible(true);
- }
- 
- public static void getDirection() {
-  int differenceX = Math.abs(centerX-clickedX);
-  int differenceY = Math.abs(centerY-clickedY);
-  
-  if((differenceX < 75) && (centerY < clickedY)) {
-   south = true;
-  }
-  else if((differenceX < 75) && (centerY > clickedY)) {
-   north = true;
-  }
-  else if((differenceY < 75) && (centerX < clickedX)) {
-   east = true;
-  }
-  else if((differenceY < 75) && (centerX > clickedX)) {
-   west = true;
-  }
-  else if((differenceX >= 75) && (centerY < clickedY) && (centerX < clickedX)) {
-   south = true;
-   east = true;
-  }
-  else if((differenceX >= 75) && (centerY < clickedY) && (centerX > clickedX)) {
-   south = true;
-   west = true;
-  }
-  else if((differenceX >=  75) && (centerY > clickedY)&& (centerX < clickedX)) {
-   north = true;
-   east = true;
-  }
-  else if((differenceX >=  75) && (centerY > clickedY)&& (centerX > clickedX)) {
-   north = true;
-   west = true;
-  }
-  /*
-   * save this for testing purposes 
-  System.out.println();
-  System.out.println("north: "+north);
-  System.out.println("south: "+south);
-  System.out.println("west: "+west);
-  System.out.println("east: "+east);
-  */
-  if((north == true) && (west == true)) {
-   picRank = 3;
-  }
-  else if((north == true) && (east == true)) {
-   picRank = 1;
-  }
-  else if((south == true) && (west == true)) {
-   picRank = 5;
-  }
-  else if((south == true) && (east == true)) {
-   picRank = 7;
-  }
-  else if(north == true) {
-   picRank = 2;
-  }
-  else if(south == true) {
-   picRank = 6;
-  }
-  else if(west == true) {
-   picRank = 4;
-  }
-  else if(east == true) {
-   picRank = 0;
-  }
-  directionCheck = false;
- }
+	private JFrame frame;
+	private MainMenu mainmenu;
+	private JPanel visiblePanel;
+	private PauseScreen pause;
+	private CardLayout cards= new CardLayout();
+	private Renderer render;
+	private Game game;
+	private int currentPanel;
 
- public void update(int x, int y) {
-  if(directionCheck == true) {
-   getDirection();
-  }
-  draw.updateValue(x, y, picRank);
- }
-}
+	public Display(Game game){
+
+		this.game = game;
+
+		render = new Renderer(game, game.root + "/resources/images/" , game.windowX, game.windowY, game.getEntityList(), game.getProjectileList(), this);
+		frame = new JFrame();
+		frame.setSize(game.windowX + 16, game.windowY + 39);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setLocationRelativeTo(null);
+	
+		MouseControl mouseControl = new MouseControl(this.game);
+		render.addMouseListener(mouseControl);
+		
+		render.addMouseMotionListener(mouseControl);
+		
+		frame.addKeyListener(new KeyboardControl(this.game));
+		/*
+		 * Code to create "visible layers", which displays
+		 * and switches game states
+		 */
+		visiblePanel=new JPanel();
+		visiblePanel.setLayout(cards);
+		mainmenu= new MainMenu(this, game);
+		visiblePanel.add(mainmenu,"menu");
+		visiblePanel.add(render,"game");
+		pause=new PauseScreen(this);
+		visiblePanel.add(pause,"pause");
+		frame.add(visiblePanel);
+		cards.show(visiblePanel, "menu");
+		frame.setFocusable(true);
+		frame.setVisible(true);
+	}
+
+	public Game getGame(){return game;}
+
+	public void switchJPanels(int i ) {
+		switch(i) {
+			case 0://menu state
+				cards.show(visiblePanel, "menu");
+				mainmenu.startMusic();
+				currentPanel = 0;
+				break;
+			case 1: //game state
+				cards.show(visiblePanel, "game");
+				currentPanel = 1;
+				break;
+			case 2: //pause state
+				cards.show(visiblePanel,"pause");
+				currentPanel = 2;
+				break;
+			case 3://inventory
+				cards.show(visiblePanel, "inventory");
+				currentPanel = 3;
+				break;
+		}
+	}
+
+	public static void getDirection(Entity current) {
+
+		
+		current.picRank = (int) Math.round(current.moveAngle / 22.5);
+		
+		if(current.picRank == 16)
+		{
+			current.picRank = 15;
+		}
+	
+	}
+
+	
+		public void update() {
+	
+			for(int i = 0; i< game.getEntityList().size(); i++) 
+			{
+				//if(list.get(i).directionCheck == true)
+				//if(game.getEntityList().get(i).newClick == true) 
+				{
+					//System.out.println(i);
+					getDirection(game.getEntityList().get(i));
+				}
+			}
+		
+				render.updateValue();
+		
+		
+			
+		}
+		
+		public Renderer getRendererObject()
+		{
+			return render;
+		}
+	
+	}
+
+
+
+	
