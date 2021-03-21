@@ -1,0 +1,12 @@
+house1Part1
+0 //x offset to origin
+0 //y offset
+715 // y coordinate to layer
+751 // x dim to pic
+867 // y dim to pic
+house1Part2
+751
+0
+665
+443
+867
