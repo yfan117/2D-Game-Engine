@@ -2,11 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d2c51394-261e-408e-a19f-14df4625bf3a" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/MapBuilder/MapBuilder.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/MapBuilder/class/MapBuilder/MapBuilder.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/MapBuilder/compile and run.bat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/MapBuilder/src/MapBuilder.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/MapBuilder/src/Viewport.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/DialogueManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/DialogueManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Game.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Inventory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Inventory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/KeyboardControl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/KeyboardControl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MouseControl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MouseControl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Movement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Movement.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Objective.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Objective.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Renderer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Renderer.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -24,7 +29,7 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../save/RPG" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../save2/RPG" />
   </component>
   <component name="RunManager">
     <configuration name="Game" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">

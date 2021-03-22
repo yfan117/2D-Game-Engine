@@ -65,7 +65,7 @@ public class DialogueManager {
 		return true;
 	}
 	
-	public void chooseRespone(int i) {
+	public void chooseResponse(int i) {
 		i--;
 			Dialogue [] responses= d.getResponses();
 		if(responses[i].getObjective()!=null) {

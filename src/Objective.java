@@ -45,6 +45,7 @@ class ShopObjective extends Objective{
 	@Override
 	public void doObjective(){
 		//open shop
+		System.out.println("Open shop");
 	}
 	@Override
 	public Dialogue getTransition() {

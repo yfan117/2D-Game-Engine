@@ -298,6 +298,11 @@ public class Movement{
 				{
 					current.newCheckPoint = false;
 					current.state = "idle";
+					if(current.type == "player")
+					{
+						current.runningStone.pause();
+						current.runningDirt.pause();
+					}
 					current.picCounter = 0;
 					current.newClick = false;
 					current.hasPath = false;
