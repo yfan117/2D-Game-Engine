@@ -16,7 +16,7 @@ import java.util.TimerTask;
 
 public class Game
 {
-	static final public String root = Paths.get(System.getProperty("user.dir")).getParent() + "/Portfolio";
+	static final public String root = Paths.get(System.getProperty("user.dir")).getParent() + "/RPG";
 
     public DialogueUI dialogueObj = null; //no dialogue instances yet
     boolean saved = false;
@@ -128,8 +128,9 @@ public class Game
 
         int[] collisionBox = {50, 100};
 
-        list.add(new Entity("player", "wizard", new int[]{10, 10}, 100, 80, this, 100, 50));
-        list.add(new Entity("friendly", "wizard", new int[]{100, 100}, 100, 80, this, 100, 50));
+        list.add(new Entity("player", "wizard", new int[]{10, 10}, 100, 80, this, 50));
+        //list.add(new Entity("friendly", "player", new int[]{100, 100}, 100, 80, this, 50));
+        list.add(new Diablo.Entity(this, "chest", 150, 150));
 //        list.add(new Entity("friendly", "lucy", new int[]{300, 300}, 100, 100, 80, this, 100, 0, ImageIO.read(new File(repo + "tavernGirl.png")), new Dialogue("Hello, good day", new Dialogue("Hello again")), collisionBox));
 //        list.add(new Entity("friendly", "lucy", new int[]{600, 300}, 100, 100, 80, this, 100, 0, ImageIO.read(new File(repo + "player.png")), new Dialogue("Greetings"), collisionBox));
 //        list.add(new Entity("friendly", "lucy", new int[]{1200, 300}, 100, 100, 80, this, 100, 0, ImageIO.read(new File(repo + "player.png")), d1, collisionBox));

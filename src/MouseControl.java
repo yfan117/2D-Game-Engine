@@ -26,7 +26,6 @@ public class MouseControl implements MouseListener, MouseMotionListener {
 		this.game = game;
 		player = game.getEntityList().get(0);
 		movement = new Movement(player, game);
-
 	}
 
 	@Override
@@ -41,10 +40,6 @@ public class MouseControl implements MouseListener, MouseMotionListener {
 	@Override
 	public void mousePressed(MouseEvent e) {
 		// TODO Auto-generated method stub
-
-
-
-
 
 		if(SwingUtilities.isLeftMouseButton(e))
 		{
@@ -107,6 +102,8 @@ public class MouseControl implements MouseListener, MouseMotionListener {
 				player.move.checkPoint.add(new Node(player.x, player.y));
 				player.move.pathFind();
 				player.state = "run";
+				if(!player.runningStone.isRunning())
+					player.runningStone.play();
 				player.newClick = true;
 				player.newCheckPoint = true;
 

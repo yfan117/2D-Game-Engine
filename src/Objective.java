@@ -65,17 +65,23 @@ class ItemObjective extends Objective{
 		return transition;
 	}
 }
-class QuestObjective extends Objective{
-	private Dialogue transition=null;
+class QuestObjective extends Objective
+{
+	private Dialogue transition = null;
 	private Objective checkQuest;
 	private DialogueObjective questDialogue;
 	private Game game;
-	QuestObjective(Game game,Objective checkQuest, Objective questDialogue){
-		this.game=game;
+
+	QuestObjective(Game game, Objective checkQuest, Objective questDialogue)
+	{
+		this.game = game;
 	}
-	public void doObjective() {
+
+	public void doObjective()
+	{
 		//check entity for an Objective
-		if(game.getEntityList().get(0).getQuestlog().contains(checkQuest)) {
+		if (game.getEntityList().get(0).getQuestlog().contains(checkQuest))
+		{
 			questDialogue.doObjective();
 		}
 		//return reward to player
