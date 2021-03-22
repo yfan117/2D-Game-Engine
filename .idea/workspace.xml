@@ -2,11 +2,55 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d2c51394-261e-408e-a19f-14df4625bf3a" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/MapBuilder/MapBuilder.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/MapBuilder/class/MapBuilder/MapBuilder.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/MapBuilder/compile and run.bat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/MapBuilder/src/MapBuilder.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/MapBuilder/src/Viewport.java" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/images/chest.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Diablo/AI.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Diablo/Animation.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Diablo/Dialogue.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Diablo/DialogueManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/Diablo/DialogueManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Diablo/DialogueUI.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Diablo/Display.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Diablo/Entity.java" beforeDir="false" afterPath="$PROJECT_DIR$/Diablo/Entity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Diablo/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/Diablo/Game.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Diablo/Inventory.java" beforeDir="false" afterPath="$PROJECT_DIR$/Diablo/Inventory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Diablo/Item.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Diablo/Items/HealthPotion.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Diablo/Items/Item.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Diablo/Items/ManaPotion.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Diablo/Items/SpeedPotion.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Diablo/KeyboardControl.java" beforeDir="false" afterPath="$PROJECT_DIR$/Diablo/KeyboardControl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Diablo/LoadGame.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Diablo/MainMenu.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Diablo/Map.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Diablo/MouseControl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Diablo/Movement.java" beforeDir="false" afterPath="$PROJECT_DIR$/Diablo/Movement.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Diablo/MusicPlayer.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Diablo/NPC.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Diablo/Node.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Diablo/Objective.java" beforeDir="false" afterPath="$PROJECT_DIR$/Diablo/Objective.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Diablo/PauseScreen.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Diablo/Receiver.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Diablo/Renderer.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Diablo/Sender.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Diablo/SpriteMaker.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/RPG/Diablo/Animation.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/RPG/Diablo/Animation.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/RPG/Diablo/DisplayThread.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/RPG/Diablo/DisplayThread.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/RPG/Diablo/Entity.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/RPG/Diablo/Entity.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/RPG/Diablo/Game$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/RPG/Diablo/Game$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/RPG/Diablo/Game$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/RPG/Diablo/Game$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/RPG/Diablo/Game$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/RPG/Diablo/Game$3.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/RPG/Diablo/Game$4.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/RPG/Diablo/Game$4.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/RPG/Diablo/Game$5.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/RPG/Diablo/Game$5.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/RPG/Diablo/Game.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/RPG/Diablo/Game.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/RPG/Diablo/Inventory.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/RPG/Diablo/Inventory.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/RPG/Diablo/LayerThread.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/RPG/Diablo/LayerThread.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/RPG/Diablo/MouseControl.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/RPG/Diablo/MouseControl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/RPG/Diablo/Movement.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/RPG/Diablo/Movement.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/RPG/Diablo/QuestObjective.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/RPG/Diablo/QuestObjective.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/RPG/Diablo/Receiving.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/RPG/Diablo/Receiving.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/RPG/Diablo/Renderer$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/RPG/Diablo/Renderer$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/RPG/Diablo/Renderer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/RPG/Diablo/Renderer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/RPG/Diablo/Sending.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/RPG/Diablo/Sending.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -24,7 +68,7 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../save/RPG" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../save2/RPG" />
   </component>
   <component name="RunManager">
     <configuration name="Game" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">

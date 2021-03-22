@@ -4,14 +4,12 @@ package Diablo;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 
-import Diablo.Items.Item;
+import Diablo.Items.*;
+
+import javax.imageio.ImageIO;
 
 public class Entity{
 
@@ -76,9 +74,6 @@ public class Entity{
 	 AI ai;
 
 	 Game game;
-
-	 int oil;
-	 int insanity;
 	 
 	 int respondX = 0;
 	 int respondY = 0;
@@ -115,6 +110,9 @@ public class Entity{
 	
 	String characterName;
 
+	MusicPlayer runningStone;
+	MusicPlayer runningDirt;
+
 	/*
 	 * Friendly NPC variables
 	 */
@@ -144,6 +142,10 @@ public class Entity{
 		if(type.equals("enemy")) {
 			//attack();
 		}
+		if(type.equals("chest"))
+		{
+			game.display.getRendererObject().drawChest(this.inventory.getRows(), this.inventory.getCols(), this.inventory);
+		}
 	}
 
 	public boolean actionable() {
@@ -155,7 +157,6 @@ public class Entity{
 			return true;
 		else
 			return false;
-
 	}
 
 	public boolean isEntity(int x, int y) {
@@ -188,7 +189,7 @@ public class Entity{
 		currentDialogue=0;
 		this.collisionBox=collisionBox;
 	}
-	public Entity(String type, String name, int[] location, int hp, int hitBox, Game game, int oil, int mana) throws IOException {
+	public Entity(String type, String name, int[] location, int hp, int hitBox, Game game, int mana) throws IOException {
 		this.game = game;
 
 		this.inventory = new Diablo.Inventory();
@@ -200,6 +201,12 @@ public class Entity{
          characterName = name;
         if(type.contentEquals("player"))
          {
+			 try{
+				 runningStone = new MusicPlayer(Game.root + "/resources/music/runningStone.WAV");
+				 runningDirt = new MusicPlayer(Game.root + "/resources/music/runningDirt.WAV");
+				 runningStone.start();
+				 runningDirt.start();
+			 }catch(Exception ex){ex.printStackTrace();}
         	visible = true;
         	enableMovement();
          }
@@ -241,8 +248,6 @@ public class Entity{
 		 moveSpeed = 5;
 		 
 		 state = "idle";
-		 
-		
 	}
 	
 	public Animation makeNewAnimation(String name) throws NumberFormatException, IOException
@@ -276,14 +281,36 @@ public class Entity{
 	     
 		 return Game.models.get(Game.models.size() -1);
 	}
-/*
-	public Entity(Game game, String name, int x, int y) throws IOException {
+
+	public Entity(Game game, String type, int x, int y) throws IOException {
 		this.game = game;
 		this.x = x;
 		this.y = y;
+		this.type = type;
+		this.inventory = new Diablo.Inventory("Chest", 4, 8);
 
+		this.hp = 1;
+		this.hitBox = 80;
+		this.target = this;
+		this.visible = true;
+		this.actionable = true;
+
+		int[] collisionBox = {50, 100};
+
+		this.collisionBox = collisionBox;
+		this.width = collisionBox[0];
+		this.height = collisionBox[1];
+
+		this.idle = new Animation("chest", Renderer.getImageData("chest"),50,100,50,0);
+
+		this.state = "idle";
+
+		for(int i = 0; i < 32; i++)
+		{
+			inventory.setBackpackItem(i, new SpeedPotion(game));
+		}
 	}
-*/
+
 	public Entity(Game game, String name, int destinationX, int destinationY, int hitBox) throws IOException {
 
 		this.x = game.getEntityList().get(0).x;
@@ -335,9 +362,6 @@ public class Entity{
         this.picX = picX;
         this.picY = picY;
         spriteWidth = picX;
-        
-        
- 
 	}
 	
 	public void enableMovement() throws NumberFormatException, IOException

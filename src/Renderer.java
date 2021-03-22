@@ -1,6 +1,5 @@
 package Diablo;
 
-
 import java.awt.*;
 import java.awt.image.*;
 import java.io.File;
@@ -15,6 +14,10 @@ import javax.swing.JPanel;
 
 class Renderer extends JPanel{
 
+	int chestRows;
+	int chestCols;
+	boolean chestBool;
+	Inventory chestInventory;
 
 	int[] backGroundBuffer;
 
@@ -406,8 +409,8 @@ class Renderer extends JPanel{
 								}
 								catch(ArrayIndexOutOfBoundsException e)
 								{
-									System.out.println(current.state +"!!!!!!!!!! UNEXPLAINED ERROR !!!!!!!!!!");
-									System.out.println(current.picX * current.picCounter + x + ((current.picY * current.picRank + y) * current.spriteWidth));
+									//System.out.println(current.state +"!!!!!!!!!! UNEXPLAINED ERROR !!!!!!!!!!");
+									//System.out.println(current.picX * current.picCounter + x + ((current.picY * current.picRank + y) * current.spriteWidth));
 									break;
 								}
 								
@@ -809,6 +812,41 @@ class Renderer extends JPanel{
 			}
 		}
 
+		//Chest slots
+		if(chestBool)
+		{
+			g.setColor(Color.darkGray);
+			g.fillRect(((Diablo.Game.windowX / 2) - ((chestCols / 2) * 50)), ((Diablo.Game.windowY / 2) - ((chestRows / 2) * 50)), chestCols * 50, chestRows * 50);
+			g.setColor(Color.LIGHT_GRAY);
+			for (int i = 0; i < chestCols; i++)
+			{
+				for (int j = 0; j < chestRows; j++)
+				{
+					g.drawRect(((((Diablo.Game.windowX / 2) - (chestCols / 2) * 50)) + (i * 50)), (((Diablo.Game.windowY / 2) - ((chestRows / 2) * 50)) + 1) + (j * 50), 48, 48);
+				}
+			}
+
+			//Chest items
+			int counter = -1;
+			for (int i = 0; i < chestRows; i++)
+			{
+				for (int j = 0; j < chestCols; j++)
+				{
+					try
+					{
+						counter++;
+						BufferedImage img = chestInventory.getBackpackItemImage(counter);
+						g.drawImage(img, ((((Diablo.Game.windowX / 2) - (chestCols / 2) * 50) + 9) + (j * 50)), (((Diablo.Game.windowY / 2) - ((chestRows / 2) * 50)) + 9) + (i * 50), 32, 32, null);
+						if(chestInventory.getBackpackItem(counter).isStackable())
+						{
+							String s = String.valueOf(chestInventory.getBackpackItem(counter).getNumberInStack());
+							g.drawString(s, ((((Diablo.Game.windowX / 2) - (chestCols / 2) * 50) + 9) + (j * 50)), (((Diablo.Game.windowY / 2) - ((chestRows / 2) * 50)) + 9) + (i * 50) + 30);
+						}
+					}catch(Exception ex){}
+				}
+			}
+		}
+
 		///////////////////////////ADD LATER
 		//Spell slots
 //			g.setColor(Color.DARK_GRAY);
@@ -863,7 +901,13 @@ class Renderer extends JPanel{
 		return Toolkit.getDefaultToolkit().createImage(ip);
 	}
 
-	
+	public void drawChest(int r, int c, Inventory chestInventory)
+	{
+		this.chestInventory = chestInventory;
+		this.chestRows = r;
+		this.chestCols = c;
+		this.chestBool = true;
+	}
 }
 
 class LayerThread implements Runnable 
@@ -895,5 +939,4 @@ class LayerThread implements Runnable
 			}
 		
 	}
-	
 }
