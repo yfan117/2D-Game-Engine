@@ -238,15 +238,6 @@ public class Entity{
 		
         this.hp = hp;
         this.hitBox = hitBox;
-        /*
-         FileReader reader = new FileReader(Game.root + "/resources/text/" + name + ".txt");
-		 BufferedReader bufferedReader = new BufferedReader(reader);
-
-		 layerY = Integer.parseInt(bufferedReader.readLine());
-	    */
-		 
-	     //this.idle = makeNewAnimation(name);
-		// System.out.printf("%d %d %d \n", layerY, picX, picY);
 
 		 moveSpeed = 5;
 		 
@@ -263,10 +254,9 @@ public class Entity{
 	
 		 for(int i = 0; i < Game.models.size(); i++)
 		 {
-			//System.out.println(Game.models.get(i).name);
+
 			if(Game.models.get(i).name.contentEquals(name))
 			{
-				//isExist = true;
 				System.out.println("animation already exist for -- " + name);
 				return Game.models.get(i);
 			}
@@ -288,14 +278,7 @@ public class Entity{
 	     
 		 return Game.models.get(Game.models.size() -1);
 	}
-/*
-	public Entity(Game game, String name, int x, int y) throws IOException {
-		this.game = game;
-		this.x = x;
-		this.y = y;
 
-	}
-*/
 	public Entity(Game game, String name, int destinationX, int destinationY, int hitBox) throws IOException {
 
 		this.x = game.getEntityList().get(0).x;
@@ -346,11 +329,11 @@ public class Entity{
 
         
         animationInUse = new Animation("house",
-        		 imageData, 
-        		 picX,
-        		 picY,
-        		 picX,
-	        	 1);
+						        		 imageData, 
+						        		 picX,
+						        		 picY,
+						        		 picX,
+							        	 1);
         
  
 	}
@@ -363,11 +346,11 @@ public class Entity{
 		 if(type == "projectile")
 		 {
 			 run = new Animation("arrow",
-					 Renderer.getImageData("arrow2"), 
-		        	 64,
-		        	 64,
-		        	 64,
-		        	 0);
+								 Renderer.getImageData("arrow2"), 
+					        	 64,
+					        	 64,
+					        	 64,
+					        	 0);
 			 
 		 }
 		 else

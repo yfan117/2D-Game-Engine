@@ -627,12 +627,26 @@ class Renderer extends JPanel{
     	int width = image.getWidth();
     	int height = image.getHeight();
 		int[] imageData = new int[width * height];
-		
+		int firstColor = image.getRGB(0, 0);
+		System.out.println("first color is -- " +firstColor);
 		for(int y = 0; y < height; y++)
 		{
 			for(int x = 0; x < width; x++)
 			{
-				imageData[x + y * width] = image.getRGB(x, y);
+				if((firstColor != image.getRGB(x, y)) && (131586 != image.getRGB(x, y)))
+				{
+					/*
+					if(imageName.contains("archer"))
+					{
+						if(image.getRGB(x, y)!=0)
+						{
+							System.out.println(image.getRGB(x, y));
+						}
+					}*/
+						
+					imageData[x + y * width] = image.getRGB(x, y);
+				}
+					//imageData[x + y * width] = image.getRGB(x, y);
 			}
 		}
 		
@@ -674,6 +688,7 @@ class Renderer extends JPanel{
 				{
 					current.updateAnimationData(current.idle);
 					System.out.println("state changed");
+					list.get(i).picCounter = 77;
 				}
 					
 				
