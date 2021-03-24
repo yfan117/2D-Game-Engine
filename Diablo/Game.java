@@ -16,7 +16,7 @@ import java.util.TimerTask;
 
 public class Game
 {
-	static final public String root = Paths.get(System.getProperty("user.dir")).getParent() + "/Portfolio";
+	static final public String root = Paths.get(System.getProperty("user.dir")) + "";
 
     public DialogueUI dialogueObj = null; //no dialogue instances yet
     boolean saved = false;
@@ -33,7 +33,7 @@ public class Game
     public LoadGame getLoadFile() {return loadFile;}
 
     public void createDialogue(Entity entity) { dialogueObj = new DialogueUI(entity); }
-
+    public static List<Animation> uniqueTiles = new ArrayList<Animation>();
     public String getDialogue()
     {
         return dialogueObj.getDialogue();
@@ -66,7 +66,7 @@ public class Game
 
     public Diablo.KeyboardControl getKeyboardControl() { return keyboard; }
 
-    private ArrayList<Entity> obstacle = new ArrayList<Entity>();
+    public static ArrayList<Entity> obstacle = new ArrayList<Entity>();
 
     public ArrayList<Entity> getObstacles() { return obstacle; }
 
@@ -76,13 +76,13 @@ public class Game
 
     static ArrayList<Animation> models = new ArrayList();
     
-    static int numTileX = 15;
-    static int numTileY = 10;
+    static int numTileX = 60;
+    static int numTileY = 60;
     
-    static int mapWidth = 1000*numTileX;
+    static int mapWidth = 500*numTileX;
     
     //boolean[] obsMap = new boolean[1000 * numTileX * 500 * numTileY];
-    boolean[] obsMap = new boolean[500 * 50 * 250 * 40];
+    boolean[] obsMap = new boolean[500 * 60 * 250 * 60];
 
     static Timer dataTimer = new Timer();
     static Timer renderTimer = new Timer();
@@ -128,7 +128,7 @@ public class Game
 
         int[] collisionBox = {50, 100};
 
-        list.add(new Entity("player", "wizard", new int[]{10, 10}, 100, 80, this, 100, 50));
+        list.add(new Entity("player", "wizard", new int[]{1500, 1500}, 100, 80, this, 100, 50));
         list.add(new Entity("friendly", "wizard", new int[]{100, 100}, 100, 80, this, 100, 50));
 //        list.add(new Entity("friendly", "lucy", new int[]{300, 300}, 100, 100, 80, this, 100, 0, ImageIO.read(new File(repo + "tavernGirl.png")), new Dialogue("Hello, good day", new Dialogue("Hello again")), collisionBox));
 //        list.add(new Entity("friendly", "lucy", new int[]{600, 300}, 100, 100, 80, this, 100, 0, ImageIO.read(new File(repo + "player.png")), new Dialogue("Greetings"), collisionBox));

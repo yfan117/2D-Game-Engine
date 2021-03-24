@@ -6,12 +6,16 @@ import java.awt.image.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
+
+import org.json.simple.JSONObject;
 
 class Renderer extends JPanel{
 
@@ -31,22 +35,24 @@ class Renderer extends JPanel{
 	
 	ArrayList<int[]> test = new ArrayList<>();
 
-	int mapWidth = Game.numTileX;
-	int mapHeight = Game.numTileY;
-	
+	static int mapWidth = Game.numTileX;
+	static int mapHeight = Game.numTileY;
+	static int tW = 500;
+	static int tH = 250;
 	//int mapWidth = 200*50;
 	//int mapHeight = 200 * 50;
 
 
 
 	BufferedImage frameBuffer1 = new BufferedImage(Game.windowX, Game.windowY, BufferedImage.TYPE_INT_RGB);
-	
-	
+	static int [] empty = new int[tW*tH];
+	static Animation emptyAni;// = new Animation(empty);
+//	Arrays.fill(empty,0);
     int[] fbData1 = ((DataBufferInt)frameBuffer1.getRaster().getDataBuffer()).getData();
     
     
     
-    Animation[] worldBuffer = new Animation[mapWidth * mapHeight];
+    static Animation[] worldBuffer = new Animation[mapWidth * mapHeight];
     
 
  
@@ -98,12 +104,17 @@ class Renderer extends JPanel{
 			this.display = display;
 			this.game = display.getGame();
 			
-			populateArray();
+//			try {
+////				populateArray();
+//			} catch (IOException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
 			
 			layerThread = new LayerThread(this, game);
 			
 			new Thread(layerThread).start();
-			
+			showUT();
 			initObsOrder();
 			layerOrder();
 			tempToFrame();
@@ -245,6 +256,7 @@ class Renderer extends JPanel{
 	static int cameraControlY;
 	public void tempToFrame()
 	{
+//		resetFrame(fbData1);
 		cameraControlX = list.get(0).x;
 		cameraControlY = list.get(0).y;
 		
@@ -291,16 +303,16 @@ class Renderer extends JPanel{
 
 		//get map data	
 		
-		int tileX = cameraX / 1000;
-		int tileY = cameraY / 500;
+		int tileX = cameraX / tW;
+		int tileY = cameraY / tH;
 	
 		int offsetX = 0;
 		int offsetY = 0;
 		
 		
-		for(int b = fbStartY; b <= Game.windowY; b = b + 500 + offsetY)
+		for(int b = fbStartY; b <= Game.windowY; b = b + tH + offsetY)
 		{
-			tileX = cameraX / 1000;
+			tileX = cameraX / tW;
 			if(tileX > mapWidth -1)
 			{
 				tileX = mapWidth -1;
@@ -319,13 +331,12 @@ class Renderer extends JPanel{
 			{
 				offsetX = 0;
 			}
-			
 			if(offsetY > 0)
 			{
 				offsetY = 0;
 			}
 	
-			for(int a = fbStartX; a <= Game.windowX; a = a + 1000 + offsetX) 
+			for(int a = fbStartX; a <= Game.windowX; a = a + tW + offsetX) 
 			{
 
 				if(tileX > mapWidth -1)
@@ -353,30 +364,26 @@ class Renderer extends JPanel{
 				{
 					offsetY = 0;
 				}
-				
-				
-				for(int y = 0; y < (500 + offsetY); y++)
+				for(int y = 0; y < (tH + offsetY); y++)
 				{
-					for(int x = 0; x < (1000 + offsetX); x++)
+					for(int x = 0; x < (tW + offsetX); x++)
 					{
 						
 						if((a + x  >= Game.windowX)||(b + y >= Game.windowY))
 						{
 							break;
 						}
-						fbData1[a + x + (b + y) * Game.windowX] = worldBuffer[tileX + tileY * 10].imageData[x - offsetX + (y - offsetY) * 1000];
-	
+						int colorCode =  worldBuffer[tileX + tileY * Game.numTileX].imageData[x - offsetX + (y - offsetY) * tW];
+//						System.out.println(worldBuffer[(1500/500) + 0 * Game.numTileX].imageData[0]);
+						if(colorCode != 0) {
+						fbData1[a + x + (b + y) * Game.windowX] = worldBuffer[tileX + tileY * Game.numTileX].imageData[x - offsetX + (y - offsetY) * tW];
+						}
+						else {}
 					}
-					
-			
 				}
-			
 				tileX++;
-				
 			}
-			
 			tileY++;
-
 		}
 
 		Entity current;
@@ -410,9 +417,6 @@ class Renderer extends JPanel{
 									System.out.println(current.picX * current.picCounter + x + ((current.picY * current.picRank + y) * current.spriteWidth));
 									break;
 								}
-								
-								
-
 							}
 							else
 							{
@@ -460,10 +464,6 @@ class Renderer extends JPanel{
 										fbData1[resolutionX/2 + x +(current.x - cameraControlX) + (resolutionY/2 + y+(current.y - cameraControlY)) * resolutionX] = colorCode;
 									}
 								}
-							
-					
-						
-							
 							}
 						}
 					
@@ -556,17 +556,15 @@ class Renderer extends JPanel{
 										fbData1[resolutionX/2 + x +(current.x - cameraControlX) + (resolutionY/2 + y+(current.y - cameraControlY)) * resolutionX] = colorCode;
 									
 								}
-							
-					
-						
-							
+
+
 							}
+
+							
 						}
-					
 					}
-				}
+				}			
 				
-		
 	}
 
 	public void resetFrame(int[] tempBuffer)
@@ -600,24 +598,48 @@ class Renderer extends JPanel{
 		
 		
 	}
-
-    public void populateArray()
-    {
-    	System.out.println("here");
-    
-    	//Animation tile = new Animation(mapTile);
-    
-    	//load each image into ArrayList as int[],  Each element in worldBuffer contain one Animation obj, which has reference to it's int[].
-    	for(int y = 0; y < mapHeight; y++)
-		{
-    		for(int x = 0; x < mapWidth; x++)
-    		{
-    			worldBuffer[x + y *mapWidth] = new Animation(mapTile);
-        		worldBuffer[x + y *mapWidth].addStartPoint(1000*x, 500*y);
-    		}
-    		
+	public void showUT() {
+		for(int i = 0; i < Game.uniqueTiles.size(); i++) {
+			System.out.println(game.uniqueTiles.get(i).name);
 		}
-   
+		System.out.println(	Game.uniqueTiles.size());
+	}
+	public static void createEmptyWB() {
+    	for(int y = 0; y < mapHeight; y++)
+   	 {
+   		for(int x = 0; x < mapWidth; x++)
+   		{
+				  worldBuffer[x + y *mapWidth] = new Animation(emptyAni.imageData);
+				  worldBuffer[x + y *mapWidth].addStartPoint(tW*x, tH*y);
+//				  i++;
+   		}
+   	 }
+	}
+    public static void populateArray(JSONObject node) throws IOException
+    {
+//    	worldBuffer.
+
+		 int index = ((Long)node.get("image_index")).intValue();
+		 if(index == -1) {
+			 return;
+		 }
+		 Image  image = ImageIO.read(new File(Game.root + "/resources/maps/test6/" + (String) Map.imageFiles.get(index)));
+		 int x = ((Long) node.get("x")).intValue();
+		 int y = ((Long) node.get("y")).intValue();
+		 int width = image.getWidth(null);
+		 int height = image.getHeight(null);
+		 String indexStr = index + "";
+//		 Animation temp = new Animation(indexStr, Map.imageToArray(index), width, height, width, x , y);
+		 for(int i = 0; i < Game.uniqueTiles.size(); i++) {
+			 if(Game.uniqueTiles.get(i).name.equals(indexStr)) {
+						worldBuffer[(x/tW) + (y/tH) * mapWidth] = 
+								new Animation(indexStr, Game.uniqueTiles.get(i).imageData, width, height, width, x , y);//Game.uniqueTiles.get(i); 
+						return;
+					}
+				}
+			 Game.uniqueTiles.add(new Animation(indexStr, Map.imageToArray(index, ((Long)node.get("layer")).intValue()), width, height, width, x , y));
+//			 temp=null;
+			 return;
     }
     
   	public static int[] getImageData(String imageName) throws IOException
@@ -738,6 +760,17 @@ class Renderer extends JPanel{
 		g.fillRect(25, 10, list.get(0).hp * 2, 20);
 		g.setColor(Color.BLUE);
 		g.fillRect(25, 40, list.get(0).mana, 20);
+
+		try
+		{
+			BufferedImage image = ImageIO.read(new File(Game.root + "/resources/images/playerHead.png"));
+
+			int color = image.getRGB(1, 1);
+			Image img = makeColorTransparent(image, new Color(color));
+			BufferedImage transImg = imageToBufferedImage(img);
+
+			g.drawImage(transImg, 25, 75, 75, 75, null);
+		}catch(Exception ex){ex.printStackTrace();}
 
 		//Inventory slots
 		if(game.getEntityList().get(0).inventory.getInventoryOpen())

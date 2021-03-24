@@ -123,7 +123,3 @@ public class Display{
 		}
 	
 	}
-
-
-
-	
