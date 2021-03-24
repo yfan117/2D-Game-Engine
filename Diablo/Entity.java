@@ -339,6 +339,20 @@ public class Entity{
         
  
 	}
+	public Entity(String name, int[] imageData, int x, int y, int layerY, int picX, int picY) throws IOException {
+		this.characterName = name;
+		this.imageData = imageData;
+		this.x = x;
+        this.y = y;
+        this.layerY = layerY;
+     
+        this.picX = picX;
+        this.picY = picY;
+        spriteWidth = picX;
+        
+        
+ 
+	}
 	
 	public void enableMovement() throws NumberFormatException, IOException
 	{
