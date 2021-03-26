@@ -180,12 +180,12 @@ public class Map{
 		for(int i = 0; i < array.size(); i++) {
 			Iterator<JSONObject> iterator = ((JSONArray) array.get(i)).iterator();
 			parseThis = (JSONObject) new JSONParser().parse((iterator.next().toString()));
-//			if(((Long)parseThis.get("layer")).intValue() == 0) {
+			if(((Long)parseThis.get("layer")).intValue() == 0) {
 				Renderer.populateArray(parseThis);
-//				}
-//			else {
-//				makeUnique(parseThis);
-//			}			
+				}
+			else {
+				makeUnique(parseThis);
+			}			
 		}
 		
 		String spriteList = jo.get("spriteList").toString();
