@@ -623,21 +623,22 @@ class Renderer extends JPanel{
 		 if(index == -1) {
 			 return;
 		 }
-		 Image  image = ImageIO.read(new File(Game.root + "/resources/maps/test6/" + (String) Map.imageFiles.get(index)));
+		 String indexStr = node.get("picture").toString();
+		 Image  image = ImageIO.read(new File(Game.root + "/resources/maps/test6/" + indexStr));
 		 int x = ((Long) node.get("x")).intValue();
 		 int y = ((Long) node.get("y")).intValue();
 		 int width = image.getWidth(null);
 		 int height = image.getHeight(null);
-		 String indexStr = index + "";
+		
 //		 Animation temp = new Animation(indexStr, Map.imageToArray(index), width, height, width, x , y);
 		 for(int i = 0; i < Game.uniqueTiles.size(); i++) {
 			 if(Game.uniqueTiles.get(i).name.equals(indexStr)) {
-						worldBuffer[(x/tW) + (y/tH) * mapWidth] = 
+						worldBuffer[(x/width) + (y/height) * mapWidth] = 
 								new Animation(indexStr, Game.uniqueTiles.get(i).imageData, width, height, width, x , y);//Game.uniqueTiles.get(i); 
 						return;
 					}
 				}
-			 Game.uniqueTiles.add(new Animation(indexStr, Map.imageToArray(index, ((Long)node.get("layer")).intValue()), width, height, width, x , y));
+			 Game.uniqueTiles.add(new Animation(indexStr, Map.imageToArray(indexStr, 0), width, height, width, x , y));
 //			 temp=null;
 			 return;
     }

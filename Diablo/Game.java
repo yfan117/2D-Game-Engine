@@ -160,8 +160,8 @@ public class Game
         //displayThread.start();
 
         //new Thread(dataUpdate).start();
-        renderTimer.scheduleAtFixedRate(frameUpdate, 0, 1000 / 30);
-        timeTimer.scheduleAtFixedRate(timeCounter, 0, 10);
+//        renderTimer.scheduleAtFixedRate(frameUpdate, 0, 1000 / 30);
+        timeTimer.scheduleAtFixedRate(timeCounter, 0, 1);
         mouse = new MouseControl(this);
 
         receiver = new Receiver(this, 20000);
@@ -170,13 +170,31 @@ public class Game
         sender = new Sender(this, 10000);
         sendTimer.scheduleAtFixedRate(send, 0, 1);
 		 
-		 /*
-		 while(true)
-		 {
-			
-			 display.update();
-		 }
-		 */
+        int timeSegment = 0;
+        int waitTime = 0;
+        while(true)
+        {
+            timeSegment = gameTime + 30;
+            display.update();
+
+            waitTime = timeSegment - gameTime;
+//            System.out.println(waitTime);
+
+            if(waitTime > 0)
+            {
+                try {
+                       Thread.sleep(waitTime);
+                   } catch (InterruptedException e) {
+                       // TODO Auto-generated catch block
+                       e.printStackTrace();
+                   }
+            }
+            else
+            {
+                System.out.println("time slice exceeded");
+            }
+
+        }
 
     }
 
@@ -449,7 +467,6 @@ class DisplayThread implements Runnable
 		  
 		public void run()
 		{
-
 			System.out.println("repainting");
 			game.display.update();
 			//display.getRendererObject().repaintt();
