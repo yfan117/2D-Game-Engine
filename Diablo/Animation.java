@@ -3,7 +3,7 @@ package Diablo;
 public class Animation {
 	
 	int[] imageData;
-	int spritWidth;
+	int spriteWidth;
 	int picWidth;
 	int picHeight;
 	int numOfFrame;
@@ -14,13 +14,13 @@ public class Animation {
 	int startY;
 	//int cycleRate;
 	
-	public Animation(String name, int[] imageData, int picWidth, int picHeight, int spritWidth, int numOfFrame)
+	public Animation(String name, int[] imageData, int picWidth, int picHeight, int spriteWidth, int numOfFrame)
 	{
 		this.name = name;
 		this.imageData = imageData;
 		this.picWidth = picWidth;
 		this.picHeight = picHeight;
-		this.spritWidth = spritWidth;
+		this.spriteWidth = spriteWidth;
 		this.numOfFrame = numOfFrame;
 	}
 	
@@ -29,15 +29,7 @@ public class Animation {
 		this.imageData = imageData;
 
 	}
-	public Animation(String name, int[] imageData, int picWidth, int picHeight, int spritWidth, int startX, int startY) {
-		this.name = name;
-		this.imageData = imageData;
-		this.picWidth = picWidth;
-		this.picHeight = picHeight;
-		this.spritWidth = spritWidth;
-		this.startX = startX;
-		this.startY = startY;
-	}
+	
 	public void addStartPoint(int startX, int startY)
 	{
 		this.startX = startX;
