@@ -64,8 +64,8 @@ public class LoadGame
     {
         currentSave = new File(game.root + "/resources/text/saves/" + name + ".txt");
 
-        x = 1500;
-        y = 1500;
+        x = 10;
+        y = 10;
         hp = 100;
         if (currentSave.exists())
         {

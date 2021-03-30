@@ -13,8 +13,6 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
-import org.json.simple.JSONObject;
-
 class Renderer extends JPanel{
 
 
@@ -52,7 +50,7 @@ class Renderer extends JPanel{
     
     
     
-    static Animation[] worldBuffer = new Animation[mapWidth * mapHeight];
+    Animation[] worldBuffer = new Animation[mapWidth * mapHeight];
     
 
  
@@ -422,16 +420,16 @@ class Renderer extends JPanel{
 
 		//get map data	
 		
-		int tileX = cameraX / tW;
-		int tileY = cameraY / tH;
+		int tileX = cameraX / 1000;
+		int tileY = cameraY / 500;
 	
 		int offsetX = 0;
 		int offsetY = 0;
 		
 		
-		for(int b = fbStartY; b <= Game.windowY; b = b + tH + offsetY)
+		for(int b = fbStartY; b <= Game.windowY; b = b + 500 + offsetY)
 		{
-			tileX = cameraX / tW;
+			tileX = cameraX / 1000;
 			if(tileX > mapWidth -1)
 			{
 				tileX = mapWidth -1;
@@ -456,7 +454,7 @@ class Renderer extends JPanel{
 				offsetY = 0;
 			}
 	
-			for(int a = fbStartX; a <= Game.windowX; a = a + tW + offsetX) 
+			for(int a = fbStartX; a <= Game.windowX; a = a + 1000 + offsetX) 
 			{
 
 				if(tileX > mapWidth -1)
@@ -485,7 +483,7 @@ class Renderer extends JPanel{
 					offsetY = 0;
 				}
 				
-				
+			
 				for(int y = 0; y < (tH + offsetY); y++)
                 {
                     for(int x = 0; x < (tW + offsetX); x++)
@@ -603,9 +601,7 @@ class Renderer extends JPanel{
 				{
 					current = game.getProjectileList().get(i);
 					
-					/*
-					current.move.isVisible();
-					if(current.visible == true)
+					if(current.active == true)
 					{
 						//System.out.println("p here");
 						int picStartX = 0;	

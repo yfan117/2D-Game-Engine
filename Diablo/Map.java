@@ -1,24 +1,15 @@
 
 package Diablo;
-import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Scanner;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
-import org.json.simple.JSONArray; 
-import org.json.simple.JSONObject; 
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+
 public class Map{
 	Game game;
 	String mapName;
@@ -39,16 +30,6 @@ public class Map{
 
 
 	public Map(String mapName, Game game) throws IOException  {
-		System.out.println("map");
-		try {
-			parseJSON();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		this.mapName = mapName;
 
 		try
@@ -130,11 +111,11 @@ public class Map{
 
 	}
 
-
 	public int[] getLocation() {
 
 		return respawnLcation;
 	}
+
 	public void startMapMusic()
 	{
 		try
@@ -299,6 +280,5 @@ public class Map{
 //			  }
 //		  }
 //	 }
-
 }
 

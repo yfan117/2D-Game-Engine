@@ -28,7 +28,7 @@ public class Movement{
 	
 
 	
-	int nodeIndex = 0;
+	int nodeIndex = 1;
 	
 	
 	public void keyBoardUpdate(Entity current)
@@ -79,6 +79,49 @@ public class Movement{
 	
 	int obsX;
 	int obsY;
+	
+	public double getDirection(double x, double y)
+	{
+		
+		double deltaX = (double)(x - current.x);
+		double deltaY = -(double)(y - current.y);
+		current.slopeY = deltaY / deltaX;
+		current.moveAngle = Math.toDegrees(Math.atan2(current.slopeY, nodeIndex));
+
+		if((deltaX < 0) && (deltaY > 0))
+		{
+			//obsX = current.x + 0;
+			//obsY = current.y + 200;
+			current.moveAngle = 180 + current.moveAngle;
+			//System.out.println("2");
+		}
+		else if((deltaX < 0) && (deltaY < 0))
+		{
+			//obsX = current.x + 0;
+			//obsY = current.y + 100;
+			current.moveAngle = 180 + current.moveAngle;
+			//System.out.println("3");
+
+		}
+		else if((deltaX > 0) && (deltaY < 0))
+		{
+			//obsX = current.x + 200;
+			//obsY = current.y + 100;
+			current.moveAngle = 360 + current.moveAngle;
+			//System.out.println("4");
+
+		}
+		else
+		{
+			//obsX = current.x + 200;
+			//obsY = current.y + 200;
+			//System.out.println("1");
+
+		}
+		
+		return current.moveAngle;
+		
+	}
 	public void update(Entity current)
 	{
 
@@ -97,54 +140,29 @@ public class Movement{
 			//if((current.type != "projectile")&&(current.type != "player"))
 			if(current.type != "projectile")
 			{
-				
+				if(checkPoint.size() != 0)
+				{
 					current.clickedX = checkPoint.get(1).x;
-					current.clickedY = checkPoint.get(1).y;
+					current.clickedY = checkPoint.get(1).y;	
+				}
+						
+			}
+			
+			if(current.type == "projectile")
+			{
+				
+				getDirection(current.clickedX, current.clickedY);
+				//System.out.println(current.moveAngle);
 				
 				
 			}
 			//System.out.println(current.x +" " +current.y);
 			if(current.newCheckPoint == true)
 			{
-				double deltaX = (double)(current.clickedX - current.x);
-				double deltaY = -(double)(current.clickedY - current.y);
-				current.slopeY = deltaY / deltaX;
-				current.moveAngle = Math.toDegrees(Math.atan2(current.slopeY, nodeIndex));
-				
-				if((deltaX < 0) && (deltaY > 0))
-				{
-					//obsX = current.x + 0;
-					//obsY = current.y + 200;
-					current.moveAngle = 180 + current.moveAngle;
-					//System.out.println("2");
-				}
-				else if((deltaX < 0) && (deltaY < 0))
-				{
-					//obsX = current.x + 0;
-					//obsY = current.y + 100;
-					current.moveAngle = 180 + current.moveAngle;
-					//System.out.println("3");
-
-				}
-				else if((deltaX > 0) && (deltaY < 0))
-				{
-					//obsX = current.x + 200;
-					//obsY = current.y + 100;
-					current.moveAngle = 360 + current.moveAngle;
-					//System.out.println("4");
-
-				}
-				else
-				{
-					//obsX = current.x + 200;
-					//obsY = current.y + 200;
-					//System.out.println("1");
-
-				}
 			
-				//System.out.println(current.moveAngle);
-				//obsX = current.x;
-				//obsY = current.y;
+				
+				getDirection(current.clickedX, current.clickedY);
+				
 				current.newCheckPoint = false;
 		
 			}
@@ -494,6 +512,56 @@ public class Movement{
 					current.visible = false;
 
 			}
+			
+			public static boolean isVisible(Entity current) {
+		
+				int x1 = current.x;
+				int x2 = current.x + current.animationInUse.picWidth;
+				int y1 = current.y;
+				int y2 = current.y + current.animationInUse.picHeight;
+				
+				boolean xInFrame = false;
+				boolean yInFrame = false;
+				
+				//System.out.println(current.picWidth);
+				//System.out.println(Renderer.cameraX + Game.windowX);
+				
+				if((x1 >= Renderer.cameraX) && (x1 <= Renderer.cameraX + Renderer.frameWidth))
+				{
+					xInFrame = true;
+				}
+				else if((x2 >= Renderer.cameraX) && (x2 <= Renderer.cameraX + Renderer.frameWidth))
+				{
+					xInFrame = true;
+				}
+				else if((x1 <= Renderer.cameraX) && (x2 >= Renderer.cameraX + Renderer.frameWidth))
+				{
+					xInFrame = true;
+				}
+				
+				
+				if((y1 >= Renderer.cameraY) && (y1 <= Renderer.cameraY + Renderer.frameHeight))
+				{
+					yInFrame = true;
+				}
+				else if((y2 >= Renderer.cameraY) && (y2 <= Renderer.cameraY + Renderer.frameHeight))
+				{
+					yInFrame = true;
+				}
+				else if((y1 <= Renderer.cameraY) && (y2 >= Renderer.cameraY + Renderer.frameHeight))
+				{
+					yInFrame = true;
+				}
+				
+				if((xInFrame == true) && (yInFrame == true))
+				{
+					return true;
+				}
+				
+				return false;
+                     
+
+            }
 
 			public int isCollision(int x, int y, Entity current)
 			{

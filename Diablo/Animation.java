@@ -14,7 +14,7 @@ public class Animation {
 	int startY;
 	//int cycleRate;
 	
-	public Animation(String name, int[] imageData, int picWidth, int picHeight, int spritWidth, int numOfFrame)
+	public Animation(String name, int[] imageData, int picWidth, int picHeight, int spriteWidth, int numOfFrame)
 	{
 		this.name = name;
 		this.imageData = imageData;
@@ -38,6 +38,7 @@ public class Animation {
 		this.startX = startX;
 		this.startY = startY;
 	}
+
 	public void addStartPoint(int startX, int startY)
 	{
 		this.startX = startX;
