@@ -10,6 +10,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -41,6 +42,9 @@ public class Game
 
     static int windowX = 1280;
     static int windowY = 720;
+    
+    //static int windowX = 1920;
+    //static int windowY = 1080;
 
     static int centerX = windowX / 2;
     static int centerY = windowY / 2;
@@ -74,7 +78,9 @@ public class Game
 
     public ArrayList<Node> getObstacleLocation() { return obstacleLocation; }
 
-    static ArrayList<Animation> models = new ArrayList();
+    static ArrayList<Animation> models = new ArrayList<Animation>();
+    
+    static ArrayList<Animation> projectileAnimation = new ArrayList<Animation>();
     
     static int numTileX = 15;
     static int numTileY = 10;
@@ -129,7 +135,8 @@ public class Game
         int[] collisionBox = {50, 100};
 
         list.add(new Entity("player", "archer", new int[]{10, 10}, 100, 80, this, 100, 50));
-        list.add(new Entity("enemy", "swordGirl", new int[]{100, 100}, 100, 80, this, 100, 50));
+        //list.add(new Entity("enemy", "swordGirl", new int[]{100, 100}, 100, 80, this, 100, 50));
+        //list.add(new Entity("enemy", "wall", new int[]{100, 100}, 100, 80, this, 100, 50));
        //list.add(new Entity("friendly", "lucy", new int[]{100, 100}, 100, 80, this, 100, 50));
 //        list.add(new Entity("friendly", "lucy", new int[]{300, 300}, 100, 100, 80, this, 100, 0, ImageIO.read(new File(repo + "tavernGirl.png")), new Dialogue("Hello, good day", new Dialogue("Hello again")), collisionBox));
 //        list.add(new Entity("friendly", "lucy", new int[]{600, 300}, 100, 100, 80, this, 100, 0, ImageIO.read(new File(repo + "player.png")), new Dialogue("Greetings"), collisionBox));
@@ -156,13 +163,14 @@ public class Game
 
         //dataThread.start();
         dataTimer.scheduleAtFixedRate(dataUpdate, 0, 30);
+      
         //new Thread(displayUpdate).start();
 
         //displayThread.start();
 
         //new Thread(dataUpdate).start();
-        renderTimer.scheduleAtFixedRate(frameUpdate, 0, 1000 / 30);
-        timeTimer.scheduleAtFixedRate(timeCounter, 0, 10);
+        //renderTimer.scheduleAtFixedRate(frameUpdate, 0, 1000 / 30);
+        timeTimer.scheduleAtFixedRate(timeCounter, 0, 1);
         mouse = new MouseControl(this);
 
         receiver = new Receiver(this, 20000);
@@ -171,14 +179,33 @@ public class Game
         sender = new Sender(this, 10000);
         sendTimer.scheduleAtFixedRate(send, 0, 1);
 		 
-		 /*
+		 int timeSegment = 0;
+		 int waitTime = 0;
 		 while(true)
 		 {
-			
+			 timeSegment = gameTime + 30;
 			 display.update();
+			 
+			 waitTime = timeSegment - gameTime;
+			 //System.out.println(waitTime);
+			 
+			 if(waitTime > 0)
+			 {
+				 try {
+						Thread.sleep(waitTime);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+			 }
+			 else
+			 {
+				 System.out.println("time slice exceeded");
+			 }
+			 
 		 }
-		 */
-
+		 
+    
     }
 
 
@@ -254,6 +281,14 @@ public class Game
     	//System.out.println("current x is: " +list.get(0).x +"  current y is: " +list.get(0).y);
         //list.get(0).move.keyBoardUpdate(list.get(0));
 
+    	/*
+    	 Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
+         for ( Thread t : threadSet){
+             System.out.println("Thread :"+t+":"+"state:"+t.getState());
+         }
+         System.out.println();
+         */
+         
         for (int i = 0; i < list.size(); i++)
         {
             if ((list.get(i).hasPath == true) && (list.get(i).move != null))
@@ -266,7 +301,6 @@ public class Game
         for (int i = 1; i < list.size(); i++)
         {
 
-            //System.out.println("ai");
         	if((list.get(i).move != null)&&(list.get(i).active == true))
         	{
         		list.get(i).ai.update();
@@ -277,8 +311,8 @@ public class Game
 
         for (int i = 0; i < projectileList.size(); i++)
         {
-
-            projectileList.get(i).move.update(projectileList.get(i));
+        	if(projectileList.get(i).active == true)
+        		projectileList.get(i).move.update(projectileList.get(i));
 
             //System.out.println(projectile.get(i).collision);
         }
@@ -290,8 +324,9 @@ public class Game
         for (int i = 0; i < projectileList.size(); i++)
         {
 
-            if ((projectileList.get(i).visible == false) || (projectileList.get(i).active == false))
-        	//if (projectileList.get(i).collision == true)
+            //if ((projectileList.get(i).visible == false) || (projectileList.get(i).active == false))
+        	//if ((projectileList.get(i).collision == true)||(Movement.isVisible(projectileList.get(i)) == false))
+        	if (projectileList.get(i).collision == true)
             {
                 projectileList.remove(i);
             }
@@ -314,6 +349,7 @@ public class Game
             //break;
         }
 
+      
 
     }
 

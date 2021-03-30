@@ -157,9 +157,127 @@ class Renderer extends JPanel{
 			
 		return false;
 	}
+//	public void layerOrder()
+//	{
+//		
+//				entityInFB = new ArrayList<>();
+//				Entity current;
+//
+//				for(int i = 0; i< game.getObstacles().size(); i++)
+//				{
+//					current = game.getObstacles().get(i);
+//					
+//					
+//					if(current.y > cameraY + resolutionY)
+//					{
+//						break;
+//					}
+//					
+//					entityInFB.add(current);
+//					
+//					
+//				}
+//				
+//				
+//				for(int i = 0; i< game.getEntityList().size(); i++)
+//				{
+//					current = game.getEntityList().get(i);
+//					//if(current.visible == true)
+//					{
+//					for(int a = 0; a< entityInFB.size(); a++)
+//					{
+//						//System.out.println(entityInFB.size());
+//						/*
+//						if(current.y > cameraY + resolutionY)
+//						{
+//							break;
+//						}
+//						*/
+//						
+//						if(a == 0)
+//						{
+//							if(current.layerY + current.y < entityInFB.get(a).layerY + entityInFB.get(a).y)
+//							{
+//								entityInFB.add(0, current);
+//								break;
+//							}
+//
+//							
+//						}
+//						
+//						else if(a == entityInFB.size() - 1)
+//						{
+//							if(current.layerY + current.y >= entityInFB.get(a).layerY + entityInFB.get(a).y)
+//							{
+//								entityInFB.add(current);
+//							}
+//							else
+//							{
+//								entityInFB.add(entityInFB.size() - 1, current);
+//							}
+//							
+//							break;
+//						}
+//						
+//						else if((current.layerY + current.y >= entityInFB.get(a).layerY + entityInFB.get(a).y)
+//								&& (current.layerY + current.y <= entityInFB.get(a + 1).layerY + entityInFB.get(a + 1).y))
+//							{
+//								//System.out.println("here");
+//								entityInFB.add(a + 1, current);
+//								break;
+//							}
+//						
+//						
+//						
+//					
+//						
+//						
+//					}
+//				
+//				}
+//				}
+//				
+//		
+//		}
+			
+	static int frameWidth = 0;
+	static int frameHeight = 0;
 	public void layerOrder()
 	{
 		
+		cameraControlX = list.get(0).x;
+		cameraControlY = list.get(0).y;
+		
+		cameraX = cameraControlX - resolutionX/2;
+		cameraY = cameraControlY - resolutionY/2;
+	
+		//set camera cord to be player cord
+		/*
+		cameraX = list.get(0).x - resolutionX/2;
+		cameraY = list.get(0).y - resolutionY/2;
+		
+		*/
+		if(cameraX < 0)
+		{
+			frameWidth = Game.windowX + cameraX;
+			cameraX = 0;
+
+		}
+		else
+		{
+			frameWidth = Game.windowX;
+		}
+		
+		if(cameraY < 0)
+		{
+			frameHeight = Game.windowY + cameraY;
+			cameraY = 0;
+
+		}
+		else
+		{
+			frameHeight = Game.windowY;
+		}
 				entityInFB = new ArrayList<>();
 				Entity current;
 
@@ -168,21 +286,24 @@ class Renderer extends JPanel{
 					current = game.getObstacles().get(i);
 					
 					
+					if(Movement.isVisible(current) == true )
+					{
+						entityInFB.add(current);
+					}
+					
 					if(current.y > cameraY + resolutionY)
 					{
 						break;
 					}
 					
-					entityInFB.add(current);
 					
 					
 				}
-				
-				
+	
 				for(int i = 0; i< game.getEntityList().size(); i++)
 				{
 					current = game.getEntityList().get(i);
-					if(current.visible == true)
+					//if(current.visible == true)
 					{
 					for(int a = 0; a< entityInFB.size(); a++)
 					{
@@ -233,13 +354,17 @@ class Renderer extends JPanel{
 						
 						
 					}
+					if(entityInFB.size() == 0)
+					{
+						
+						entityInFB.add(current);
+					}
 				
 				}
 				}
 				
 		
 		}
-			
 		
 	static int cameraControlX;
 	static int cameraControlY;
@@ -474,58 +599,16 @@ class Renderer extends JPanel{
 				{
 					current = game.getProjectileList().get(i);
 					
-					/*
-					current.move.isVisible();
-					if(current.visible == true)
+					if(current.active == true)
 					{
-						//System.out.println("p here");
-						int picStartX = 0;	
-						if(current.x - cameraX < Game.windowX)
-						{
-							picStartX = 0;
-						}
-						
-						int picEndX = (current.x + current.picX) - (cameraX + Game.windowX);
-						if(picEndX < 0)
-						{
-							picEndX = 0;
-						}
-						picEndX = current.picX - picEndX;
-						
-						int picStartY = 0;	
-						if(current.y - cameraY < Game.windowY)
-						{
-							picStartY = 0;
-						}
-						
-						int picEndY = (current.y + current.picY) - (cameraY + Game.windowY);
-						if(picEndY < 0)
-						{
-							picEndY = 0;
-						}
-						picEndY = current.picY - picEndY;
-						
-						current.picCounter = 0;
-						current.picRank = 0;
-						
-						for(int y = picStartY; y < picEndY; y++)
-						{
-							for(int x = picStartX; x < picEndX; x++)
-							{
-								int colorCode =  current.imageData[current.picX * current.picCounter + x + ((current.picY * current.picRank + y) * current.spriteWidth)];
-								fbData1[resolutionX/2 + x - current.picX + (current.x - cameraControlX) + (resolutionY/2 + y +(current.y - cameraControlY - current.picY)) * resolutionX] = colorCode;
-							}
-						}
-					}
-					*/
-					current.updateAnimationData(current.run);
+			
 					for(int y = 0; y < current.animationInUse.picHeight; y++)
 					{
 						for(int x = 0; x < current.animationInUse.picWidth; x++)
 						{
 							int colorCode = 0;
 						
-								colorCode =  current.animationInUse.imageData[x + y * current.animationInUse.spriteWidth];
+								colorCode =  current.animationInUse.imageData[x + (y + current.picRank * current.animationInUse.picHeight) * current.animationInUse.spriteWidth];
 
 								//System.out.println("here");
 							
@@ -562,7 +645,7 @@ class Renderer extends JPanel{
 							
 							}
 						}
-					
+					}
 					}
 				}
 				
@@ -582,29 +665,10 @@ class Renderer extends JPanel{
 		}
 	}
 	
-	public void showObs()
-	{
-		
-		for(int i = 0; i < worldBuffer.length; i++)
-    	{
-			//int colorCode = game.obsMap[i];
-			
-			if(game.obsMap[i] == true)
-			{
-				//System.out.println(i);
-				//worldBuffer[i] = Color.GREEN.getRGB();
-			}
-				
-    	}
-    	
-		
-		
-	}
 
     public void populateArray()
     {
-    	System.out.println("here");
-    
+  
     	//Animation tile = new Animation(mapTile);
     
     	//load each image into ArrayList as int[],  Each element in worldBuffer contain one Animation obj, which has reference to it's int[].
@@ -619,9 +683,10 @@ class Renderer extends JPanel{
 		}
    
     }
-    
+
   	public static int[] getImageData(String imageName) throws IOException
 	{
+  	
   		BufferedImage image = ImageIO.read(new File(Game.root +"/resources/images/"+ imageName + ".png"));
   		
     	int width = image.getWidth();
@@ -658,7 +723,8 @@ class Renderer extends JPanel{
 
 
 		Entity current;
-		for(int i = 0; i< list.size(); i++) {
+		for(int i = 0; i< list.size(); i++) 
+		{
 			
 		//if((list.get(i).x != list.get(i).preX) || (list.get(i).y != list.get(i).preY)) 
 			current = list.get(i);
@@ -668,7 +734,7 @@ class Renderer extends JPanel{
 				if(current.animationInUse != current.run)
 				{
 					current.updateAnimationData(current.run);
-					System.out.println("state changed");
+					//System.out.println("state changed");
 				}
 			
 				if(list.get(i).picCounter < list.get(i).animationInUse.numOfFrame) 
@@ -687,8 +753,9 @@ class Renderer extends JPanel{
 				if(current.animationInUse != current.idle)
 				{
 					current.updateAnimationData(current.idle);
-					System.out.println("state changed");
-					list.get(i).picCounter = 77;
+					//System.out.println("state changed");
+					//list.get(i).picCounter = 77;
+					list.get(i).picCounter = 0;
 				}
 					
 				
@@ -700,6 +767,44 @@ class Renderer extends JPanel{
 				{
 					list.get(i).picCounter = 0;
 				}
+			}
+			else if(current.state == "attack")
+			{
+				if(current.animationInUse != current.attack)
+				{
+					current.updateAnimationData(current.attack);
+					//System.out.println("state changed");
+					list.get(i).picCounter = 0;
+				}
+					
+				
+				if(list.get(i).picCounter < list.get(i).animationInUse.numOfFrame-1) 
+				{
+					list.get(i).picCounter++;
+				}
+				else
+				{
+					list.get(i).state = "idle";
+				}
+				
+				if(list.get(i).picCounter == list.get(i).attackFrame)
+				{
+					System.out.println("shooting");
+					
+					for(int a = 0; a< game.getProjectileList().size(); a++)
+					{
+						game.getProjectileList().get(game.getProjectileList().size()-1).active = true;
+//					try {
+//						game.getProjectileList().add(new Entity(game, "arrow", list.get(i).destinationX, list.get(i).destinationY, 80));
+//					} catch (IOException e) {
+//						// TODO Auto-generated catch block
+//						e.printStackTrace();
+//					}
+					list.get(i).destinationX = 0;
+					list.get(i).destinationY = 0;
+					}
+				}
+				
 			}
 
 		
@@ -715,6 +820,7 @@ class Renderer extends JPanel{
 	}
 
 	boolean renderReady = true;
+	
 	protected void paintComponent(Graphics g) {
 
 		super.paintComponent(g);

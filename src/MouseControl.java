@@ -174,16 +174,14 @@ public class MouseControl implements MouseListener, MouseMotionListener {
 		}
 
 
-
+		int destinationX = 0;
+		int destinationY = 0;
 
 		if (SwingUtilities.isRightMouseButton(e))
 		{
 
 			int eX = e.getX();
 			int eY = e.getY();
-
-			int destinationX = 0;
-			int destinationY = 0;
 
 			int orginX = player.x;
 			int orginY = player.y;
@@ -212,21 +210,24 @@ public class MouseControl implements MouseListener, MouseMotionListener {
 				destinationY =Math.round(destinationY/5)*5;
 				
 				System.out.println(destinationX +" " +destinationX);
+				game.getEntityList().get(0).state = "attack";
+				game.getEntityList().get(0).picCounter = 0;
+				game.getEntityList().get(0).x = game.getEntityList().get(0).clickedX;
+				game.getEntityList().get(0).y = game.getEntityList().get(0).clickedY;
+				game.getEntityList().get(0).destinationX = destinationX;
+				game.getEntityList().get(0).destinationY = destinationY;
 
+//				System.out.println("des is " +destinationX +" " +destinationY);
+//				System.out.println(game.getEntityList().get(0).x +" " +game.getEntityList().get(0).y);
 			try {
 					game.getProjectileList().add(new Entity(game, "arrow", destinationX, destinationY, 80));
-				/*
-					projectile.get(projectile.size()-1).move.nodeIndex = 1;
-					projectile.get(projectile.size()-1).move.checkPoint = new ArrayList<Node>();
-					projectile.get(projectile.size()-1).move.usedGrid   = new ArrayList<Node>();
-					projectile.get(projectile.size()-1).move.checkPoint.add(new Node(player.x, player.y));
-					projectile.get(projectile.size()-1).move.pathFind();
-				*/
+			
 
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
+				
 
 			 }
 			else

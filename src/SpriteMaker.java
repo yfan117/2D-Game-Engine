@@ -16,7 +16,7 @@ public class SpriteMaker {
 		int picX = 300;
 		int picY = 300;
 		int numDirection = 16;
-		int numPicPer = 25;
+		int numPicPer = 26;
 		
 		int width = picX * numPicPer;
 		int height = picY * numDirection;

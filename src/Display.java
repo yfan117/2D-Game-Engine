@@ -88,13 +88,36 @@ public class Display{
 
 	public static void getDirection(Entity current) {
 
+		if((current.destinationX != 0)&&(current.destinationY != 0))
+		{
+			current.move.getDirection(current.destinationX, current.destinationY);
+		}
 		
+		if(current.type == "projectile")
+		{
+			//System.out.println(current.clickedX +" " + current.clickedY);
+			current.move.getDirection(current.clickedX, current.clickedY);
+//			System.out.println("here");
+//			System.out.println(current.moveAngle);
+		}
 		current.picRank = (int) Math.round(current.moveAngle / 22.5);
 		
 		if(current.picRank == 16)
 		{
 			current.picRank = 15;
 		}
+		
+		if(current.picRank <= 0)
+		{
+			current.picRank = 0;
+		}
+//		if(current.type == "projectile")
+//		{
+//			System.out.println(current.picRank);
+//			//System.out.println(current.moveAngle);
+//
+//		}
+	
 	
 	}
 
@@ -108,6 +131,15 @@ public class Display{
 				{
 					//System.out.println(i);
 					getDirection(game.getEntityList().get(i));
+				}
+			}
+			for(int i = 0; i< game.getProjectileList().size(); i++) 
+			{
+				//if(list.get(i).directionCheck == true)
+				//if(game.getEntityList().get(i).newClick == true) 
+				{
+					//System.out.println(i);
+					getDirection(game.getProjectileList().get(i));
 				}
 			}
 		
