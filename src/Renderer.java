@@ -5,15 +5,15 @@ import java.awt.image.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.imageio.ImageIO;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 class Renderer extends JPanel{
 
+	int mostCols;
 	int chestRows;
 	int chestCols;
 	boolean chestBool;
@@ -742,17 +742,27 @@ class Renderer extends JPanel{
 		g.setColor(Color.BLUE);
 		g.fillRect(25, 40, list.get(0).mana, 20);
 
+		//Skills
+		for(int i = 1; i <= 4; i++)
+		{
+			try
+			{
+				BufferedImage img = ImageIO.read(new File(Diablo.Game.root + "/resources/images/skill" + i + ".png"));
+				g.drawImage(img, ((Diablo.Game.windowX / 2) - 120 + ((i - 1) * 60)), (Diablo.Game.windowY) - 60, 60, 60, null);
+			}catch(Exception ex){ex.printStackTrace();}
+		}
+
 		//Inventory slots
 		if(game.getEntityList().get(0).inventory.getInventoryOpen())
 		{
 			g.setColor(Color.darkGray);
-			g.fillRect(((Diablo.Game.windowX / 2) - (game.getEntityList().get(0).inventory.getInventoryCols() / 2) * 50), ((Diablo.Game.windowY) - (game.getEntityList().get(0).inventory.getInventoryRows() * 50)), game.getEntityList().get(0).inventory.getInventoryCols() * 50, game.getEntityList().get(0).inventory.getInventoryRows() * 50);
+			g.fillRect(((Diablo.Game.windowX / 2) - (game.getEntityList().get(0).inventory.getInventoryCols() / 2) * 50), ((Diablo.Game.windowY) - (game.getEntityList().get(0).inventory.getInventoryRows() * 50) - 60), game.getEntityList().get(0).inventory.getInventoryCols() * 50, game.getEntityList().get(0).inventory.getInventoryRows() * 50);
 			g.setColor(Color.LIGHT_GRAY);
 			for (int i = 0; i < game.getEntityList().get(0).inventory.getInventoryCols(); i++)
 			{
 				for (int j = 0; j < game.getEntityList().get(0).inventory.getInventoryRows(); j++)
 				{
-					g.drawRect(((((Diablo.Game.windowX / 2) - (game.getEntityList().get(0).inventory.getInventoryCols() / 2) * 50)) + (i * 50)), (((Diablo.Game.windowY) - (game.getEntityList().get(0).inventory.getInventoryRows() * 50)) + 1) + (j * 50), 48, 48);
+					g.drawRect(((((Diablo.Game.windowX / 2) - (game.getEntityList().get(0).inventory.getInventoryCols() / 2) * 50)) + (i * 50)), (((Diablo.Game.windowY) - (game.getEntityList().get(0).inventory.getInventoryRows() * 50)) + 1) + (j * 50) - 60, 48, 48);
 				}
 			}
 
@@ -766,11 +776,11 @@ class Renderer extends JPanel{
 					{
 						counter++;
 						BufferedImage img = game.getEntityList().get(0).inventory.getInventoryItemImage(counter);
-						g.drawImage(img, ((((Diablo.Game.windowX / 2) - (game.getEntityList().get(0).inventory.getInventoryCols() / 2) * 50) + 9) + (j * 50)), (((Diablo.Game.windowY) - (game.getEntityList().get(0).inventory.getInventoryRows() * 50)) + 9) + (i * 50), 32, 32, null);
+						g.drawImage(img, ((((Diablo.Game.windowX / 2) - (game.getEntityList().get(0).inventory.getInventoryCols() / 2) * 50) + 9) + (j * 50)), (((Diablo.Game.windowY) - (game.getEntityList().get(0).inventory.getInventoryRows() * 50)) + 9) + (i * 50) - 60, 32, 32, null);
 						if(game.getEntityList().get(0).inventory.getInventoryItem(counter).isStackable())
 						{
 							String s = String.valueOf(game.getEntityList().get(0).inventory.getInventoryItem(counter).getNumberInStack());
-							g.drawString(s, ((((Diablo.Game.windowX / 2) - (game.getEntityList().get(0).inventory.getInventoryCols() / 2) * 50) + 9) + (j * 50)), (((Diablo.Game.windowY) - (game.getEntityList().get(0).inventory.getInventoryRows() * 50)) + 9) + (i * 50) + 30);
+							g.drawString(s, ((((Diablo.Game.windowX / 2) - (game.getEntityList().get(0).inventory.getInventoryCols() / 2) * 50) + 9) + (j * 50)), (((Diablo.Game.windowY) - (game.getEntityList().get(0).inventory.getInventoryRows() * 50)) + 9) + (i * 50) - 30);
 						}
 					}catch(Exception ex){}
 				}
@@ -816,13 +826,35 @@ class Renderer extends JPanel{
 		if(chestBool)
 		{
 			g.setColor(Color.darkGray);
-			g.fillRect(((Diablo.Game.windowX / 2) - ((chestCols / 2) * 50)), ((Diablo.Game.windowY / 2) - ((chestRows / 2) * 50)), chestCols * 50, chestRows * 50);
+			g.fillRect(((Diablo.Game.windowX / 2) - ((mostCols / 2) * 50)) - 25, ((Diablo.Game.windowY / 4) - ((chestRows / 2) * 50)) - 50, chestCols * 50 + 50, (chestRows * 50) + (game.getEntityList().get(0).inventory.getRows() * 50) + (game.getEntityList().get(0).inventory.getInventoryRows() * 50) + 175);
+			g.setColor(Color.WHITE);
+			g.drawString("Chest", ((Diablo.Game.windowX / 2) - ((chestCols / 2) * 50)), ((Diablo.Game.windowY / 4) - ((chestRows / 2) * 50)) - 10);
+			g.drawString("Backpack", ((Diablo.Game.windowX / 2) - ((chestCols / 2) * 50)), ((Diablo.Game.windowY / 4) + ((chestRows / 2) * 50)) + 35);
+			g.drawString("Inventory", ((Diablo.Game.windowX / 2) - ((chestCols / 2) * 50)), ((Diablo.Game.windowY / 4) + ((chestRows / 2) * 50)) + ((Diablo.Game.windowY / 4) + ((game.getEntityList().get(0).inventory.getRows() / 2) * 50)) + 10);
 			g.setColor(Color.LIGHT_GRAY);
+			g.drawRect(((Diablo.Game.windowX / 2) - ((mostCols / 2) * 50)) - 25, ((Diablo.Game.windowY / 4) - ((chestRows / 2) * 50)) - 50, chestCols * 50 + 50, (chestRows * 50) + (game.getEntityList().get(0).inventory.getRows() * 50) + (game.getEntityList().get(0).inventory.getInventoryRows() * 50) + 175);
+			//Chest
 			for (int i = 0; i < chestCols; i++)
 			{
 				for (int j = 0; j < chestRows; j++)
 				{
-					g.drawRect(((((Diablo.Game.windowX / 2) - (chestCols / 2) * 50)) + (i * 50)), (((Diablo.Game.windowY / 2) - ((chestRows / 2) * 50)) + 1) + (j * 50), 48, 48);
+					g.drawRect(((((Diablo.Game.windowX / 2) - (chestCols / 2) * 50)) + (i * 50)), (((Diablo.Game.windowY / 4) - ((chestRows / 2) * 50)) + 1) + (j * 50), 48, 48);
+				}
+			}
+			//Backpack
+			for (int i = 0; i < game.getEntityList().get(0).inventory.getCols(); i++)
+			{
+				for (int j = 0; j < game.getEntityList().get(0).inventory.getRows(); j++)
+				{
+					g.drawRect(((((Diablo.Game.windowX / 2) - (game.getEntityList().get(0).inventory.getCols() / 2) * 50)) + (i * 50)), ((((Diablo.Game.windowY / 4) - ((game.getEntityList().get(0).inventory.getRows() / 2) * 50)) + 1) + (j * 50)) + 50 + (chestRows * 50), 48, 48);
+				}
+			}
+			//Inventory
+			for (int i = 0; i < game.getEntityList().get(0).inventory.getInventoryCols(); i++)
+			{
+				for (int j = 0; j < game.getEntityList().get(0).inventory.getInventoryRows(); j++)
+				{
+					g.drawRect(((((Diablo.Game.windowX / 2) - (game.getEntityList().get(0).inventory.getInventoryCols() / 2) * 50)) + (i * 50)), ((((Diablo.Game.windowY / 4) - ((game.getEntityList().get(0).inventory.getInventoryRows() / 2) * 50)) + 1) + (j * 50)) + (chestRows * 50) + (game.getEntityList().get(0).inventory.getRows() * 50), 48, 48);
 				}
 			}
 
@@ -836,11 +868,49 @@ class Renderer extends JPanel{
 					{
 						counter++;
 						BufferedImage img = chestInventory.getBackpackItemImage(counter);
-						g.drawImage(img, ((((Diablo.Game.windowX / 2) - (chestCols / 2) * 50) + 9) + (j * 50)), (((Diablo.Game.windowY / 2) - ((chestRows / 2) * 50)) + 9) + (i * 50), 32, 32, null);
+						g.drawImage(img, ((((Diablo.Game.windowX / 2) - (chestCols / 2) * 50) + 9) + (j * 50)), (((Diablo.Game.windowY / 4) - ((chestRows / 2) * 50)) + 9) + (i * 50), 32, 32, null);
 						if(chestInventory.getBackpackItem(counter).isStackable())
 						{
 							String s = String.valueOf(chestInventory.getBackpackItem(counter).getNumberInStack());
-							g.drawString(s, ((((Diablo.Game.windowX / 2) - (chestCols / 2) * 50) + 9) + (j * 50)), (((Diablo.Game.windowY / 2) - ((chestRows / 2) * 50)) + 9) + (i * 50) + 30);
+							g.drawString(s, ((((Diablo.Game.windowX / 2) - (chestCols / 2) * 50) + 9) + (j * 50)), (((Diablo.Game.windowY / 4) - ((chestRows / 2) * 50)) + 9) + (i * 50) + 30);
+						}
+					}catch(Exception ex){}
+				}
+			}
+			//Backpack items
+			counter = -1;
+			for (int i = 0; i < game.getEntityList().get(0).inventory.getRows(); i++)
+			{
+				for (int j = 0; j < game.getEntityList().get(0).inventory.getCols(); j++)
+				{
+					try
+					{
+						counter++;
+						BufferedImage img = game.getEntityList().get(0).inventory.getBackpackItemImage(counter);
+						g.drawImage(img, ((((Diablo.Game.windowX / 2) - (game.getEntityList().get(0).inventory.getCols() / 2) * 50) + 9) + (j * 50)), ((((Diablo.Game.windowY / 4) - ((game.getEntityList().get(0).inventory.getRows() / 2) * 50)) + 10) + (i * 50)) + 50 + (chestRows * 50), 32, 32, null);
+						if(game.getEntityList().get(0).inventory.getBackpackItem(counter).isStackable())
+						{
+							String s = String.valueOf(game.getEntityList().get(0).inventory.getBackpackItem(counter).getNumberInStack());
+							g.drawString(s, ((((Diablo.Game.windowX / 2) - (game.getEntityList().get(0).inventory.getCols() / 2) * 50) + 9) + (j * 50)), ((((Diablo.Game.windowY / 4) - ((game.getEntityList().get(0).inventory.getRows() / 2) * 50)) + 10) + (i * 50)) + 50 + (chestRows * 50) + 30);
+						}
+					}catch(Exception ex){}
+				}
+			}
+			//Inventory items
+			counter = -1;
+			for (int i = 0; i < game.getEntityList().get(0).inventory.getInventoryRows(); i++)
+			{
+				for (int j = 0; j < game.getEntityList().get(0).inventory.getInventoryCols(); j++)
+				{
+					try
+					{
+						counter++;
+						BufferedImage img = game.getEntityList().get(0).inventory.getInventoryItemImage(counter);
+						g.drawImage(img, ((((Diablo.Game.windowX / 2) - (game.getEntityList().get(0).inventory.getInventoryCols() / 2) * 50) + 9) + (j * 50)), ((((Diablo.Game.windowY / 4) - ((game.getEntityList().get(0).inventory.getInventoryRows() / 2) * 50)) + 10) + (i * 50)) + (chestRows * 50) + (game.getEntityList().get(0).inventory.getRows() * 50), 32, 32, null);
+						if(game.getEntityList().get(0).inventory.getInventoryItem(counter).isStackable())
+						{
+							String s = String.valueOf(game.getEntityList().get(0).inventory.getInventoryItem(counter).getNumberInStack());
+							g.drawString(s, ((((Diablo.Game.windowX / 2) - (game.getEntityList().get(0).inventory.getInventoryCols() / 2) * 50) + 9) + (j * 50)), ((((Diablo.Game.windowY / 4) - ((game.getEntityList().get(0).inventory.getInventoryRows() / 2) * 50)) + 10) + (i * 50)) + (chestRows * 50) + (game.getEntityList().get(0).inventory.getRows() * 50) + 30);
 						}
 					}catch(Exception ex){}
 				}
@@ -907,6 +977,10 @@ class Renderer extends JPanel{
 		this.chestRows = r;
 		this.chestCols = c;
 		this.chestBool = true;
+
+		int[] temp = {chestCols, game.getEntityList().get(0).inventory.getCols(), game.getEntityList().get(0).inventory.getInventoryCols()};
+		Arrays.sort(temp);
+		mostCols = temp[temp.length-1];
 	}
 }
 
