@@ -153,9 +153,5 @@ public class Display{
 		{
 			return render;
 		}
-	
 	}
 
-
-
-	

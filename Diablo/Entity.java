@@ -222,87 +222,86 @@ public class Entity{
          }
         else
         {
-        		
-        	respondX = x;
-        	respondY = y;
-        	ai = new AI(this, game);
+          
+         respondX = x;
+         respondY = y;
+         ai = new AI(this, game);
         }
         
         target = this;
         
-    	inventory = new Inventory();
-    	
-		//friendly NPC Variables
-		if(type.equals("friendly")) {
-			actionable=true;
-		}
-		if(type.equals("enemy")) {
-			actionable=true;
-		}
-		
-		width= 0;
-		height=0;
-		
+     inventory = new Inventory();
+     
+  //friendly NPC Variables
+  if(type.equals("friendly")) {
+   actionable=true;
+  }
+  if(type.equals("enemy")) {
+   actionable=true;
+  }
+  
+  width= 0;
+  height=0;
+  
         this.hp = hp;
         this.hitBox = hitBox;
+   moveSpeed = 5;
+   
+   state = "idle";
+   
+  
+ }
+ 
+ public Animation makeNewAnimation(String name, ArrayList<Animation> list) throws NumberFormatException, IOException
+ {
+  FileReader reader = new FileReader(Game.root + "/resources/text/" + name + ".txt");
+   BufferedReader bufferedReader = new BufferedReader(reader);
+   
+ 
+   for(int i = 0; i < list.size(); i++)
+   {
 
-		 moveSpeed = 5;
-		 
-		 state = "idle";
-		 
-		
-	}
-	
-	public Animation makeNewAnimation(String name, ArrayList<Animation> list) throws NumberFormatException, IOException
-	{
-		FileReader reader = new FileReader(Game.root + "/resources/text/" + name + ".txt");
-		 BufferedReader bufferedReader = new BufferedReader(reader);
-		 
-	
-		 for(int i = 0; i < list.size(); i++)
-		 {
+   if(list.get(i).name.contentEquals(name))
+   {
+    System.out.println("animation already exist for -- " + name);
+    return list.get(i);
+   }
+   }
+   
+  if(name.contains("@idle") == true)
+  {
+   this.layerY = Integer.parseInt(bufferedReader.readLine());
+  }
+  if(name.contains("@attack") == true)
+  {
+   this.attackFrame = Integer.parseInt(bufferedReader.readLine());
+  }
+  
+ 
+  list.add(new Animation(name,
+       Renderer.getImageData(name),
+            Integer.parseInt(bufferedReader.readLine()),
+            Integer.parseInt(bufferedReader.readLine()),
+            Integer.parseInt(bufferedReader.readLine()),
+            Integer.parseInt(bufferedReader.readLine())));
+     
+      System.out.println("new animation added for -- " + name);
+ 
+      
+   return list.get(list.size() -1);
+ }
+ 
+ public void enableAttack() throws NumberFormatException, IOException
+ {
+ 
+  this.attack = makeNewAnimation(characterName + "@attack", Game.models);
+ 
+ }
 
-			if(list.get(i).name.contentEquals(name))
-			{
-				System.out.println("animation already exist for -- " + name);
-				return list.get(i);
-			}
-		 }
-		 
-		if(name.contains("@idle") == true)
-		{
-			this.layerY = Integer.parseInt(bufferedReader.readLine());
-		}
-		if(name.contains("@attack") == true)
-		{
-			this.attackFrame = Integer.parseInt(bufferedReader.readLine());
-		}
-		
-	
-		list.add(new Animation(name,
-					 	Renderer.getImageData(name),
-				        Integer.parseInt(bufferedReader.readLine()),
-				        Integer.parseInt(bufferedReader.readLine()),
-				        Integer.parseInt(bufferedReader.readLine()),
-				        Integer.parseInt(bufferedReader.readLine())));
-				 
-	     System.out.println("new animation added for -- " + name);
-	
-	     
-		 return list.get(list.size() -1);
-	}
-	
-	public void enableAttack() throws NumberFormatException, IOException
-	{
-	
-		this.attack = makeNewAnimation(characterName + "@attack", Game.models);
-	
-	}
+ public Entity(Game game, String name, int destinationX, int destinationY, int hitBox) throws IOException {
 
-	public Entity(Game game, String name, int destinationX, int destinationY, int hitBox) throws IOException {
-
-		this.x = game.getEntityList().get(0).x - 70;
-        this.y = game.getEntityList().get(0).y - 50;
+  this.x = game.getEntityList().get(0).x;
+        this.y = game.getEntityList().get(0).y;
 
         if(x < 0)
         {
@@ -315,48 +314,47 @@ public class Entity{
         
         //move = new Movement(this, game);
 
-		clickedX = destinationX ;
-		clickedY = destinationY ;
-		
-		characterName = name;
-		newClick = true;
+  clickedX = destinationX ;
+  clickedY = destinationY ;
+  
+  characterName = name;
+  newClick = true;
 
         if(name == "arrow")
         {
-        	type = "projectile";
+         type = "projectile";
 
-        	visible = true;
-        	enableMovement();
-        	newCheckPoint = true;
-        	
-		
+         visible = true;
+         enableMovement();
+         newCheckPoint = true;
         }
         if(name == "melee")
         {
-        	type = "melee";
-        	visible = true;
+         type = "melee";
+         visible = true;
         
-		
+  
         }
         
         animationInUse = run;
         this.hitBox = hitBox;
 //        FileReader reader = new FileReader(Game.root + "/resources/text/" + name + ".txt");
 //
+
 //		 BufferedReader bufferedReader = new BufferedReader(reader);
 //
 //		 moveSpeed = Integer.parseInt(bufferedReader.readLine());
         
         moveSpeed = 10;
 
-		 damage = 100;
+   damage = 100;
 
-	}
-	
+ }
+ 
 
-	public Entity(Game game, int[] imageData, int x, int y, int layerY, int picX, int picY) throws IOException {
-		this.game = game;
-		this.x = x;
+ public Entity(Game game, int[] imageData, int x, int y, int layerY, int picX, int picY) throws IOException {
+  this.game = game;
+  this.x = x;
         this.y = y;
         this.layerY = layerY;
 

@@ -449,7 +449,55 @@ public class Movement{
 
 			}
 		}
-		
+			public static boolean isVisible(Entity current) {
+
+                int x1 = current.x;
+                int x2 = current.x + current.animationInUse.picWidth;
+                int y1 = current.y;
+                int y2 = current.y + current.animationInUse.picHeight;
+
+                boolean xInFrame = false;
+                boolean yInFrame = false;
+
+                //System.out.println(current.picWidth);
+                //System.out.println(Renderer.cameraX + Game.windowX);
+
+                if((x1 >= Renderer.cameraX) && (x1 <= Renderer.cameraX + Renderer.frameWidth))
+                {
+                    xInFrame = true;
+                }
+                else if((x2 >= Renderer.cameraX) && (x2 <= Renderer.cameraX + Renderer.frameWidth))
+                {
+                    xInFrame = true;
+                }
+                else if((x1 <= Renderer.cameraX) && (x2 >= Renderer.cameraX + Renderer.frameWidth))
+                {
+                    xInFrame = true;
+                }
+
+
+                if((y1 >= Renderer.cameraY) && (y1 <= Renderer.cameraY + Renderer.frameHeight))
+                {
+                    yInFrame = true;
+                }
+                else if((y2 >= Renderer.cameraY) && (y2 <= Renderer.cameraY + Renderer.frameHeight))
+                {
+                    yInFrame = true;
+                }
+                else if((y1 <= Renderer.cameraY) && (y2 >= Renderer.cameraY + Renderer.frameHeight))
+                {
+                    yInFrame = true;
+                }
+
+                if((xInFrame == true) && (yInFrame == true))
+                {
+                    return true;
+                }
+
+                return false;
+
+
+            }
 
 
 			public void isVisible() {

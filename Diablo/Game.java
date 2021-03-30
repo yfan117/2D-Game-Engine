@@ -39,7 +39,6 @@ public class Game
     {
         return dialogueObj.getDialogue();
     }
-
     static int windowX = 1280;
     static int windowY = 720;
     
@@ -486,7 +485,6 @@ class DisplayThread implements Runnable
 		  
 		public void run()
 		{
-
 			System.out.println("repainting");
 			game.display.update();
 			//display.getRendererObject().repaintt();
