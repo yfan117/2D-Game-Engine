@@ -39,8 +39,8 @@ public class Game
         return dialogueObj.getDialogue();
     }
 
-    static int windowX = 1280;
-    static int windowY = 720;
+    static int windowX = 1920;
+    static int windowY = 1080;
 
     static int centerX = windowX / 2;
     static int centerY = windowY / 2;
@@ -76,13 +76,15 @@ public class Game
 
     static ArrayList<Animation> models = new ArrayList();
     
-    static int numTileX = 60;
-    static int numTileY = 60;
+    static ArrayList<Animation> projectileAnimation = new ArrayList<Animation>();
+
+    static int numTileX = 40;
+    static int numTileY = 40;
     
     static int mapWidth = 500*numTileX;
     
     //boolean[] obsMap = new boolean[1000 * numTileX * 500 * numTileY];
-    boolean[] obsMap = new boolean[500 * 60 * 250 * 60];
+    boolean[] obsMap = new boolean[500 * numTileX * 250 * numTileY];
 
     static Timer dataTimer = new Timer();
     static Timer renderTimer = new Timer();

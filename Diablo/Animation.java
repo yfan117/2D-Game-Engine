@@ -3,7 +3,7 @@ package Diablo;
 public class Animation {
 	
 	int[] imageData;
-	int spritWidth;
+	int spriteWidth;
 	int picWidth;
 	int picHeight;
 	int numOfFrame;
@@ -20,7 +20,7 @@ public class Animation {
 		this.imageData = imageData;
 		this.picWidth = picWidth;
 		this.picHeight = picHeight;
-		this.spritWidth = spritWidth;
+		this.spriteWidth = spritWidth;
 		this.numOfFrame = numOfFrame;
 	}
 	
@@ -34,7 +34,7 @@ public class Animation {
 		this.imageData = imageData;
 		this.picWidth = picWidth;
 		this.picHeight = picHeight;
-		this.spritWidth = spritWidth;
+		this.spriteWidth = spritWidth;
 		this.startX = startX;
 		this.startY = startY;
 	}

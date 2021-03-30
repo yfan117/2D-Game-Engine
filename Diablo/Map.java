@@ -30,7 +30,7 @@ public class Map{
 	static JSONArray map = new JSONArray();
 	public static List<Integer[]> imageListArr = new ArrayList<Integer[]>();
 	public static List imageFiles = new ArrayList();
-	final File folders = new File(game.root + "/resources/maps/test6");
+	final static File folders = new File(Game.root + "/resources/maps/map3");
 	public static List<Animation> aniList = new ArrayList<Animation>();
 	public Map(Game game){this.game = game;}
 
@@ -154,7 +154,7 @@ public class Map{
 	}	
 	public void parseJSON() throws IOException, ParseException {
 		filesInFolder(folders);
-		Object obj = new JSONParser().parse(new FileReader(Game.root + "/resources/maps/" + "MAP1" + ".json")); 
+		Object obj = new JSONParser().parse(new FileReader(Game.root + "/resources/maps/" + "map31" + ".json")); 
 		JSONObject jo = (JSONObject) obj; 
 		String layerList = jo.get("nodeList").toString();
 		
@@ -179,13 +179,13 @@ public class Map{
 		Renderer.createEmptyWB();
 		for(int i = 0; i < array.size(); i++) {
 			Iterator<JSONObject> iterator = ((JSONArray) array.get(i)).iterator();
-			parseThis = (JSONObject) new JSONParser().parse((iterator.next().toString()));
-			if(((Long)parseThis.get("layer")).intValue() == 0) {
-				Renderer.populateArray(parseThis);
+				parseThis = (JSONObject) new JSONParser().parse((iterator.next().toString()));
+				if(((Long)parseThis.get("layer")).intValue() == 0) {
+					Renderer.populateArray(parseThis);
 				}
-			else {
-				makeUnique(parseThis);
-			}			
+				else {
+					makeUnique(parseThis);
+				}			
 		}
 		
 		String spriteList = jo.get("spriteList").toString();
@@ -212,7 +212,8 @@ public class Map{
 			 return;
 		 }
 		 String indexStr = node.get("picture").toString();
-		 Image  image = ImageIO.read(new File(Game.root + "/resources/maps/test6/" + indexStr));
+		 System.out.println(indexStr);
+		 Image  image = ImageIO.read(new File(folders + "\\" + indexStr));
 		 int x = ((Long) node.get("x")).intValue();
 		 int y = ((Long) node.get("y")).intValue();
 		 int width = image.getWidth(null);
@@ -222,7 +223,7 @@ public class Map{
 		 for(int i = 0; i < Game.obstacle.size(); i++) {
 			 if((Game.obstacle.get(i)).characterName.equals(indexStr)) {
 					//reference	
-				 Game.obstacle.add(new Entity(indexStr, Game.obstacle.get(i).imageData, x, y + 380, y, width, height));
+				 Game.obstacle.add(new Entity(indexStr, Game.obstacle.get(i).animationInUse.imageData, x, y + 380, y, width, height));
 						return;
 					}
 				}
@@ -245,36 +246,6 @@ public class Map{
 			 }
 		 }
 	 }
-//	 public void populate(JSONObject node) throws IOException {
-//		 int index = ((Long)node.get("image_index")).intValue();
-//		 if(index == -1) {
-//			 return;
-//		 }
-//		 Image  image = ImageIO.read(new File(game.root + "/resources/maps/test6/" + (String) imageFiles.get(index)));
-//		 int x = ((Long) node.get("x")).intValue();
-//		 int y = ((Long) node.get("y")).intValue();
-//		 int width = image.getWidth(null);
-//		 int height = image.getHeight(null);
-//		 for(int i = 0; i < Game.uniqueTiles.size(); i++) {
-////		    	for(int i = 0; i < 5; i++) {
-////		    		System.out.println((node.keySet()));
-////		    		if(((Long)(((HashMap) Map.arr1.get(i)).get("image_index"))).intValue() != -1)
-////					System.out.println(((HashMap) Map.arr2.get(((Long)(((HashMap) Map.arr1.get(i)).get("image_index"))).intValue())).keySet());
-//					if(Game.uniqueTiles.get(i).name == index + ""){
-////						worldBuffer[]
-//						
-//						Game.display.getRendererObject().worldBuffer[x + y * Renderer.mapWidth] = Game.uniqueTiles.get(i); 
-////								= new Animation(index + "", imageToArray(index), width, height, width, x , y);
-//						break;
-//					}
-//				}
-//		 if(((Long) node.get("layer")).intValue() == 0){
-//			 Game.uniqueTiles.add(new Animation(index + "", imageToArray(index, ((Long)node.get("layer")).intValue()), width, height, width, x , y));
-//		 }
-//		 else {
-//			 
-//		 }
-//	 }
 	 
 	 public static int[] imageToArray(String name, int layer) throws IOException {
 		  BufferedImage image;
@@ -284,7 +255,7 @@ public class Map{
 //			 
 //			  //System.out.println("spriteList size: " + spriteList.size() + "; i: " + i + "; width: " + width + "; height: " + height);
 //			  if(i != 90) { //remove later, there was a 8mb borken picture for some reason
-				  image = ImageIO.read(new File(Game.root + "/resources/maps/test6/" + name));
+				  image = ImageIO.read(new File(folders + "\\" + name));
 //				  System.out.println(i);
 //				  width = ((Long) ((HashMap) spriteList.get(i)).get("width")).intValue();
 //				  height = ((Long)((HashMap) spriteList.get(i)).get("height")).intValue();
