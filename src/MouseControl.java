@@ -20,13 +20,13 @@ public class MouseControl implements MouseListener, MouseMotionListener {
 	int itemClickedNumber = -1;
 	int backpackClickedNumber = -1;
 	boolean clickedInv = false;
-	boolean clickedSkill = false;
 
 	public MouseControl(Game game)
 	{
 		this.game = game;
 		player = game.getEntityList().get(0);
 		movement = new Movement(player, game);
+
 	}
 
 	@Override
@@ -41,6 +41,10 @@ public class MouseControl implements MouseListener, MouseMotionListener {
 	@Override
 	public void mousePressed(MouseEvent e) {
 		// TODO Auto-generated method stub
+
+
+
+
 
 		if(SwingUtilities.isLeftMouseButton(e))
 		{
@@ -59,13 +63,6 @@ public class MouseControl implements MouseListener, MouseMotionListener {
 			if (checkBackpack(eX, eY))
 			{
 				clickedInv = true;
-				return;
-			}
-
-			//Player clicked one of the skills
-			if (checkSkills(eX, eY))
-			{
-				clickedSkill = true;
 				return;
 			}
 
@@ -110,8 +107,6 @@ public class MouseControl implements MouseListener, MouseMotionListener {
 				player.move.checkPoint.add(new Node(player.x, player.y));
 				player.move.pathFind();
 				player.state = "run";
-				if(!player.runningStone.isRunning())
-					player.runningStone.play();
 				player.newClick = true;
 				player.newCheckPoint = true;
 
@@ -179,16 +174,14 @@ public class MouseControl implements MouseListener, MouseMotionListener {
 		}
 
 
-
+		int destinationX = 0;
+		int destinationY = 0;
 
 		if (SwingUtilities.isRightMouseButton(e))
 		{
 
 			int eX = e.getX();
 			int eY = e.getY();
-
-			int destinationX = 0;
-			int destinationY = 0;
 
 			int orginX = player.x;
 			int orginY = player.y;
@@ -217,21 +210,24 @@ public class MouseControl implements MouseListener, MouseMotionListener {
 				destinationY =Math.round(destinationY/5)*5;
 				
 				System.out.println(destinationX +" " +destinationX);
+				game.getEntityList().get(0).state = "attack";
+				game.getEntityList().get(0).picCounter = 0;
+				game.getEntityList().get(0).x = game.getEntityList().get(0).clickedX;
+				game.getEntityList().get(0).y = game.getEntityList().get(0).clickedY;
+				game.getEntityList().get(0).destinationX = destinationX;
+				game.getEntityList().get(0).destinationY = destinationY;
 
+//				System.out.println("des is " +destinationX +" " +destinationY);
+//				System.out.println(game.getEntityList().get(0).x +" " +game.getEntityList().get(0).y);
 			try {
 					game.getProjectileList().add(new Entity(game, "arrow", destinationX, destinationY, 80));
-				/*
-					projectile.get(projectile.size()-1).move.nodeIndex = 1;
-					projectile.get(projectile.size()-1).move.checkPoint = new ArrayList<Node>();
-					projectile.get(projectile.size()-1).move.usedGrid   = new ArrayList<Node>();
-					projectile.get(projectile.size()-1).move.checkPoint.add(new Node(player.x, player.y));
-					projectile.get(projectile.size()-1).move.pathFind();
-				*/
+			
 
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
+				
 
 			 }
 			else
@@ -588,14 +584,14 @@ public class MouseControl implements MouseListener, MouseMotionListener {
 		boolean b = false;
 		if (game.getEntityList().get(0).inventory.getInventoryOpen())
 		{
-			if (eX > ((Diablo.Game.windowX / 2) - ((game.getEntityList().get(0).inventory.getInventoryCols() / 2) * 50)) && eX < ((Diablo.Game.windowX / 2) + ((game.getEntityList().get(0).inventory.getInventoryCols() / 2) * 50)) && eY > ((Diablo.Game.windowY) - (game.getEntityList().get(0).inventory.getInventoryRows() * 50) - 60) && eY < ((Diablo.Game.windowY) - (game.getEntityList().get(0).inventory.getInventoryRows() * 50)))
+			if (eX > ((Diablo.Game.windowX / 2) - ((game.getEntityList().get(0).inventory.getInventoryCols() / 2) * 50)) && eX < ((Diablo.Game.windowX / 2) + ((game.getEntityList().get(0).inventory.getInventoryCols() / 2) * 50)) && eY > ((Diablo.Game.windowY) - (game.getEntityList().get(0).inventory.getInventoryRows() * 50)))
 			{
 				for (int i = 0; i < game.getEntityList().get(0).inventory.getInventoryRows(); i++)
 				{
 					for (int j = 0; j < game.getEntityList().get(0).inventory.getInventoryCols(); j++)
 					{
 						int col = ((Diablo.Game.windowX / 2) - ((game.getEntityList().get(0).inventory.getInventoryCols() * 50) / 2) + (50 * j));
-						int row = ((Diablo.Game.windowY) - (game.getEntityList().get(0).inventory.getInventoryRows() * 50) + (50 * i) - 60);
+						int row = ((Diablo.Game.windowY) - (game.getEntityList().get(0).inventory.getInventoryRows() * 50) + (50 * i));
 
 						if (eX > col && eX < col + 50 && eY > row && eY < row + 50)
 						{
@@ -615,24 +611,6 @@ public class MouseControl implements MouseListener, MouseMotionListener {
 				}
 				b = true;
 			}
-		}
-		return b;
-	}
-	private boolean checkSkills(int eX, int eY)
-	{
-		boolean b = false;
-		if (eX > Diablo.Game.windowX / 2 - 120 && eX < Diablo.Game.windowX / 2 + 120 && eY > Diablo.Game.windowY - 60)
-		{
-			for (int i = 0; i < 4; i++)
-			{
-				int col = ((Diablo.Game.windowX / 2) - 120 + (60 * i));
-
-				if (eX > col && eX < col + 60)
-				{
-					System.out.println("Player clicked skill number: " + i);
-				}
-			}
-			b = true;
 		}
 		return b;
 	}
