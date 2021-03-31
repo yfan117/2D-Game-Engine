@@ -11,7 +11,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import Diablo.Items.Item;
+import Diablo.Items.*;
 
 public class Entity{
 
@@ -116,6 +116,9 @@ public class Entity{
 	Animation run;
 	Animation attack;
 	int attackFrame;
+
+	MusicPlayer runningStone;
+	MusicPlayer runningDirt;
 	
 	String characterName;
 
@@ -147,6 +150,10 @@ public class Entity{
 		}
 		if(type.equals("enemy")) {
 			//attack();
+		}
+		if(type.equals("chest"))
+		{
+			game.display.getRendererObject().drawChest(this.inventory.getRows(), this.inventory.getCols(), this.inventory);
 		}
 	}
 
@@ -216,6 +223,13 @@ public class Entity{
          
         if(type.contentEquals("player"))
          {
+			 try{
+				 runningStone = new MusicPlayer(Game.root + "/resources/music/runningStone.WAV");
+				 runningDirt = new MusicPlayer(Game.root + "/resources/music/runningDirt.WAV");
+				 runningStone.start();
+				 runningDirt.start();
+			 }catch(Exception ex){ex.printStackTrace();}
+
         	visible = true;
         	enableMovement();
         	enableAttack();
@@ -350,6 +364,35 @@ public class Entity{
    damage = 100;
 
  }
+
+	public Entity(Game game, String type, int x, int y) throws IOException {
+		this.game = game;
+		this.x = x;
+		this.y = y;
+		this.type = type;
+		this.inventory = new Diablo.Inventory("Chest", 4, 8);
+
+		this.hp = 1;
+		this.hitBox = 80;
+		this.target = this;
+		this.visible = true;
+		this.actionable = true;
+
+		int[] collisionBox = {50, 100};
+
+		this.collisionBox = collisionBox;
+		this.width = collisionBox[0];
+		this.height = collisionBox[1];
+
+		this.idle = new Animation("chest", Renderer.getImageData("chest"),50,100,50,0);
+
+		this.state = "idle";
+
+		for(int i = 0; i < 32; i++)
+		{
+			inventory.setBackpackItem(i, new SpeedPotion(game));
+		}
+	}
  
 
  public Entity(Game game, int[] imageData, int x, int y, int layerY, int picX, int picY) throws IOException {
