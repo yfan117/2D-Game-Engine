@@ -1,4 +1,5 @@
 package Diablo;
+import Diablo.Items.HealthPotion;
 import Diablo.Items.Item;
 
 import javax.imageio.ImageIO;
@@ -17,7 +18,7 @@ import java.util.TimerTask;
 
 public class Game
 {
-	static final public String root = Paths.get(System.getProperty("user.dir")).getParent() + "/RPG";
+	static final public String root = Paths.get(System.getProperty("user.dir")).getParent() + "\\Portfolio";
 
     public DialogueUI dialogueObj = null; //no dialogue instances yet
     boolean saved = false;
@@ -120,22 +121,31 @@ public class Game
         /*
          * Creating Dialogue
          */
-
         Dialogue d3 = new Dialogue("Did you encounter Sean?");
         Dialogue d2 = new Dialogue("I require you to please encounter Sean.  I will reward you for your efforts", d3);
-        Objective encounterSeanDialogue = new DialogueObjective(new Dialogue("Please ecounter Sean", d3), this);
+        Objective encounterSeanDialogue = new DialogueObjective(new Dialogue("Please ecounter Sean", d3),"encounter sean", this);
         Dialogue[] responses = {new Dialogue("yes", encounterSeanDialogue), new Dialogue("no")};
         Dialogue d1 = new Dialogue("Hello Traveler, I am the Tavern girl.  It is nice to meet you.  You have a trusthworthy face, will you help me for a reward?  I require assistance with a mission, would you like to hear more?", responses);
 
         //	 Item reward= new SeansItem();
+        Item reward= new HealthPotion(this, 10);
         Dialogue EncounteredSeanDialogue = new Dialogue("Oh, the Tavern Girl sent you, here is proof you met me");
-        Objective EncounteredSean = new DialogueObjective(EncounteredSeanDialogue, this);
-        Objective EncounterSean = new QuestObjective(this, encounterSeanDialogue, EncounteredSean);
-        Dialogue sean1 = new Dialogue("Hello", EncounterSean);
-
+        Objective EncounteredSean = new DialogueObjective(EncounteredSeanDialogue,"encounter sean", this);
+        Objective EncounterSean = new QuestObjective(this,"encounter sean", EncounteredSean,reward);
+        Dialogue sean1 = new Dialogue("Hello, I am Sean", EncounterSean);
         int[] collisionBox = {50, 100};
 
-        list.add(new Entity("player", "archer", new int[]{10, 10}, 100, 80, this, 100, 50));
+        list.add(new Entity("player", "archer", new int[]{3300, 1500}, 100, 80, this, 100, 50));
+        list.add(new Entity("friend", "tavernGirl", new int[]{10000, 900}, 100, 80, this, 100, 50));
+        list.get(list.size()-1).picRank = 13;
+        list.add(new Entity("friend", "wizard", new int[]{9500, 1500}, 100, 80, this, 100, 50));
+        list.get(list.size()-1).picRank = 3;
+        
+        list.get(1).addDialogue(ImageIO.read(new File(repo + "tavernGirl.png")),d1,"Lucy",collisionBox);
+        list.get(2).addDialogue(ImageIO.read(new File(repo + "playerportrait.png")),sean1,"Sean",collisionBox);
+        list.get(0).setPortrait(ImageIO.read(new File(repo + "playerportrait.png")));
+        
+        
         //list.add(new Entity("enemy", "knight", new int[]{3300, 1200}, 100, 80, this, 100, 50));
         //list.add(new Entity("enemy", "wall", new int[]{100, 100}, 100, 80, this, 100, 50));
        //list.add(new Entity("friendly", "lucy", new int[]{100, 100}, 100, 80, this, 100, 50));

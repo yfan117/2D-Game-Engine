@@ -7,7 +7,9 @@ public class Objective {
 	//private Item item;
 	private Dialogue transition=null;
 	private Item reward=null;
+	public String name;
 	 Objective(){
+		
 	}
 	public void doObjective() {
 	 }
@@ -19,23 +21,23 @@ public class Objective {
 class DialogueObjective extends Objective{
 	private Dialogue d;
 	private Game game;
-	private Dialogue transition=null;
-	DialogueObjective(Dialogue d,Game game){
-		this.d=d;
-		transition=d.getTransition();
-		this.game=game;
-	}
+	public String name;
 	
-	@Override
-	public void doObjective(){
-		game.dialogueObj.NPC=true;
-		game.dialogueObj.setDialogue(d);
-		game.getEntityList().get(0).addObjective(this);
+	DialogueObjective(Dialogue d,String name,Game game){
+		
+		this.d=d;
+		this.game=game;
+		this.name=name;
 		
 	}
+
 	@Override
-	public Dialogue getTransition() {
-		return transition;
+	public void doObjective(){
+		game.getEntityList().get(0).addQuest(name);
+		game.dialogueObj.NPC=true;
+		game.dialogueObj.setDialogue(d);
+		
+		
 	}
 }
 
@@ -67,17 +69,34 @@ class ItemObjective extends Objective{
 }
 class QuestObjective extends Objective{
 	private Dialogue transition=null;
-	private Objective checkQuest;
+	private String questName;
 	private DialogueObjective questDialogue;
 	private Game game;
-	QuestObjective(Game game,Objective checkQuest, Objective questDialogue){
+	private Item reward;
+	public String name;
+	QuestObjective(Game game,String questName, Objective questDialogue,Item reward){
 		this.game=game;
+		this.questName=questName;
+		this.questDialogue=(DialogueObjective) questDialogue;
+		this.reward=reward;
 	}
 	public void doObjective() {
 		//check entity for an Objective
-		if(game.getEntityList().get(0).getQuestlog().contains(checkQuest)) {
-			questDialogue.doObjective();
+		if(game.getEntityList().get(0).getQuestlog()==null) {
+			return;
 		}
-		//return reward to player
+		for(int i =0; i < game.getEntityList().get(0).getQuestlog().size();i++) {
+			System.out.println(game.getEntityList().get(0).getQuestlog().get(i));
+			System.out.println(questName);
+			if(game.getEntityList().get(0).getQuestlog().get(i).equals(questName)) {
+			System.out.println("quest found");
+			questDialogue.doObjective();//open the dialogue related to the quest
+			//return reward to player
+			System.out.println("you receieved "+ reward.getName());
+			game.getEntityList().get(0).addItem(1, reward);
+			return;
+		}
+			
+		}
 	}
 }

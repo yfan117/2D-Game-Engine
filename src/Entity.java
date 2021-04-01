@@ -133,16 +133,15 @@ public class Entity{
 	private int height;
 	private Dialogue d=null;
 	private Diablo.Items.Item[] itemsList = new Diablo.Items.Item[4];
-	private ArrayList<Objective> questlog= new ArrayList<Objective>();
-	/*
-	 * Friendly NPC constructor
-	 */
+	private ArrayList<String> questlog= new ArrayList<String>();
+	private String npcName;
 	
-
+	public String getName() {return npcName;}
+	
 	public void doAction(){
-		if(type.equals("friendly")) {
+		if(type.equals("friend")) {
 			if(game.dialogue==true) {
-				game.dialogue=false;//terminate dialogue
+				game.dialogue=true;//terminate dialogue
 			}
 			else {
 				game.createDialogue(this);//startup dialogue
@@ -172,8 +171,15 @@ public class Entity{
 
 	public boolean isEntity(int x, int y) {
 		//checks if x and y is within entity's collision box
-
-		if(x<this.x+width/2 && x >this.x-width/2 && y <this.y+height/2 && y>this.y-height/2)
+		boolean result = Movement.isVisible(x,
+                y, 
+                0,
+                0,
+                this.x,
+               this.y,
+               300,
+                300);
+		if(result==true)
 		{
 			return true;
 		}
@@ -198,12 +204,15 @@ public class Entity{
 		animationInUse = current;
 
 	}
-	public void addDialogue(Image NpcPortrait,Dialogue dialogue, int[] collisionBox)
+	public void addDialogue(Image NpcPortrait,Dialogue dialogue,String npcName,int [] collisionBox)
 	{
 		this.npcPortrait=NpcPortrait;
 		this.d=dialogue;
 		currentDialogue=0;
-		this.collisionBox=collisionBox;
+		this.npcName=npcName;
+		 width=collisionBox[0];
+			height=collisionBox[1];
+			this.collisionBox=collisionBox;
 	}
 	int destinationX;
 	int destinationY;
@@ -254,8 +263,8 @@ public class Entity{
    actionable=true;
   }
   
-  width= 0;
-  height=0;
+  //width= 0;
+ // height=0;
   
         this.hp = hp;
         this.hitBox = hitBox;
@@ -479,10 +488,11 @@ public class Entity{
 	{
 		this.itemsList[i] = null;
 	}
-	public void addObjective(Objective quest) {
-		questlog.add(quest);
+	public void addQuest(String string) {
+		questlog.add(string);
+		System.out.println("quest added");
 	}
-	public ArrayList<Objective> getQuestlog(){
+	public ArrayList<String> getQuestlog(){
 		return questlog;
 	}
 
@@ -512,4 +522,8 @@ public class Entity{
 		if (moveSpeed <= 0)
 			moveSpeed = 1;
 	}
+	public void setPortrait(Image portrait) {
+		this.npcPortrait= portrait;
+	}
+	
 }

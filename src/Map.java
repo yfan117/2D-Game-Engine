@@ -30,7 +30,10 @@ public class Map{
 	static JSONArray map = new JSONArray();
 	public static List<Integer[]> imageListArr = new ArrayList<Integer[]>();
 	public static List imageFiles = new ArrayList();
-	final static File folders = new File(Game.root + "/resources/maps/map2");
+	
+	static String currentMap = "map3";
+	final static File folders = new File(Game.root + "/resources/maps/" +currentMap);
+	
 	public static List<Animation> aniList = new ArrayList<Animation>();
 	public Map(Game game){this.game = game;}
 
@@ -40,6 +43,7 @@ public class Map{
 
 	public Map(String mapName, Game game) throws IOException  {
 		System.out.println("map");
+		System.out.println(Game.root);
 		try {
 			parseJSON();
 		} catch (IOException e) {
@@ -154,7 +158,7 @@ public class Map{
 	}	
 	public void parseJSON() throws IOException, ParseException {
 		filesInFolder(folders);
-		Object obj = new JSONParser().parse(new FileReader(Game.root + "/resources/maps/" + "map2" + ".json")); 
+		Object obj = new JSONParser().parse(new FileReader(Game.root + "/resources/maps/" + currentMap + ".json")); 
 		JSONObject jo = (JSONObject) obj; 
 		String layerList = jo.get("nodeList").toString();
 		

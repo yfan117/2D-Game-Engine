@@ -52,7 +52,28 @@ public class MouseControl implements MouseListener, MouseMotionListener {
 
 			int eX = e.getX();
 			int eY = e.getY();
+			int wX=e.getX();
+			int wY=e.getY();
+			if(wX < Game.centerX ) {
+				wX = Renderer.cameraControlX- (Game.centerX - wX);
+			}
+			else if(wX > Game.centerX ) {
+				wX = Renderer.cameraControlX + (wX - Game.centerX);
+			}
 
+			if(wY < Game.centerY ) {
+				wY = Renderer.cameraControlY- (Game.centerY - wY);
+			}
+			else if(wY > Game.centerY ) {
+				wY = Renderer.cameraControlY  + (wY - Game.centerY);
+			}
+			wX =Math.round(wX/5)*5;
+			wY=Math.round(wY/5)*5;
+			if(game.dialogue==true) {
+				game.dialogueObj.checkResponse(eX,eY);
+				//game.dialogueObj.checkResponse(player.clickedX,player.clickedY);
+				return;
+			}
 			//Player clicked inside the inventory while it is open
 			if (checkInventory(eX, eY))
 			{
@@ -115,6 +136,8 @@ public class MouseControl implements MouseListener, MouseMotionListener {
 				player.move.checkPoint.add(new Node(player.x, player.y));
 				player.move.pathFind();
 				player.state = "run";
+				if(!player.runningStone.isRunning())
+					player.runningStone.play();
 				player.newClick = true;
 				player.newCheckPoint = true;
 
@@ -140,11 +163,11 @@ public class MouseControl implements MouseListener, MouseMotionListener {
 
 
 			System.out.println("clicked " +eX + " " + eY);
-
+			
 			for(int i =1; i < game.getEntityList().size();i++)
 			{
 				Entity entity= game.getEntityList().get(i);//check for click collision
-				if(entity.isEntity(player.clickedX,player.clickedY)) {
+				if(entity.isEntity(wX,wY)==true) {
 					System.out.println("entity here");
 					entity.doAction();
 				}
@@ -433,9 +456,21 @@ public class MouseControl implements MouseListener, MouseMotionListener {
 		eX =Math.round(eX/5)*5;
 		eY=Math.round(eY/5)*5;
 
-		/*new
+		/*
 		 * Check if mouse hovering over an action
 		 */
+		
+		if(game.dialogue==true) {
+			if(game.dialogueObj.checkHovering(eX,eY)==true) {
+				game.hovering=true;
+				return;
+			}else
+			{
+				
+			game.hovering=false;
+			return;
+		}
+		}
 		for(int i =1; i < game.getEntityList().size();i++){
 			Entity entity= game.getEntityList().get(i);//check for entity collision
 			if(entity.isEntity(eX,eY) && entity.actionable()==true ) {
@@ -451,7 +486,8 @@ public class MouseControl implements MouseListener, MouseMotionListener {
 			else {
 				game.hovering=false;
 			}
-		}
+		}	
+		
 	}
 
 	@Override

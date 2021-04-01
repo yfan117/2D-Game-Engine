@@ -169,89 +169,7 @@ class Renderer extends JPanel{
 			
 		return false;
 	}
-//	public void layerOrder()
-//	{
-//		
-//				entityInFB = new ArrayList<>();
-//				Entity current;
-//
-//				for(int i = 0; i< game.getObstacles().size(); i++)
-//				{
-//					current = game.getObstacles().get(i);
-//					
-//					
-//					if(current.y > cameraY + resolutionY)
-//					{
-//						break;
-//					}
-//					
-//					entityInFB.add(current);
-//					
-//					
-//				}
-//				
-//				
-//				for(int i = 0; i< game.getEntityList().size(); i++)
-//				{
-//					current = game.getEntityList().get(i);
-//					//if(current.visible == true)
-//					{
-//					for(int a = 0; a< entityInFB.size(); a++)
-//					{
-//						//System.out.println(entityInFB.size());
-//						/*
-//						if(current.y > cameraY + resolutionY)
-//						{
-//							break;
-//						}
-//						*/
-//						
-//						if(a == 0)
-//						{
-//							if(current.layerY + current.y < entityInFB.get(a).layerY + entityInFB.get(a).y)
-//							{
-//								entityInFB.add(0, current);
-//								break;
-//							}
-//
-//							
-//						}
-//						
-//						else if(a == entityInFB.size() - 1)
-//						{
-//							if(current.layerY + current.y >= entityInFB.get(a).layerY + entityInFB.get(a).y)
-//							{
-//								entityInFB.add(current);
-//							}
-//							else
-//							{
-//								entityInFB.add(entityInFB.size() - 1, current);
-//							}
-//							
-//							break;
-//						}
-//						
-//						else if((current.layerY + current.y >= entityInFB.get(a).layerY + entityInFB.get(a).y)
-//								&& (current.layerY + current.y <= entityInFB.get(a + 1).layerY + entityInFB.get(a + 1).y))
-//							{
-//								//System.out.println("here");
-//								entityInFB.add(a + 1, current);
-//								break;
-//							}
-//						
-//						
-//						
-//					
-//						
-//						
-//					}
-//				
-//				}
-//				}
-//				
-//		
-//		}
-			
+		
 	static int frameWidth = 0;
 	static int frameHeight = 0;
 	public void layerOrder()
@@ -298,10 +216,19 @@ class Renderer extends JPanel{
 					current = game.getObstacles().get(i);
 					
 					
-					if(Movement.isVisible(current) == true )
-					{
+					boolean result = Movement.isVisible(current.x,
+                            current.y, 
+                            current.animationInUse.picWidth,
+                            current.animationInUse.picHeight,
+                            cameraX,
+                            cameraY,
+                            frameWidth,
+                            frameHeight);
+						
+						if(result == true )
+						{
 						entityInFB.add(current);
-					}
+						}
 					
 					if(current.y > cameraY + resolutionY)
 					{
@@ -1135,7 +1062,7 @@ class Renderer extends JPanel{
 //			}
 
 	}
-	//new function
+	
 	private static BufferedImage imageToBufferedImage(Image image) {
 
 		BufferedImage bufferedImage = new BufferedImage(image.getWidth(null), image.getHeight(null), BufferedImage.TYPE_INT_ARGB);
