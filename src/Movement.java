@@ -152,6 +152,7 @@ public class Movement{
 			{
 				
 				getDirection(current.clickedX, current.clickedY);
+				//current.collision = true;
 				//System.out.println(current.moveAngle);
 				
 				
@@ -300,9 +301,19 @@ public class Movement{
 					//obsY = current.y;
 				}
 				
+//				if(current.type == "enemy")
+//				{
+//					checkPoint.remove(1);
+//					current.newCheckPoint = true;
+//					current.state = "attack";
+//					//obsX = current.x;
+//					//obsY = current.y;
+//				}
+				
 				if(current.type == "projectile")
 				{
 					current.active = false;
+					current.collision = true;
 					//obsX = current.x;
 					//obsY = current.y;
 				}
@@ -316,6 +327,11 @@ public class Movement{
 				{
 					current.newCheckPoint = false;
 					current.state = "idle";
+					if(current.type == "player")
+					{
+						current.runningStone.pause();
+						current.runningDirt.pause();
+					}
 					current.picCounter = 0;
 					current.newClick = false;
 					current.hasPath = false;
@@ -449,9 +465,55 @@ public class Movement{
 
 			}
 		}
-		
+			public static boolean isVisible(int x1, int y1, int w1, int h1,int x2, int y2, int w2, int h2) {
 
 
+                int xs1 = x1 + w1;
+                int ys1 = y1 + h1;
+
+                boolean xInFrame = false;
+                boolean yInFrame = false;
+
+                //System.out.println(current.picWidth);
+                //System.out.println(Renderer.cameraX + Game.windowX);
+
+                if((x1 >= x2) && (x1 <= x2 + w2))
+                {
+                    xInFrame = true;
+                }
+                else if((xs1 >= x2) && (xs1 <= x2 + w2))
+                {
+                    xInFrame = true;
+                }
+                else if((x1 <= x2) && (xs1 >= x2 + w2))
+                {
+                    xInFrame = true;
+                }
+
+
+                if((y1 >= y2) && (y1 <= y2 + h2))
+                {
+                    yInFrame = true;
+                }
+                else if((ys1 >= y2) && (ys1 <= y2 + h2))
+                {
+                    yInFrame = true;
+                }
+                else if((y1 <= y2) && (ys1 >= y2 + h2))
+                {
+                    yInFrame = true;
+                }
+
+                if((xInFrame == true) && (yInFrame == true))
+                {
+                    return true;
+                }
+
+                return false;
+
+
+            }
+			
 			public void isVisible() {
 				if(((current.x >= Renderer.cameraX ) && (current.x <= Renderer.cameraX + Game.windowX))
 		        		&&
@@ -465,56 +527,7 @@ public class Movement{
 
 			}
 			
-			public static boolean isVisible(Entity current) {
 		
-				int x1 = current.x;
-				int x2 = current.x + current.animationInUse.picWidth;
-				int y1 = current.y;
-				int y2 = current.y + current.animationInUse.picHeight;
-				
-				boolean xInFrame = false;
-				boolean yInFrame = false;
-				
-				//System.out.println(current.picWidth);
-				//System.out.println(Renderer.cameraX + Game.windowX);
-				
-				if((x1 >= Renderer.cameraX) && (x1 <= Renderer.cameraX + Renderer.frameWidth))
-				{
-					xInFrame = true;
-				}
-				else if((x2 >= Renderer.cameraX) && (x2 <= Renderer.cameraX + Renderer.frameWidth))
-				{
-					xInFrame = true;
-				}
-				else if((x1 <= Renderer.cameraX) && (x2 >= Renderer.cameraX + Renderer.frameWidth))
-				{
-					xInFrame = true;
-				}
-				
-				
-				if((y1 >= Renderer.cameraY) && (y1 <= Renderer.cameraY + Renderer.frameHeight))
-				{
-					yInFrame = true;
-				}
-				else if((y2 >= Renderer.cameraY) && (y2 <= Renderer.cameraY + Renderer.frameHeight))
-				{
-					yInFrame = true;
-				}
-				else if((y1 <= Renderer.cameraY) && (y2 >= Renderer.cameraY + Renderer.frameHeight))
-				{
-					yInFrame = true;
-				}
-				
-				if((xInFrame == true) && (yInFrame == true))
-				{
-					return true;
-				}
-				
-				return false;
-                     
-
-            }
-
 			public int isCollision(int x, int y, Entity current)
 			{
 				int result = 0;

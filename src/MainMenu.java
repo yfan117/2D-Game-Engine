@@ -25,22 +25,29 @@ public class MainMenu extends JPanel
     private String loadName;
     private LoadGame loadGame;
     private File lastLoaded;
+    private Box.Filler filler;
+    private FlowLayout flowLayout;
 
     public MainMenu(Display d, Game game)
     {
         lastLoaded = new File(game.root + "/resources/text/lastLoaded.txt");
 
         layout = new BorderLayout();
+        flowLayout = new FlowLayout();
+        flowLayout.setVgap(40);
         this.setLayout(layout);
 
         loadGame = game.getLoadFile();
 
-        bottomPanel = new JPanel();
-        bottomPanel.setBackground(Color.WHITE);
+        bottomPanel = new JPanel(flowLayout);
+        bottomPanel.setPreferredSize(new Dimension(300,720));
+        bottomPanel.setOpaque(false);
 
         this.game = game;
         display = d;
         img = new ImageIcon(Game.root + "/resources/images/MainMenu.png").getImage();
+
+        filler = new Box.Filler(new Dimension(300, 300), new Dimension(300, 300), new Dimension(300, 300));
 
         continueButtonImage = new ImageIcon(Game.root + "/resources/images/ContinueButton.png");
         newGameButtonImage = new ImageIcon(Game.root + "/resources/images/NewGameButton.png");
@@ -133,12 +140,13 @@ public class MainMenu extends JPanel
         });
         settingsButton.addActionListener(e -> {System.out.println("Settings");});
 
+        bottomPanel.add(filler);
         bottomPanel.add(continueButton);
         bottomPanel.add(newGameButton);
         bottomPanel.add(loadGameButton);
         bottomPanel.add(settingsButton);
 
-        add(bottomPanel, BorderLayout.SOUTH);
+        add(bottomPanel, BorderLayout.EAST);
 
         startMusic();
     }

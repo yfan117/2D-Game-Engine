@@ -11,7 +11,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import Diablo.Items.Item;
+import Diablo.Items.*;
 
 public class Entity{
 
@@ -116,6 +116,9 @@ public class Entity{
 	Animation run;
 	Animation attack;
 	int attackFrame;
+
+	MusicPlayer runningStone;
+	MusicPlayer runningDirt;
 	
 	String characterName;
 
@@ -130,16 +133,15 @@ public class Entity{
 	private int height;
 	private Dialogue d=null;
 	private Diablo.Items.Item[] itemsList = new Diablo.Items.Item[4];
-	private ArrayList<Objective> questlog= new ArrayList<Objective>();
-	/*
-	 * Friendly NPC constructor
-	 */
+	private ArrayList<String> questlog= new ArrayList<String>();
+	private String npcName;
 	
-
+	public String getName() {return npcName;}
+	
 	public void doAction(){
-		if(type.equals("friendly")) {
+		if(type.equals("friend")) {
 			if(game.dialogue==true) {
-				game.dialogue=false;//terminate dialogue
+				game.dialogue=true;//terminate dialogue
 			}
 			else {
 				game.createDialogue(this);//startup dialogue
@@ -147,6 +149,10 @@ public class Entity{
 		}
 		if(type.equals("enemy")) {
 			//attack();
+		}
+		if(type.equals("chest"))
+		{
+			game.display.getRendererObject().drawChest(this.inventory.getRows(), this.inventory.getCols(), this.inventory);
 		}
 	}
 
@@ -165,8 +171,15 @@ public class Entity{
 
 	public boolean isEntity(int x, int y) {
 		//checks if x and y is within entity's collision box
-
-		if(x<this.x+width/2 && x >this.x-width/2 && y <this.y+height/2 && y>this.y-height/2)
+		boolean result = Movement.isVisible(x,
+                y, 
+                0,
+                0,
+                this.x,
+               this.y,
+               300,
+                300);
+		if(result==true)
 		{
 			return true;
 		}
@@ -191,12 +204,15 @@ public class Entity{
 		animationInUse = current;
 
 	}
-	public void addDialogue(Image NpcPortrait,Dialogue dialogue, int[] collisionBox)
+	public void addDialogue(Image NpcPortrait,Dialogue dialogue,String npcName,int [] collisionBox)
 	{
 		this.npcPortrait=NpcPortrait;
 		this.d=dialogue;
 		currentDialogue=0;
-		this.collisionBox=collisionBox;
+		this.npcName=npcName;
+		 width=collisionBox[0];
+			height=collisionBox[1];
+			this.collisionBox=collisionBox;
 	}
 	int destinationX;
 	int destinationY;
@@ -216,90 +232,98 @@ public class Entity{
          
         if(type.contentEquals("player"))
          {
+			 try{
+				 runningStone = new MusicPlayer(Game.root + "/resources/music/runningStone.WAV");
+				 runningDirt = new MusicPlayer(Game.root + "/resources/music/runningDirt.WAV");
+				 runningStone.start();
+				 runningDirt.start();
+			 }catch(Exception ex){ex.printStackTrace();}
+
         	visible = true;
         	enableMovement();
         	enableAttack();
+        	moveSpeed = 5;
          }
         else
         {
-        		
-        	respondX = x;
-        	respondY = y;
-        	ai = new AI(this, game);
+         //enableAttack();
+         respondX = x;
+         respondY = y;
+         ai = new AI(this, game);
+         moveSpeed = 1;
         }
         
         target = this;
         
-    	inventory = new Inventory();
-    	
-		//friendly NPC Variables
-		if(type.equals("friendly")) {
-			actionable=true;
-		}
-		if(type.equals("enemy")) {
-			actionable=true;
-		}
-		
-		width= 0;
-		height=0;
-		
+     inventory = new Inventory();
+     
+  //friendly NPC Variables
+  if(type.equals("friendly")) {
+   actionable=true;
+  }
+  if(type.equals("enemy")) {
+   actionable=true;
+  }
+  
+  //width= 0;
+ // height=0;
+  
         this.hp = hp;
         this.hitBox = hitBox;
+   
+   
+   state = "idle";
+   
+  
+ }
+ 
+ public Animation makeNewAnimation(String name, ArrayList<Animation> list) throws NumberFormatException, IOException
+ {
+  FileReader reader = new FileReader(Game.root + "/resources/text/" + name + ".txt");
+   BufferedReader bufferedReader = new BufferedReader(reader);
+   
+ 
+   for(int i = 0; i < list.size(); i++)
+   {
 
-		 moveSpeed = 5;
-		 
-		 state = "idle";
-		 
-		
-	}
-	
-	public Animation makeNewAnimation(String name, ArrayList<Animation> list) throws NumberFormatException, IOException
-	{
-		FileReader reader = new FileReader(Game.root + "/resources/text/" + name + ".txt");
-		 BufferedReader bufferedReader = new BufferedReader(reader);
-		 
-	
-		 for(int i = 0; i < list.size(); i++)
-		 {
+   if(list.get(i).name.contentEquals(name))
+   {
+    System.out.println("animation already exist for -- " + name);
+    return list.get(i);
+   }
+   }
+   
+  if(name.contains("@idle") == true)
+  {
+   this.layerY = Integer.parseInt(bufferedReader.readLine());
+  }
+  if(name.contains("@attack") == true)
+  {
+   this.attackFrame = Integer.parseInt(bufferedReader.readLine());
+  }
+  
+ 
+  list.add(new Animation(name,
+       Renderer.getImageData(name),
+            Integer.parseInt(bufferedReader.readLine()),
+            Integer.parseInt(bufferedReader.readLine()),
+            Integer.parseInt(bufferedReader.readLine()),
+            Integer.parseInt(bufferedReader.readLine())));
+     
+      System.out.println("new animation added for -- " + name);
+ 
+      
+   return list.get(list.size() -1);
+ }
+ 
+ public void enableAttack() throws NumberFormatException, IOException
+ {
+ 
+  this.attack = makeNewAnimation(characterName + "@attack", Game.models);
+ 
+ }
 
-			if(list.get(i).name.contentEquals(name))
-			{
-				System.out.println("animation already exist for -- " + name);
-				return list.get(i);
-			}
-		 }
-		 
-		if(name.contains("@idle") == true)
-		{
-			this.layerY = Integer.parseInt(bufferedReader.readLine());
-		}
-		if(name.contains("@attack") == true)
-		{
-			this.attackFrame = Integer.parseInt(bufferedReader.readLine());
-		}
-		
-	
-		list.add(new Animation(name,
-					 	Renderer.getImageData(name),
-				        Integer.parseInt(bufferedReader.readLine()),
-				        Integer.parseInt(bufferedReader.readLine()),
-				        Integer.parseInt(bufferedReader.readLine()),
-				        Integer.parseInt(bufferedReader.readLine())));
-				 
-	     System.out.println("new animation added for -- " + name);
-	
-	     
-		 return list.get(list.size() -1);
-	}
-	
-	public void enableAttack() throws NumberFormatException, IOException
-	{
-	
-		this.attack = makeNewAnimation(characterName + "@attack", Game.models);
-	
-	}
-
-	public Entity(Game game, String name, int destinationX, int destinationY, int hitBox) throws IOException {
+ public Entity(Game game, String name, int destinationX, int destinationY, int hitBox) throws IOException {
 
 		this.x = game.getEntityList().get(0).x - 70;
         this.y = game.getEntityList().get(0).y - 50;
@@ -315,48 +339,76 @@ public class Entity{
         
         //move = new Movement(this, game);
 
-		clickedX = destinationX ;
-		clickedY = destinationY ;
-		
-		characterName = name;
-		newClick = true;
+  clickedX = destinationX ;
+  clickedY = destinationY ;
+  
+  characterName = name;
+  newClick = true;
 
         if(name == "arrow")
         {
-        	type = "projectile";
+         type = "projectile";
 
-        	visible = true;
-        	enableMovement();
-        	newCheckPoint = true;
-        	
-		
+         visible = true;
+         enableMovement();
+         newCheckPoint = true;
         }
         if(name == "melee")
         {
-        	type = "melee";
-        	visible = true;
+         type = "melee";
+         visible = true;
         
-		
+  
         }
         
         animationInUse = run;
         this.hitBox = hitBox;
 //        FileReader reader = new FileReader(Game.root + "/resources/text/" + name + ".txt");
 //
+
 //		 BufferedReader bufferedReader = new BufferedReader(reader);
 //
 //		 moveSpeed = Integer.parseInt(bufferedReader.readLine());
         
         moveSpeed = 10;
 
-		 damage = 100;
+   damage = 100;
 
-	}
-	
+ }
 
-	public Entity(Game game, int[] imageData, int x, int y, int layerY, int picX, int picY) throws IOException {
+	public Entity(Game game, String type, int x, int y) throws IOException {
 		this.game = game;
 		this.x = x;
+		this.y = y;
+		this.type = type;
+		this.inventory = new Diablo.Inventory("Chest", 4, 8);
+
+		this.hp = 1;
+		this.hitBox = 80;
+		this.target = this;
+		this.visible = true;
+		this.actionable = true;
+
+		int[] collisionBox = {50, 100};
+
+		this.collisionBox = collisionBox;
+		this.width = collisionBox[0];
+		this.height = collisionBox[1];
+
+		this.idle = new Animation("chest", Renderer.getImageData("chest"),50,100,50,0);
+
+		this.state = "idle";
+
+		for(int i = 0; i < 32; i++)
+		{
+			inventory.setBackpackItem(i, new SpeedPotion(game));
+		}
+	}
+ 
+
+ public Entity(Game game, int[] imageData, int x, int y, int layerY, int picX, int picY) throws IOException {
+  this.game = game;
+  this.x = x;
         this.y = y;
         this.layerY = layerY;
 
@@ -370,6 +422,24 @@ public class Entity{
         
  
 	}
+ 
+ public Entity(String name, int[] imageData, int x, int y, int layerY, int picX, int picY) throws IOException {
+     this.characterName = name;
+     this.x = x;
+     this.y = y;
+     this.layerY = layerY;
+
+
+     animationInUse = new Animation(name,
+              imageData, 
+              picX,
+              picY,
+              picX,
+              1);
+
+
+
+ }
 
 	public void enableMovement() throws NumberFormatException, IOException
 	{
@@ -420,10 +490,11 @@ public class Entity{
 	{
 		this.itemsList[i] = null;
 	}
-	public void addObjective(Objective quest) {
-		questlog.add(quest);
+	public void addQuest(String string) {
+		questlog.add(string);
+		System.out.println("quest added");
 	}
-	public ArrayList<Objective> getQuestlog(){
+	public ArrayList<String> getQuestlog(){
 		return questlog;
 	}
 
@@ -453,4 +524,8 @@ public class Entity{
 		if (moveSpeed <= 0)
 			moveSpeed = 1;
 	}
+	public void setPortrait(Image portrait) {
+		this.npcPortrait= portrait;
+	}
+	
 }

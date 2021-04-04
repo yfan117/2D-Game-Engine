@@ -13,25 +13,25 @@ public class SpriteMaker {
 	
 	public static void main(String[] args) throws IOException
 	{
-		int picX = 300;
-		int picY = 300;
-		int numDirection = 16;
-		int numPicPer = 26;
+		int picX = 1920;
+		int picY = 1080;
+		int numDirection = 1;
+		int numPicPer = 250;
 		
 		int width = picX * numPicPer;
 		int height = picY * numDirection;
 		int[] rgbMatrix = new int[width * height];
 	
-		String root = "C:\\Users\\Fan\\eclipse-workspace/Portfolio/resources/images/archer@run/Direction";
-		
+		//String root = "C:\\Users\\Fan\\eclipse-workspace/Portfolio/resources/images/knight@idle/Direction";
+		String root = "C:\\Users\\Fan\\Desktop\\DrStrangePortal\\render_";
 		String newRoot;
 		String imageDir;
 		
 		for(int i = 1; i <= numDirection ; i++)
 		{
-			newRoot = root + i +"/";
-			
-			for(int a = 0; a < numPicPer ; a++)
+			//newRoot = root + i +"/";
+			newRoot = root;
+			for(int a = 1; a < numPicPer ; a++)
 			{
 				if(a < 10)
 				{
@@ -91,7 +91,7 @@ public class SpriteMaker {
 			outputFile.write(temp[i] +" ");
 		}
 		*/
-		ImageIO.write(finalImage, "png", new File("C:\\Users\\Fan\\eclipse-workspace/Portfolio/resources/images/archer@run"
+		ImageIO.write(finalImage, "png", new File("C:\\Users\\Fan\\eclipse-workspace/Portfolio/resources/images/portal"
 				+ ".png"));
 		
 		

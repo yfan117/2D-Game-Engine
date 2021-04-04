@@ -6,7 +6,7 @@ import java.util.TimerTask;
 
 public class AI {
 	
-	int idleRange = 500;
+	int idleRange = 750;
 	Random rand = new Random();
 	String state = "idle";
 	
@@ -38,8 +38,20 @@ public class AI {
 			
 				if(npc.type == "enemy")
 				{
-					npc.clickedX = npc.respondX + (rand.nextInt(idleRange*2)-idleRange);
-					npc.clickedY = npc.respondY + (rand.nextInt(idleRange*2)-idleRange);
+//					npc.clickedX = npc.respondX + (rand.nextInt(idleRange*2)-idleRange);
+//					npc.clickedY = npc.respondY + (rand.nextInt(idleRange*2)-idleRange);
+					//if(Map.currentMap == "map2")
+					{
+						//if(npc.hp < 100)
+						{
+							//System.out.println(game.getEntityList().get(0).hp);
+							npc.clickedX = game.getEntityList().get(0).x + (rand.nextInt(idleRange*2)-idleRange);
+							npc.clickedY = game.getEntityList().get(0).y + (rand.nextInt(idleRange*2)-idleRange);
+//							npc.clickedX = npc.x + (rand.nextInt(idleRange*2)-idleRange);
+//							npc.clickedY = npc.y + (rand.nextInt(idleRange*2)-idleRange);
+						}
+					}
+					
 				}
 				
 				if(npc.type == "friend")
@@ -85,7 +97,7 @@ public class AI {
 					npc.newClick = true;
 					npc.newCheckPoint = true;
 				}
-				moveEndTime = Game.gameTime + 30;
+				moveEndTime = Game.gameTime + 1000;
 				
 				
 				

@@ -20,6 +20,7 @@ public class MouseControl implements MouseListener, MouseMotionListener {
 	int itemClickedNumber = -1;
 	int backpackClickedNumber = -1;
 	boolean clickedInv = false;
+	boolean clickedSkill = false;
 
 	public MouseControl(Game game)
 	{
@@ -51,7 +52,28 @@ public class MouseControl implements MouseListener, MouseMotionListener {
 
 			int eX = e.getX();
 			int eY = e.getY();
+			int wX=e.getX();
+			int wY=e.getY();
+			if(wX < Game.centerX ) {
+				wX = Renderer.cameraControlX- (Game.centerX - wX);
+			}
+			else if(wX > Game.centerX ) {
+				wX = Renderer.cameraControlX + (wX - Game.centerX);
+			}
 
+			if(wY < Game.centerY ) {
+				wY = Renderer.cameraControlY- (Game.centerY - wY);
+			}
+			else if(wY > Game.centerY ) {
+				wY = Renderer.cameraControlY  + (wY - Game.centerY);
+			}
+			wX =Math.round(wX/5)*5;
+			wY=Math.round(wY/5)*5;
+			if(game.dialogue==true) {
+				game.dialogueObj.checkResponse(eX,eY);
+				//game.dialogueObj.checkResponse(player.clickedX,player.clickedY);
+				return;
+			}
 			//Player clicked inside the inventory while it is open
 			if (checkInventory(eX, eY))
 			{
@@ -63,6 +85,13 @@ public class MouseControl implements MouseListener, MouseMotionListener {
 			if (checkBackpack(eX, eY))
 			{
 				clickedInv = true;
+				return;
+			}
+
+			//Player clicked one of the skills
+			if (checkSkills(eX, eY))
+			{
+				clickedSkill = true;
 				return;
 			}
 
@@ -88,6 +117,8 @@ public class MouseControl implements MouseListener, MouseMotionListener {
 			player.clickedX =Math.round(player.clickedX/5)*5;
 			player.clickedY =Math.round(player.clickedY/5)*5;
 
+			System.out.println("clicked " +player.clickedX + " " + player.clickedY);
+			
 			if(movement.isObstacles(player.clickedX, player.clickedY) == false)
 			{
 				player.hasPath = true;
@@ -107,6 +138,8 @@ public class MouseControl implements MouseListener, MouseMotionListener {
 				player.move.checkPoint.add(new Node(player.x, player.y));
 				player.move.pathFind();
 				player.state = "run";
+				if(!player.runningStone.isRunning())
+					player.runningStone.play();
 				player.newClick = true;
 				player.newCheckPoint = true;
 
@@ -131,12 +164,12 @@ public class MouseControl implements MouseListener, MouseMotionListener {
 			}
 
 
-			System.out.println("clicked " +eX + " " + eY);
-
+			//System.out.println("clicked " +eX + " " + eY);
+			
 			for(int i =1; i < game.getEntityList().size();i++)
 			{
 				Entity entity= game.getEntityList().get(i);//check for click collision
-				if(entity.isEntity(player.clickedX,player.clickedY)) {
+				if(entity.isEntity(wX,wY)==true) {
 					System.out.println("entity here");
 					entity.doAction();
 				}
@@ -188,7 +221,7 @@ public class MouseControl implements MouseListener, MouseMotionListener {
 
 
 
-			if(player.isMelee == false)
+			if((player.isMelee == false) && (player.state == "idle"))
 			{
 
 				if(eX < Game.centerX ) {
@@ -384,6 +417,7 @@ public class MouseControl implements MouseListener, MouseMotionListener {
 
 		game.getEntityList().get(0).inventory.resetAllBools();
 		clickedInv = false;
+		clickedSkill = false;
 	}
 
 	@Override
@@ -424,9 +458,21 @@ public class MouseControl implements MouseListener, MouseMotionListener {
 		eX =Math.round(eX/5)*5;
 		eY=Math.round(eY/5)*5;
 
-		/*new
+		/*
 		 * Check if mouse hovering over an action
 		 */
+		
+		if(game.dialogue==true) {
+			if(game.dialogueObj.checkHovering(eX,eY)==true) {
+				game.hovering=true;
+				return;
+			}else
+			{
+				
+			game.hovering=false;
+			return;
+		}
+		}
 		for(int i =1; i < game.getEntityList().size();i++){
 			Entity entity= game.getEntityList().get(i);//check for entity collision
 			if(entity.isEntity(eX,eY) && entity.actionable()==true ) {
@@ -442,7 +488,8 @@ public class MouseControl implements MouseListener, MouseMotionListener {
 			else {
 				game.hovering=false;
 			}
-		}
+		}	
+		
 	}
 
 	@Override
@@ -456,8 +503,7 @@ public class MouseControl implements MouseListener, MouseMotionListener {
 
 			if (SwingUtilities.isLeftMouseButton(e))
 			{
-
-				if (!clickedInv)
+				if (!clickedInv && !clickedSkill)
 				{
 					player.collision = false;
 					//System.out.println("clicked " +eX + " " + eY);
@@ -584,14 +630,14 @@ public class MouseControl implements MouseListener, MouseMotionListener {
 		boolean b = false;
 		if (game.getEntityList().get(0).inventory.getInventoryOpen())
 		{
-			if (eX > ((Diablo.Game.windowX / 2) - ((game.getEntityList().get(0).inventory.getInventoryCols() / 2) * 50)) && eX < ((Diablo.Game.windowX / 2) + ((game.getEntityList().get(0).inventory.getInventoryCols() / 2) * 50)) && eY > ((Diablo.Game.windowY) - (game.getEntityList().get(0).inventory.getInventoryRows() * 50)))
+			if (eX > ((Diablo.Game.windowX / 2) - ((game.getEntityList().get(0).inventory.getInventoryCols() / 2) * 50)) && eX < ((Diablo.Game.windowX / 2) + ((game.getEntityList().get(0).inventory.getInventoryCols() / 2) * 50)) && eY > ((Diablo.Game.windowY) - (game.getEntityList().get(0).inventory.getInventoryRows() * 50) - 60) && eY < ((Diablo.Game.windowY) - (game.getEntityList().get(0).inventory.getInventoryRows() * 50)))
 			{
 				for (int i = 0; i < game.getEntityList().get(0).inventory.getInventoryRows(); i++)
 				{
 					for (int j = 0; j < game.getEntityList().get(0).inventory.getInventoryCols(); j++)
 					{
 						int col = ((Diablo.Game.windowX / 2) - ((game.getEntityList().get(0).inventory.getInventoryCols() * 50) / 2) + (50 * j));
-						int row = ((Diablo.Game.windowY) - (game.getEntityList().get(0).inventory.getInventoryRows() * 50) + (50 * i));
+						int row = ((Diablo.Game.windowY) - (game.getEntityList().get(0).inventory.getInventoryRows() * 50) + (50 * i) - 60);
 
 						if (eX > col && eX < col + 50 && eY > row && eY < row + 50)
 						{
@@ -611,6 +657,24 @@ public class MouseControl implements MouseListener, MouseMotionListener {
 				}
 				b = true;
 			}
+		}
+		return b;
+	}
+	private boolean checkSkills(int eX, int eY)
+	{
+		boolean b = false;
+		if (eX > Diablo.Game.windowX / 2 - 120 && eX < Diablo.Game.windowX / 2 + 120 && eY > Diablo.Game.windowY - 60)
+		{
+			for (int i = 0; i < 4; i++)
+			{
+				int col = ((Diablo.Game.windowX / 2) - 120 + (60 * i));
+
+				if (eX > col && eX < col + 60)
+				{
+					System.out.println("Player clicked skill number: " + i);
+				}
+			}
+			b = true;
 		}
 		return b;
 	}

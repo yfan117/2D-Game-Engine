@@ -29,6 +29,7 @@ public class Display{
 		frame.setSize(game.windowX + 16, game.windowY + 39);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLocationRelativeTo(null);
+		frame.setUndecorated(true);
 	
 		MouseControl mouseControl = new MouseControl(this.game);
 		render.addMouseListener(mouseControl);
@@ -88,6 +89,8 @@ public class Display{
 
 	public static void getDirection(Entity current) {
 
+		if(current.move != null)
+		{
 		if((current.destinationX != 0)&&(current.destinationY != 0))
 		{
 			current.move.getDirection(current.destinationX, current.destinationY);
@@ -117,6 +120,16 @@ public class Display{
 //			//System.out.println(current.moveAngle);
 //
 //		}
+		}
+		
+		if(current.type == "projectile")
+		{
+			if(current.collision == true)
+			{
+				current.picRank = 16;
+				current.move = null;
+			}
+		}
 	
 	
 	}
@@ -153,9 +166,5 @@ public class Display{
 		{
 			return render;
 		}
-	
 	}
 
-
-
-	

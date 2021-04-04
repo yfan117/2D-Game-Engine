@@ -53,6 +53,15 @@ public class Inventory
         this.inventoryBools = new boolean[inventoryCapacity];
     }
 
+    public Inventory(String s, int rows, int columns)
+    {
+        this.rows = rows;
+        this.cols = columns;
+        this.backpackCapacity = rows * columns;
+
+        this.backpackItems = new Item[backpackCapacity];
+    }
+
     public int getRows(){return rows;}
     public int getCols(){return cols;}
     public int getBackpackCapacity(){return backpackCapacity;}
