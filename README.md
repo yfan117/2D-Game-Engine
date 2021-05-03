@@ -1,4 +1,4 @@
-# RPG
+# 2D Game Engine
 PNW CS club role playing game project
 
 View presentation sliders for brief understanding the project.  
