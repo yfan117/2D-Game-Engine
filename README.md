@@ -1,7 +1,7 @@
 # 2D Game Engine
-PNW CS club role playing game project
+Purdue Northwest 2D Java game engine project
 
-View presentation sliders for brief understanding the project.  
+View power point for brief presentation.
 
 Due to resources files being too large.  There's not a good way of uploading them to Github efficiently.
 Use below link to download from Google Drive
